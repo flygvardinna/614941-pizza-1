@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import IndexHome from "@/views/index";
+import IndexHome from "@/views/Index";
 
 export default {
   name: "App",

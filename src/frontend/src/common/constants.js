@@ -31,3 +31,6 @@ export const Ingredient = {
   Пармезан: "parmesan",
   "Блю чиз": "blue_cheese",
 };
+
+export const MOVE = "move";
+export const DATA_TRANSFER_PAYLOAD = "payload";
