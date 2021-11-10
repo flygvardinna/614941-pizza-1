@@ -1,7 +1,13 @@
 <template>
   <div class="content__result">
     <p>Итого: {{ price }} ₽</p>
-    <button type="button" class="button button--disabled" disabled>
+    <button
+      type="button"
+      class="button"
+      :class="{ 'button--disabled': isBtnDisabled }"
+      :disabled="isBtnDisabled"
+      @click="$emit('addToCart')"
+    >
       Готовьте!
     </button>
   </div>
@@ -14,6 +20,19 @@ export default {
     price: {
       type: Number,
       required: true,
+    },
+    pizzaName: {
+      type: String,
+      required: true,
+    },
+    ingredients: {
+      type: Array,
+      required: true,
+    },
+  },
+  computed: {
+    isBtnDisabled() {
+      return !this.ingredients.length || !this.pizzaName;
     },
   },
 };

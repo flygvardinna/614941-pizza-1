@@ -6,10 +6,12 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
+        :value="pizzaName"
+        @input="$emit('input', $event.target.value)"
       />
     </label>
 
-    <AppDrop @drop="moveIngredient($event)">
+    <AppDrop @drop="moveIngredient">
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
@@ -21,13 +23,19 @@
                 `pizza__filling--${ingredient.englishName}`,
                 ingredientClassName(ingredient.value),
               ]"
+              @drop="moveIngredient($event, ingredient)"
             ></div>
           </div>
         </div>
       </div>
     </AppDrop>
 
-    <BuilderPriceCounter :price="price" />
+    <BuilderPriceCounter
+      :price="price"
+      :pizzaName="pizzaName"
+      :ingredients="ingredients"
+      @addToCart="$emit('addToCart')"
+    />
   </div>
 </template>
 
@@ -38,6 +46,10 @@ import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounte
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop, BuilderPriceCounter },
+  model: {
+    prop: "pizzaName",
+    event: "input",
+  },
   props: {
     dough: {
       type: String,
@@ -51,10 +63,19 @@ export default {
       type: Array,
       required: true,
     },
+    pizzaName: {
+      type: String,
+      required: true,
+    },
     price: {
       type: Number,
       required: true,
     },
+  },
+  data() {
+    return {
+      value: "",
+    };
   },
   computed: {
     pizzaClassName() {
@@ -73,6 +94,7 @@ export default {
     moveIngredient(ingredient) {
       console.log("go");
       this.$emit("updateIngredients", ingredient);
+      //this.updateIngredients(ingredient);
     },
   },
 };

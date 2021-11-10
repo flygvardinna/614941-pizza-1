@@ -21,14 +21,16 @@
             :ingredients="ingredients"
             @changeSelectedItem="changeSelectedItem"
             @changeIngredientValue="changeIngredientValue"
-            @drop="updateIngredients(ingredient)"
           />
 
           <BuilderPizzaView
+            v-model="pizzaName"
             :dough="selectedItems.dough.value"
             :sauce="selectedItems.sauce.value"
             :ingredients="selectedItems.ingredients"
             :price="pizzaPrice"
+            @addToCart="addToCart"
+            @updateIngredients="updateIngredients"
           />
         </div>
       </form>
@@ -38,7 +40,12 @@
 
 <script>
 import pizza from "@/static/pizza.json";
-import { normalizeDetail, normalizeIngredients } from "@/common/helpers";
+import {
+  normalizeDetail,
+  normalizeIngredients,
+  getCartItems,
+  setCartItems,
+} from "@/common/helpers";
 import { Dough, Sauce, Size, Ingredient } from "@/common/constants";
 import AppLayout from "@/layouts/AppLayout";
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
@@ -63,6 +70,8 @@ export default {
       ingredients: pizza.ingredients.map((item) =>
         normalizeIngredients(Ingredient, item)
       ),
+      pizzaName: "",
+      cartItems: [],
     };
   },
   computed: {
@@ -87,10 +96,37 @@ export default {
       );
     },
     totalPrice() {
-      return 0;
+      const pizzaPrices = this.cartItems.map((item) => item.price);
+      return pizzaPrices.length ? pizzaPrices.reduce((a, b) => a + b, 0) : 0;
     },
   },
+  mounted() {
+    localStorage.clear();
+    this.cartItems = getCartItems();
+  },
   methods: {
+    /*addToCart() {
+      const newCartItems = this.cartItems.slice().push(this.currentPizza);
+      setCartItems(newCartItems);
+    },*/
+    // должно быть initialState для currentPizza и по нажатию на кнопку все должно обнуляться до него
+    // хранить тоже в helpers? потом будет в state
+    // После нажатия на Оформить заказ - Очистить состояния конструктора и корзины (Vuex)
+    // ПОКА НИЧЕГО НЕ НАДО - МБ ТОЛЬКО ОЧИЩАТЬ ПОЛЕ С НАЗВАНИЕМ? А МОЖЕТ И ЭТОГО ПОКА НЕ НАДО
+    // Добавляются несколько и ладно
+    addToCart() {
+      // добавь это в computed как CurrentPizza, не надо дублировать
+      const newPizza = {
+        dough: this.selectedItems.dough,
+        sauce: this.selectedItems.sauce,
+        size: this.selectedItems.size,
+        ingredients: this.selectedItems.ingredients,
+        name: this.pizzaName,
+        price: this.pizzaPrice,
+      };
+      this.cartItems = [...this.cartItems, newPizza];
+      setCartItems(this.cartItems);
+    },
     findSelectedItem(items) {
       return items.find((item) => item.isChecked);
     },
@@ -120,17 +156,24 @@ export default {
     updateIngredients(ingredient) {
       console.log("pli");
       if (ingredient.value !== 3) {
-        const ingredients = this.ingredients.slice();
+        /*const ingredients = this.ingredients.slice();
         const index = ingredients.findIndex(
           (item) => item.name === ingredient.name
         );
         ingredients[index].value = ingredient.value++;
         this.ingredients = ingredients;
-        console.log(this.ingredients);
+        console.log(this.ingredients);*/
+        ingredient.value++;
+        this.changeIngredientValue(ingredient);
       } else {
         return;
       }
     },
+    /*moveIngredient(ingredient) {
+      console.log("go");
+      //this.$emit("updateIngredients", ingredient);
+      this.updateIngredients(ingredient);
+    },*/
   },
 };
 </script>

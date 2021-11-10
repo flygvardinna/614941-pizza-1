@@ -13,3 +13,15 @@ export const normalizeIngredients = (list, item) => {
     value: 0,
   };
 };
+
+export const getCartItems = () => {
+  const items = localStorage.getItem("items");
+  if (items) {
+    return JSON.parse(items);
+  }
+  return [];
+};
+
+export const setCartItems = (items) => {
+  localStorage.setItem("items", JSON.stringify(items));
+};
