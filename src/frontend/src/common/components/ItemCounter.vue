@@ -8,7 +8,7 @@
     >
       <span class="visually-hidden">Меньше</span>
     </button>
-    <input :value="counter" type="text" name="counter" class="counter__input" />
+    <input :value="value" type="text" name="counter" class="counter__input" />
     <button
       type="button"
       class="counter__button counter__button--plus"
@@ -21,6 +21,8 @@
 </template>
 
 <script>
+import { MIN_INGREDIENT_VALUE, MAX_INGREDIENT_VALUE } from "@/common/constants";
+
 export default {
   name: "ItemCounter",
   props: {
@@ -36,11 +38,15 @@ export default {
   },
   computed: {
     isMinusBtnDisabled() {
-      return this.counter === 0;
+      return this.value === MIN_INGREDIENT_VALUE;
     },
     isPlusBtnDisabled() {
-      return this.counter === 3;
-      // замени на константы мин и макс везде
+      return this.value === MAX_INGREDIENT_VALUE;
+    },
+  },
+  watch: {
+    value(newValue) {
+      this.counter = newValue;
     },
   },
   methods: {

@@ -30,7 +30,7 @@
             :ingredients="selectedItems.ingredients"
             :price="pizzaPrice"
             @addToCart="addToCart"
-            @updateIngredients="updateIngredients"
+            @changeIngredientValue="changeIngredientValue"
           />
         </div>
       </form>
@@ -101,31 +101,18 @@ export default {
     },
   },
   mounted() {
-    localStorage.clear();
     this.cartItems = getCartItems();
   },
   methods: {
-    /*addToCart() {
-      const newCartItems = this.cartItems.slice().push(this.currentPizza);
-      setCartItems(newCartItems);
-    },*/
-    // должно быть initialState для currentPizza и по нажатию на кнопку все должно обнуляться до него
-    // хранить тоже в helpers? потом будет в state
-    // После нажатия на Оформить заказ - Очистить состояния конструктора и корзины (Vuex)
-    // ПОКА НИЧЕГО НЕ НАДО - МБ ТОЛЬКО ОЧИЩАТЬ ПОЛЕ С НАЗВАНИЕМ? А МОЖЕТ И ЭТОГО ПОКА НЕ НАДО
-    // Добавляются несколько и ладно
     addToCart() {
-      // добавь это в computed как CurrentPizza, не надо дублировать
       const newPizza = {
-        dough: this.selectedItems.dough,
-        sauce: this.selectedItems.sauce,
-        size: this.selectedItems.size,
-        ingredients: this.selectedItems.ingredients,
+        ...this.selectedItems,
         name: this.pizzaName,
         price: this.pizzaPrice,
       };
       this.cartItems = [...this.cartItems, newPizza];
       setCartItems(this.cartItems);
+      this.pizzaName = "";
     },
     findSelectedItem(items) {
       return items.find((item) => item.isChecked);
@@ -139,41 +126,16 @@ export default {
       items.find((el) => el.value === newValue).isChecked = true;
       this[itemName] = items;
     },
-    // упразднить? у радио кнопок итак есть checked по умолчанию?
     changeIngredientValue({ name, value }) {
-      console.log(name, value);
       const ingredients = this.ingredients.slice();
       const index = ingredients.findIndex((item) => item.name === name);
       if (~index) {
-        // тут -1 если не найден в массиве
         ingredients[index].value = value;
       } else {
         ingredients.push({ name, value });
       }
       this.ingredients = ingredients;
-      console.log(this.ingredients);
     },
-    updateIngredients(ingredient) {
-      console.log("pli");
-      if (ingredient.value !== 3) {
-        /*const ingredients = this.ingredients.slice();
-        const index = ingredients.findIndex(
-          (item) => item.name === ingredient.name
-        );
-        ingredients[index].value = ingredient.value++;
-        this.ingredients = ingredients;
-        console.log(this.ingredients);*/
-        ingredient.value++;
-        this.changeIngredientValue(ingredient);
-      } else {
-        return;
-      }
-    },
-    /*moveIngredient(ingredient) {
-      console.log("go");
-      //this.$emit("updateIngredients", ingredient);
-      this.updateIngredients(ingredient);
-    },*/
   },
 };
 </script>

@@ -33,7 +33,6 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               class="ingredients__item"
-              @click="$emit('click', ingredient.id)"
             >
               <AppDrop @drop="$emit('drop', ingredient)">
                 <AppDrag :transfer-data="ingredient">

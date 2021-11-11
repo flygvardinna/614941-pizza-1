@@ -11,7 +11,7 @@
       />
     </label>
 
-    <AppDrop @drop="moveIngredient">
+    <AppDrop @drop="addIngredient">
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
@@ -23,7 +23,6 @@
                 `pizza__filling--${ingredient.englishName}`,
                 ingredientClassName(ingredient.value),
               ]"
-              @drop="moveIngredient($event, ingredient)"
             ></div>
           </div>
         </div>
@@ -40,6 +39,7 @@
 </template>
 
 <script>
+import { MAX_INGREDIENT_VALUE } from "@/common/constants";
 import AppDrop from "@/common/components/AppDrop";
 import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounter";
 
@@ -85,16 +85,20 @@ export default {
   },
   methods: {
     ingredientClassName(value) {
-      if (value <= 1) {
+      if (value < 2) {
         return;
-        // неоптимально, перепридумай
       }
-      return value === 2 ? `pizza__filling--second` : `pizza__filling--third`;
+      return value === MAX_INGREDIENT_VALUE
+        ? `pizza__filling--third`
+        : `pizza__filling--second`;
     },
-    moveIngredient(ingredient) {
-      console.log("go");
-      this.$emit("updateIngredients", ingredient);
-      //this.updateIngredients(ingredient);
+    addIngredient(ingredient) {
+      if (ingredient.value !== MAX_INGREDIENT_VALUE) {
+        ingredient.value++;
+        this.$emit("changeIngredientValue", ingredient);
+      } else {
+        return;
+      }
     },
   },
 };
