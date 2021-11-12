@@ -35,7 +35,10 @@
               class="ingredients__item"
             >
               <AppDrop @drop="$emit('drop', ingredient)">
-                <AppDrag :transfer-data="ingredient">
+                <AppDrag
+                  :transfer-data="ingredient"
+                  :isDraggable="checkIsIngredientDraggable(ingredient)"
+                >
                   <span
                     class="filling"
                     :class="`filling--${ingredient.englishName}`"
@@ -62,6 +65,7 @@
 </template>
 
 <script>
+import { MAX_INGREDIENT_VALUE } from "@/common/constants";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
 import SelectorItem from "@/common/components/SelectorItem";
@@ -78,6 +82,11 @@ export default {
     ingredients: {
       type: Array,
       required: true,
+    },
+  },
+  methods: {
+    checkIsIngredientDraggable(ingredient) {
+      return ingredient.value < MAX_INGREDIENT_VALUE;
     },
   },
 };

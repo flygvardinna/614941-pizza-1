@@ -21,7 +21,7 @@
               class="pizza__filling"
               :class="[
                 `pizza__filling--${ingredient.englishName}`,
-                ingredientClassName(ingredient.value),
+                getIngredientClassName(ingredient.value),
               ]"
             ></div>
           </div>
@@ -84,7 +84,7 @@ export default {
     },
   },
   methods: {
-    ingredientClassName(value) {
+    getIngredientClassName(value) {
       if (value < 2) {
         return;
       }
