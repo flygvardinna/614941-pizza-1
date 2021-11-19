@@ -1,9 +1,9 @@
 <template>
   <RadioButton
+    :class="className"
     :value="item.value"
     :isChecked="item.isChecked"
     :inputName="`${inputName}`"
-    :itemName="`${itemName}`"
     @changeSelectedItem="$emit('changeSelectedItem', $event)"
   >
     <slot />
@@ -25,7 +25,7 @@ export default {
       type: String,
       required: true,
     },
-    itemName: {
+    className: {
       type: String,
       required: true,
     },

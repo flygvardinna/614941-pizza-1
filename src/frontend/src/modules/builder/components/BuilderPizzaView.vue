@@ -11,7 +11,7 @@
       />
     </label>
 
-    <AppDrop @drop="addIngredient">
+    <AppDrop @drop="$emit('addIngredient', $event)">
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
@@ -91,14 +91,6 @@ export default {
       return value === MAX_INGREDIENT_VALUE
         ? `pizza__filling--third`
         : `pizza__filling--second`;
-    },
-    addIngredient(ingredient) {
-      if (ingredient.value !== MAX_INGREDIENT_VALUE) {
-        ingredient.value++;
-        this.$emit("changeIngredientValue", ingredient);
-      } else {
-        return;
-      }
     },
   },
 };

@@ -10,7 +10,7 @@
           :key="item.id"
           :isChecked="item.isChecked"
           :inputName="'dought'"
-          :itemName="'dough'"
+          :className="`dough__input dough__input--${item.value}`"
           @changeSelectedItem="
             $emit('changeSelectedItem', {
               newValue: $event.target.value,

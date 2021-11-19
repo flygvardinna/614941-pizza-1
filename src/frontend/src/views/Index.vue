@@ -25,12 +25,12 @@
 
           <BuilderPizzaView
             v-model="pizzaName"
-            :dough="selectedItems.dough.value"
-            :sauce="selectedItems.sauce.value"
-            :ingredients="selectedItems.ingredients"
+            :dough="selectedDough.value"
+            :sauce="selectedSauce.value"
+            :ingredients="selectedIngredients"
             :price="pizzaPrice"
             @addToCart="addToCart"
-            @changeIngredientValue="changeIngredientValue"
+            @addIngredient="addIngredient"
           />
         </div>
       </form>
@@ -46,7 +46,13 @@ import {
   getCartItems,
   setCartItems,
 } from "@/common/helpers";
-import { Dough, Sauce, Size, Ingredient } from "@/common/constants";
+import {
+  MAX_INGREDIENT_VALUE,
+  Dough,
+  Sauce,
+  Size,
+  Ingredient,
+} from "@/common/constants";
 import AppLayout from "@/layouts/AppLayout";
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
@@ -75,24 +81,26 @@ export default {
     };
   },
   computed: {
-    selectedItems() {
-      return {
-        dough: this.findSelectedItem(this.dough),
-        sauce: this.findSelectedItem(this.sauces),
-        size: this.findSelectedItem(this.sizes),
-        ingredients: this.getSelectedIngredients(),
-      };
+    selectedDough() {
+      return this.findSelectedItem(this.dough);
+    },
+    selectedSauce() {
+      return this.findSelectedItem(this.sauces);
+    },
+    selectedSize() {
+      return this.findSelectedItem(this.sizes);
+    },
+    selectedIngredients() {
+      return this.ingredients.filter((item) => item.value > 0);
     },
     pizzaPrice() {
-      const ingredientsPrices = this.selectedItems.ingredients.map(
+      const ingredientsPrices = this.selectedIngredients.map(
         (item) => item.price * item.value
       );
       const ingredientsSum = ingredientsPrices.reduce((a, b) => a + b, 0);
       return (
-        (this.selectedItems.dough.price +
-          this.selectedItems.sauce.price +
-          ingredientsSum) *
-        this.selectedItems.size.multiplier
+        (this.selectedDough.price + this.selectedSauce.price + ingredientsSum) *
+        this.selectedSize.multiplier
       );
     },
     totalPrice() {
@@ -106,7 +114,10 @@ export default {
   methods: {
     addToCart() {
       const newPizza = {
-        ...this.selectedItems,
+        dough: this.selectedDough,
+        sauce: this.selectedSauce,
+        size: this.selectedSize,
+        ingredients: this.selectedIngredients,
         name: this.pizzaName,
         price: this.pizzaPrice,
       };
@@ -117,24 +128,18 @@ export default {
     findSelectedItem(items) {
       return items.find((item) => item.isChecked);
     },
-    getSelectedIngredients() {
-      return this.ingredients.filter((item) => item.value > 0);
-    },
     changeSelectedItem({ newValue, itemName }) {
-      const items = this[itemName].slice();
-      items.find((el) => el.isChecked).isChecked = false;
-      items.find((el) => el.value === newValue).isChecked = true;
-      this[itemName] = items;
+      this[itemName].find((el) => el.isChecked).isChecked = false;
+      this[itemName].find((el) => el.value === newValue).isChecked = true;
     },
     changeIngredientValue({ name, value }) {
-      const ingredients = this.ingredients.slice();
-      const index = ingredients.findIndex((item) => item.name === name);
-      if (~index) {
-        ingredients[index].value = value;
-      } else {
-        ingredients.push({ name, value });
+      this.ingredients.find((item) => item.name === name).value = value;
+    },
+    addIngredient(ingredient) {
+      if (ingredient.value !== MAX_INGREDIENT_VALUE) {
+        ingredient.value++;
+        this.changeIngredientValue(ingredient);
       }
-      this.ingredients = ingredients;
     },
   },
 };

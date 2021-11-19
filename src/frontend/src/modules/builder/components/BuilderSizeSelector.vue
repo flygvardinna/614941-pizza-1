@@ -10,7 +10,7 @@
           :key="size.id"
           :isChecked="size.isChecked"
           :inputName="'diameter'"
-          :itemName="'diameter'"
+          :className="`diameter__input diameter__input--${size.value}`"
           @changeSelectedItem="
             $emit('changeSelectedItem', {
               newValue: $event.target.value,

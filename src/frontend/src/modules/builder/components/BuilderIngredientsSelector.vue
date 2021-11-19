@@ -13,7 +13,7 @@
             :key="sauce.id"
             :isChecked="sauce.isChecked"
             :inputName="'sauce'"
-            :itemName="'ingredients'"
+            :className="'radio ingredients__input'"
             @changeSelectedItem="
               $emit('changeSelectedItem', {
                 newValue: $event.target.value,

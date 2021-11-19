@@ -1,5 +1,5 @@
 <template>
-  <label :class="className">
+  <label>
     <input
       :value="value"
       :checked="isChecked"
@@ -27,19 +27,6 @@ export default {
     inputName: {
       type: String,
       required: true,
-    },
-    itemName: {
-      type: String,
-      required: true,
-    },
-  },
-  computed: {
-    className() {
-      if (this.itemName === "ingredients") {
-        return `radio ingredients__input`;
-      } else {
-        return `${this.itemName}__input ${this.itemName}__input--${this.value}`;
-      }
     },
   },
 };
