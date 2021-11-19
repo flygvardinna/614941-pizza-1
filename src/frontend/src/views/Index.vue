@@ -137,8 +137,10 @@ export default {
     },
     addIngredient(ingredient) {
       if (ingredient.value !== MAX_INGREDIENT_VALUE) {
-        ingredient.value++;
-        this.changeIngredientValue(ingredient);
+        this.changeIngredientValue({
+          name: ingredient.name,
+          value: ingredient.value + 1,
+        });
       }
     },
   },
