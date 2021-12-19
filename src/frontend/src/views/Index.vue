@@ -1,39 +1,38 @@
 <template>
-  <div>
-    <div class="content">
-      <form action="#" method="post">
-        <div class="content__wrapper">
-          <h1 class="title title--big">Конструктор пиццы</h1>
+  <div class="content">
+    <router-view />
+    <form action="#" method="post">
+      <div class="content__wrapper">
+        <h1 class="title title--big">Конструктор пиццы</h1>
 
-          <BuilderDoughSelector
-            :dough="dough"
-            @changeSelectedItem="changeSelectedItem"
-          />
+        <BuilderDoughSelector
+          :dough="dough"
+          @changeSelectedItem="changeSelectedItem"
+        />
 
-          <BuilderSizeSelector
-            :sizes="sizes"
-            @changeSelectedItem="changeSelectedItem"
-          />
+        <BuilderSizeSelector
+          :sizes="sizes"
+          @changeSelectedItem="changeSelectedItem"
+        />
 
-          <BuilderIngredientsSelector
-            :sauces="sauces"
-            :ingredients="ingredients"
-            @changeSelectedItem="changeSelectedItem"
-            @changeIngredientValue="changeIngredientValue"
-          />
+        <BuilderIngredientsSelector
+          :sauces="sauces"
+          :ingredients="ingredients"
+          @changeSelectedItem="changeSelectedItem"
+          @changeIngredientValue="changeIngredientValue"
+        />
 
-          <BuilderPizzaView
-            v-model="pizzaName"
-            :dough="selectedDough.value"
-            :sauce="selectedSauce.value"
-            :ingredients="selectedIngredients"
-            :price="pizzaPrice"
-            @addToCart="addToCart"
-            @addIngredient="addIngredient"
-          />
-        </div>
-      </form>
-    </div>
+        <BuilderPizzaView
+          v-model="pizzaName"
+          :dough="selectedDough.value"
+          :sauce="selectedSauce.value"
+          :ingredients="selectedIngredients"
+          :price="pizzaPrice"
+          @addToCart="addToCart"
+          @addIngredient="addIngredient"
+        />
+      </div>
+    </form>
   </div>
 </template>
 

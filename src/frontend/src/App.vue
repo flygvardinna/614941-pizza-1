@@ -14,7 +14,7 @@ export default {
   components: { AppLayout },
   data() {
     return {
-      userData: true,
+      userData: false,
       totalPrice: 0,
     };
   },
