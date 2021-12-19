@@ -1,6 +1,5 @@
 <template>
   <div>
-    <AppLayout :price="totalPrice" />
     <div class="content">
       <form action="#" method="post">
         <div class="content__wrapper">
@@ -53,7 +52,6 @@ import {
   Size,
   Ingredient,
 } from "@/common/constants";
-import AppLayout from "@/layouts/AppLayout";
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
@@ -62,7 +60,6 @@ import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
 export default {
   name: "IndexHome",
   components: {
-    AppLayout,
     BuilderDoughSelector,
     BuilderSizeSelector,
     BuilderIngredientsSelector,
@@ -110,6 +107,7 @@ export default {
   },
   mounted() {
     this.cartItems = getCartItems();
+    this.$emit("updateTotalPrice", this.totalPrice);
   },
   methods: {
     addToCart() {
@@ -123,6 +121,7 @@ export default {
       };
       this.cartItems = [...this.cartItems, newPizza];
       setCartItems(this.cartItems);
+      this.$emit("updateTotalPrice", this.totalPrice);
       this.pizzaName = "";
     },
     findSelectedItem(items) {
