@@ -5,39 +5,20 @@
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
-        <BuilderDoughSelector
-          :dough="dough"
-          @changeSelectedItem="changeSelectedItem"
-        />
+        <BuilderDoughSelector />
 
-        <BuilderSizeSelector
-          :sizes="sizes"
-          @changeSelectedItem="changeSelectedItem"
-        />
+        <BuilderSizeSelector />
 
-        <BuilderIngredientsSelector
-          :sauces="sauces"
-          :ingredients="ingredients"
-          @changeSelectedItem="changeSelectedItem"
-          @changeIngredientValue="changeIngredientValue"
-        />
+        <BuilderIngredientsSelector />
 
-        <BuilderPizzaView
-          v-model="pizzaName"
-          :dough="selectedDough.value"
-          :sauce="selectedSauce.value"
-          :ingredients="selectedIngredients"
-          :price="pizzaPrice"
-          @addToCart="addToCart"
-          @addIngredient="addIngredient"
-        />
+        <BuilderPizzaView />
       </div>
     </form>
   </div>
 </template>
 
 <script>
-import pizza from "@/static/pizza.json";
+/*import pizza from "@/static/pizza.json";
 import {
   normalizeDetail,
   normalizeIngredients,
@@ -50,7 +31,7 @@ import {
   Sauce,
   Size,
   Ingredient,
-} from "@/common/constants";
+} from "@/common/constants";*/
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
@@ -64,8 +45,9 @@ export default {
     BuilderIngredientsSelector,
     BuilderPizzaView,
   },
-  data() {
+  /*data() {
     return {
+      pizzaName: "",
       dough: pizza.dough.map((item) => normalizeDetail(Dough, item)),
       sauces: pizza.sauces.map((item) => normalizeDetail(Sauce, item)),
       sizes: pizza.sizes.map((item) => normalizeDetail(Size, item)),
@@ -75,9 +57,16 @@ export default {
       pizzaName: "",
       cartItems: [],
     };
-  },
-  computed: {
-    selectedDough() {
+  },*/
+  /*computed: {
+    ...mapState("Builder", [
+      "selectedDough",
+      "selectedSauce",
+      "selectedSize",
+      "selectedIngredients",
+      //"pizzaName",
+    ]),
+    /*selectedDough() {
       return this.findSelectedItem(this.dough);
     },
     selectedSauce() {
@@ -103,12 +92,12 @@ export default {
       const pizzaPrices = this.cartItems.map((item) => item.price);
       return pizzaPrices.length ? pizzaPrices.reduce((a, b) => a + b, 0) : 0;
     },
-  },
-  mounted() {
+  },*/
+  /*mounted() {
     this.cartItems = getCartItems();
     this.$emit("updateTotalPrice", this.totalPrice);
-  },
-  methods: {
+  },*/
+  /*methods: {
     addToCart() {
       const newPizza = {
         dough: this.selectedDough,
@@ -141,7 +130,7 @@ export default {
         });
       }
     },
-  },
+  },*/
 };
 </script>
 

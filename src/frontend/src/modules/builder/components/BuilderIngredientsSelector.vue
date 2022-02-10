@@ -15,7 +15,7 @@
             :inputName="'sauce'"
             :className="'radio ingredients__input'"
             @changeSelectedItem="
-              $emit('changeSelectedItem', {
+              changeSelectedItem({
                 newValue: $event.target.value,
                 itemName: 'sauces',
               })
@@ -50,7 +50,7 @@
               <ItemCounter
                 :value="ingredient.value"
                 @changeIngredientValue="
-                  $emit('changeIngredientValue', {
+                  changeIngredientValue({
                     value: $event,
                     name: ingredient.name,
                   })
@@ -66,6 +66,7 @@
 
 <script>
 import { MAX_INGREDIENT_VALUE } from "@/common/constants";
+import { mapState, mapActions } from "vuex";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
 import SelectorItem from "@/common/components/SelectorItem";
@@ -74,7 +75,10 @@ import ItemCounter from "@/common/components/ItemCounter";
 export default {
   name: "BuilderIngredientsSelector",
   components: { AppDrag, AppDrop, SelectorItem, ItemCounter },
-  props: {
+  computed: {
+    ...mapState("Builder", ["sauces", "ingredients"]),
+  },
+  /*props: {
     sauces: {
       type: Array,
       required: true,
@@ -83,8 +87,9 @@ export default {
       type: Array,
       required: true,
     },
-  },
+  },*/
   methods: {
+    ...mapActions("Builder", ["changeSelectedItem", "changeIngredientValue"]),
     checkIsIngredientDraggable(ingredient) {
       return ingredient.value < MAX_INGREDIENT_VALUE;
     },

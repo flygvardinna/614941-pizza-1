@@ -11,7 +11,7 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link to="/cart"> {{ price }} ₽ </router-link>
+      <router-link to="/cart"> {{ totalPrice }} ₽ </router-link>
     </div>
     <div class="header__user">
       <router-link v-if="userData" to="/profile">
@@ -44,9 +44,15 @@
 </template>
 
 <script>
+import { mapState, mapGetters } from "vuex";
+
 export default {
   name: "AppLayoutHeader",
-  props: {
+  computed: {
+    ...mapState(["userData"]),
+    ...mapGetters("Builder", ["totalPrice"]),
+  },
+  /*props: {
     price: {
       type: Number,
       required: true,
@@ -55,7 +61,7 @@ export default {
       type: Boolean,
       required: true,
     },
-  },
+  },*/
 };
 </script>
 

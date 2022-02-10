@@ -1,12 +1,11 @@
 <template>
   <div class="content__result">
-    <p>Итого: {{ price }} ₽</p>
+    <p>Итого: {{ pizzaPrice }} ₽</p>
     <button
       type="button"
       class="button"
-      :class="{ 'button--disabled': isBtnDisabled }"
       :disabled="isBtnDisabled"
-      @click="$emit('addToCart')"
+      @click="addToCart"
     >
       Готовьте!
     </button>
@@ -14,9 +13,11 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
+
 export default {
   name: "BuilderPriceCounter",
-  props: {
+  /*props: {
     price: {
       type: Number,
       required: true,
@@ -29,11 +30,16 @@ export default {
       type: Array,
       required: true,
     },
-  },
+  },*/
   computed: {
+    ...mapState("Builder", ["pizzaName", "pizzaPrice"]),
+    ...mapGetters("Builder", ["selectedIngredients"]),
     isBtnDisabled() {
-      return !this.ingredients.length || !this.pizzaName;
+      return !this.selectedIngredients.length || !this.pizzaName;
     },
+  },
+  methods: {
+    ...mapActions("Builder", ["addToCart"]),
   },
 };
 </script>

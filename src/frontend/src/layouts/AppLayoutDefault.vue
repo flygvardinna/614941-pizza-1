@@ -1,6 +1,6 @@
 <template>
   <div class="app-layout-default">
-    <AppLayoutHeader :price="price" :userData="userData" />
+    <AppLayoutHeader />
     <slot />
   </div>
 </template>
@@ -13,7 +13,7 @@ export default {
   components: {
     AppLayoutHeader,
   },
-  props: {
+  /*props: {
     price: {
       type: Number,
       required: true,
@@ -22,6 +22,6 @@ export default {
       type: Boolean,
       required: true,
     },
-  },
+  },*/
 };
 </script>
