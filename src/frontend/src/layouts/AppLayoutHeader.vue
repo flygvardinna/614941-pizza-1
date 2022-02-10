@@ -14,7 +14,7 @@
       <router-link to="/cart"> {{ totalPrice }} ₽ </router-link>
     </div>
     <div class="header__user">
-      <router-link v-if="userData" to="/profile">
+      <router-link v-if="user" to="/profile">
         <picture>
           <source
             type="image/webp"
@@ -34,7 +34,7 @@
         <span>Василий Ложкин</span>
       </router-link>
 
-      <a v-if="userData" href="#" class="header__logout"><span>Выйти</span></a>
+      <a v-if="user" href="#" class="header__logout"><span>Выйти</span></a>
 
       <router-link v-else to="/login" class="header__login">
         <span>Войти</span>
@@ -49,19 +49,9 @@ import { mapState, mapGetters } from "vuex";
 export default {
   name: "AppLayoutHeader",
   computed: {
-    ...mapState(["userData"]),
+    ...mapState("Auth", ["user"]),
     ...mapGetters("Builder", ["totalPrice"]),
   },
-  /*props: {
-    price: {
-      type: Number,
-      required: true,
-    },
-    userData: {
-      type: Boolean,
-      required: true,
-    },
-  },*/
 };
 </script>
 

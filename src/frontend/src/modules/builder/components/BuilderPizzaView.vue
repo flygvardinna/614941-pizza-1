@@ -11,7 +11,7 @@
       />
     </label>
 
-    <AppDrop @drop="$emit('addIngredient', $event)">
+    <AppDrop @drop="addIngredient($event)">
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
@@ -42,37 +42,6 @@ import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounte
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop, BuilderPriceCounter },
-  /*model: {
-    prop: "pizzaName",
-    event: "input",
-  },
-  props: {
-    pizzaName: {
-      type: String,
-      required: true,
-    },
-    dough: {
-      type: String,
-      required: true,
-    },
-    sauce: {
-      type: String,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      value: "",
-    };
-  },*/
   computed: {
     ...mapState("Builder", [
       "selectedDough",

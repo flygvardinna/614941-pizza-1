@@ -17,23 +17,9 @@ import { mapState, mapActions, mapGetters } from "vuex";
 
 export default {
   name: "BuilderPriceCounter",
-  /*props: {
-    price: {
-      type: Number,
-      required: true,
-    },
-    pizzaName: {
-      type: String,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-  },*/
   computed: {
-    ...mapState("Builder", ["pizzaName", "pizzaPrice"]),
-    ...mapGetters("Builder", ["selectedIngredients"]),
+    ...mapState("Builder", ["pizzaName"]),
+    ...mapGetters("Builder", ["pizzaPrice", "selectedIngredients"]),
     isBtnDisabled() {
       return !this.selectedIngredients.length || !this.pizzaName;
     },

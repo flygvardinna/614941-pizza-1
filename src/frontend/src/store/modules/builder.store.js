@@ -1,3 +1,4 @@
+import { cloneDeep } from "lodash";
 import { SET_ENTITY, ADD_ENTITY } from "@/store/mutation-types";
 import { capitalize } from "@/common/helpers";
 import pizza from "@/static/pizza.json";
@@ -8,17 +9,9 @@ import {
   setCartItems,
   findSelectedItem,
 } from "@/common/helpers";
-import {
-  //MAX_INGREDIENT_VALUE,
-  Dough,
-  Sauce,
-  Size,
-  Ingredient,
-} from "@/common/constants";
+import { Dough, Sauce, Size, Ingredient } from "@/common/constants";
 
-//const entity = "builder";
 const module = capitalize("builder");
-/*const namespace = { entity, module };*/
 
 export default {
   namespaced: true,
@@ -32,15 +25,13 @@ export default {
     selectedSize: null,
     selectedIngredients: [],
     pizzaName: "",
-    pizzaPrice: 0,
     //newPizza: null,
-    // текущую пиццу надо хранить в сторе и чтоб в методе addToCart она клалась в корзину сама
+    // мб текущую пиццу надо хранить в сторе? и чтоб в методе addToCart она клалась в корзину сама
     // и в ней же, в текущей пицце (геттер), хранить selectedDough итд?
     cartItems: [],
     totalPrice: 0,
   },
   getters: {
-    //или это в state? видимо надо хранить в state
     selectedDough({ dough }) {
       return findSelectedItem(dough);
     },
@@ -53,125 +44,68 @@ export default {
     selectedIngredients({ ingredients }) {
       return ingredients.filter((item) => item.value > 0);
     },
-    pizzaPrice(state) {
-      const ingredientsPrices = state.selectedIngredients.map(
+    pizzaPrice(state, getters) {
+      const ingredientsPrices = getters.selectedIngredients.map(
         (item) => item.price * item.value
       );
       const ingredientsSum = ingredientsPrices.reduce((a, b) => a + b, 0);
       return (
-        (state.selectedDough.price +
-          state.selectedSauce.price +
+        (getters.selectedDough.price +
+          getters.selectedSauce.price +
           ingredientsSum) *
-        state.selectedSize.multiplier
+        getters.selectedSize.multiplier
       );
     },
-    // сделать сеттер setTotalPrice?
-    // у нас уже есть updateTotalPrice - как-то его модифицировать?
     totalPrice({ cartItems }) {
       const pizzaPrices = cartItems.map((item) => item.price);
       return pizzaPrices.length ? pizzaPrices.reduce((a, b) => a + b, 0) : 0;
     },
   },
   actions: {
-    setDough({ commit }) {
-      const data = pizza.dough.map((item) => normalizeDetail(Dough, item));
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "dough",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setSauces({ commit }) {
-      const data = pizza.sauces.map((item) => normalizeDetail(Sauce, item));
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "sauces",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setSizes({ commit }) {
-      const data = pizza.sizes.map((item) => normalizeDetail(Size, item));
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "sizes",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setIngredients({ commit }) {
-      const data = pizza.ingredients.map((item) =>
+    fetchPizzaParts({ commit }) {
+      const dough = pizza.dough.map((item) => normalizeDetail(Dough, item));
+      const sauces = pizza.sauces.map((item) => normalizeDetail(Sauce, item));
+      const sizes = pizza.sizes.map((item) => normalizeDetail(Size, item));
+      const ingredients = pizza.ingredients.map((item) =>
         normalizeIngredients(Ingredient, item)
       );
       commit(
         SET_ENTITY,
         {
           module,
+          entity: "dough",
+          value: dough,
+        },
+        { root: true }
+      );
+      commit(
+        SET_ENTITY,
+        {
+          module,
+          entity: "sauces",
+          value: sauces,
+        },
+        { root: true }
+      );
+      commit(
+        SET_ENTITY,
+        {
+          module,
+          entity: "sizes",
+          value: sizes,
+        },
+        { root: true }
+      );
+      commit(
+        SET_ENTITY,
+        {
+          module,
           entity: "ingredients",
-          value: data,
+          value: ingredients,
         },
         { root: true }
       );
     },
-    // или это все-таки в геттерах?
-    /*setSelectedDough({ state, commit }) {
-      const data = findSelectedItem(state.dough);
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "selectedDough",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setSelectedSauce({ state, commit }) {
-      const data = findSelectedItem(state.sauces);
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "selectedSauce",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setSelectedSize({ state, commit }) {
-      const data = findSelectedItem(state.sizes);
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "selectedSize",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setSelectedIngredients({ state, commit }) {
-      const data = state.ingredients.filter((item) => item.value > 0);
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "selectedIngredients",
-          value: data,
-        },
-        { root: true }
-      );
-    },*/
     setPizzaName({ commit }, name) {
       commit(
         SET_ENTITY,
@@ -195,17 +129,6 @@ export default {
         { root: true }
       );
     },
-    /*updateTotalPrice({ commit }, totalPrice) {
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "totalPrice",
-          value: totalPrice,
-        },
-        { root: true }
-      );
-    },*/
     /*setNewPizza(
       { state, commit },
       selectedDough,
@@ -255,20 +178,9 @@ export default {
       setCartItems(state.cartItems);
       dispatch("updateTotalPrice", state.totalPrice);
       dispatch("setPizzaName", "");
-
-      /*commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "pizzaName",
-          value: "",
-        },
-        { root: true }
-      );*/
     },
     changeSelectedItem({ state, commit }, { newValue, itemName }) {
-      const data = state[itemName];
-      // тут не надо ли cloneDeep ?
+      const data = cloneDeep(state[itemName]);
       data.find((el) => el.isChecked).isChecked = false;
       data.find((el) => el.value === newValue).isChecked = true;
 
@@ -296,14 +208,5 @@ export default {
         { root: true }
       );
     },
-    // или это не надо и условие проверяй в методе компонента и оттуда вызывай changeIngredientValue?
-    /*addIngredient({ dispatch }, ingredient) {
-      if (ingredient.value !== MAX_INGREDIENT_VALUE) {
-        dispatch("changeIngredientValue", {
-          name: ingredient.name,
-          value: ingredient.value + 1,
-        });
-      }
-    },*/
   },
 };

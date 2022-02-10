@@ -36,12 +36,6 @@ export default {
   computed: {
     ...mapState("Builder", ["dough"]),
   },
-  /*props: {
-    dough: {
-      type: Array,
-      required: true,
-    },
-  },*/
   methods: {
     ...mapActions("Builder", ["changeSelectedItem"]),
   },

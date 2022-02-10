@@ -13,15 +13,5 @@ export default {
   components: {
     AppLayoutHeader,
   },
-  /*props: {
-    price: {
-      type: Number,
-      required: true,
-    },
-    userData: {
-      type: Boolean,
-      required: true,
-    },
-  },*/
 };
 </script>

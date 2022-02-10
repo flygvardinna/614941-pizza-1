@@ -78,16 +78,6 @@ export default {
   computed: {
     ...mapState("Builder", ["sauces", "ingredients"]),
   },
-  /*props: {
-    sauces: {
-      type: Array,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-  },*/
   methods: {
     ...mapActions("Builder", ["changeSelectedItem", "changeIngredientValue"]),
     checkIsIngredientDraggable(ingredient) {

@@ -13,16 +13,12 @@ Vue.use(Vuex);
 
 const state = () => ({
   userData: null,
-  //totalPrice: 0, должна быть в корзине
 });
 
 const actions = {
   async init({ dispatch }) {
     dispatch("fetchUser");
-    dispatch("Builder/setDough");
-    dispatch("Builder/setSauces");
-    dispatch("Builder/setSizes");
-    dispatch("Builder/setIngredients");
+    dispatch("Builder/fetchPizzaParts");
     dispatch("Builder/setCartItems");
   },
   fetchUser({ commit }) {
@@ -50,7 +46,6 @@ const mutations = {
       state[entity] = [...state[entity], value];
     }
   },
-  // пригодится добавлять пиццы в корзину
 };
 
 export default new Vuex.Store({

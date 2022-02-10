@@ -18,20 +18,6 @@
 </template>
 
 <script>
-/*import pizza from "@/static/pizza.json";
-import {
-  normalizeDetail,
-  normalizeIngredients,
-  getCartItems,
-  setCartItems,
-} from "@/common/helpers";
-import {
-  MAX_INGREDIENT_VALUE,
-  Dough,
-  Sauce,
-  Size,
-  Ingredient,
-} from "@/common/constants";*/
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";

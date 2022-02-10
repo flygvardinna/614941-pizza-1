@@ -32,12 +32,6 @@ import SelectorItem from "@/common/components/SelectorItem";
 export default {
   name: "BuilderSizeSelector",
   components: { SelectorItem },
-  /*props: {
-    sizes: {
-      type: Array,
-      required: true,
-    },
-  },*/
   computed: {
     ...mapState("Builder", ["sizes"]),
   },
