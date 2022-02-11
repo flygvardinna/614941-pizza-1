@@ -48,8 +48,9 @@
                 </AppDrag>
               </AppDrop>
               <ItemCounter
+                class="ingredients__counter"
                 :value="ingredient.value"
-                @changeIngredientValue="
+                @changeItemValue="
                   changeIngredientValue({
                     value: $event,
                     name: ingredient.name,

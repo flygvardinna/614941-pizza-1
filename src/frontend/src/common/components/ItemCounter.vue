@@ -1,19 +1,22 @@
 <template>
-  <div class="counter counter--orange ingredients__counter">
+  <div class="counter">
     <button
       type="button"
       class="counter__button counter__button--minus"
       :disabled="isMinusBtnDisabled"
-      @click="removeIngredient"
+      @click="removeItem"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
     <input :value="value" type="text" name="counter" class="counter__input" />
     <button
       type="button"
-      class="counter__button counter__button--plus"
+      :class="[
+        'counter__button counter__button--plus',
+        isOrangeBtn ? 'counter__button--orange' : '',
+      ]"
       :disabled="isPlusBtnDisabled"
-      @click="addIngredient"
+      @click="addItem"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -28,6 +31,10 @@ export default {
   props: {
     value: {
       type: Number,
+      required: true,
+    },
+    isOrangeBtn: {
+      type: Boolean,
       required: true,
     },
   },
@@ -50,13 +57,13 @@ export default {
     },
   },
   methods: {
-    addIngredient() {
+    addItem() {
       this.counter++;
-      this.$emit("changeIngredientValue", this.counter);
+      this.$emit("changeItemValue", this.counter);
     },
-    removeIngredient() {
+    removeItem() {
       this.counter--;
-      this.$emit("changeIngredientValue", this.counter);
+      this.$emit("changeItemValue", this.counter);
     },
   },
 };

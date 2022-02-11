@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector";
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
@@ -30,6 +31,14 @@ export default {
     BuilderSizeSelector,
     BuilderIngredientsSelector,
     BuilderPizzaView,
+  },
+  mounted() {
+    // для очистки стора
+    //localStorage.clear();
+    console.log("cart items", this.cartItems);
+  },
+  computed: {
+    ...mapState("Builder", ["cartItems"]),
   },
   /*data() {
     return {

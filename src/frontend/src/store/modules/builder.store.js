@@ -158,12 +158,13 @@ export default {
     },*/
     addToCart({ state, getters, commit, dispatch }) {
       const newPizza = {
-        dough: state.selectedDough,
-        sauce: state.selectedSauce,
-        size: state.selectedSize,
-        ingredients: state.selectedIngredients,
+        dough: getters.selectedDough,
+        sauce: getters.selectedSauce,
+        size: getters.selectedSize,
+        ingredients: getters.selectedIngredients,
         name: state.pizzaName,
         price: getters.pizzaPrice,
+        value: 1,
       };
 
       commit(
@@ -175,6 +176,7 @@ export default {
         },
         { root: true }
       );
+      console.log("all pizzas", state.cartItems);
       setCartItems(state.cartItems);
       dispatch("updateTotalPrice", state.totalPrice);
       dispatch("setPizzaName", "");
@@ -195,7 +197,7 @@ export default {
       );
     },
     changeIngredientValue({ state, commit }, { name, value }) {
-      const data = state.ingredients;
+      const data = cloneDeep(state.ingredients);
       data.find((item) => item.name === name).value = value;
 
       commit(
