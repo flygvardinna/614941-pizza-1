@@ -1,12 +1,10 @@
 import { cloneDeep } from "lodash";
-import { SET_ENTITY, ADD_ENTITY } from "@/store/mutation-types";
+import { SET_ENTITY } from "@/store/mutation-types";
 import { capitalize } from "@/common/helpers";
 import pizza from "@/static/pizza.json";
 import {
   normalizeDetail,
   normalizeIngredients,
-  getCartItems,
-  setCartItems,
   findSelectedItem,
 } from "@/common/helpers";
 import { Dough, Sauce, Size, Ingredient } from "@/common/constants";
@@ -28,8 +26,6 @@ export default {
     //newPizza: null,
     // мб текущую пиццу надо хранить в сторе? и чтоб в методе addToCart она клалась в корзину сама
     // и в ней же, в текущей пицце (геттер), хранить selectedDough итд?
-    cartItems: [],
-    totalPrice: 0,
   },
   getters: {
     selectedDough({ dough }) {
@@ -55,10 +51,6 @@ export default {
           ingredientsSum) *
         getters.selectedSize.multiplier
       );
-    },
-    totalPrice({ cartItems }) {
-      const pizzaPrices = cartItems.map((item) => item.price);
-      return pizzaPrices.length ? pizzaPrices.reduce((a, b) => a + b, 0) : 0;
     },
   },
   actions: {
@@ -117,18 +109,6 @@ export default {
         { root: true }
       );
     },
-    setCartItems({ commit }) {
-      const data = getCartItems();
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "cartItems",
-          value: data,
-        },
-        { root: true }
-      );
-    },
     /*setNewPizza(
       { state, commit },
       selectedDough,
@@ -156,7 +136,7 @@ export default {
         { root: true }
       );
     },*/
-    addToCart({ state, getters, commit, dispatch }) {
+    /*addToCart({ state, getters, commit, dispatch }) {
       const newPizza = {
         dough: getters.selectedDough,
         sauce: getters.selectedSauce,
@@ -180,7 +160,7 @@ export default {
       setCartItems(state.cartItems);
       dispatch("updateTotalPrice", state.totalPrice);
       dispatch("setPizzaName", "");
-    },
+    },*/
     changeSelectedItem({ state, commit }, { newValue, itemName }) {
       const data = cloneDeep(state[itemName]);
       data.find((el) => el.isChecked).isChecked = false;

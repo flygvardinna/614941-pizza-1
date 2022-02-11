@@ -38,7 +38,7 @@ export default {
     console.log("cart items", this.cartItems);
   },
   computed: {
-    ...mapState("Builder", ["cartItems"]),
+    ...mapState("Cart", ["cartItems"]),
   },
   /*data() {
     return {

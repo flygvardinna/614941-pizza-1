@@ -19,7 +19,7 @@ const actions = {
   async init({ dispatch }) {
     dispatch("fetchUser");
     dispatch("Builder/fetchPizzaParts");
-    dispatch("Builder/setCartItems");
+    dispatch("Cart/setCartItems");
   },
   fetchUser({ commit }) {
     const user = jsonUser; // TODO: Add api call

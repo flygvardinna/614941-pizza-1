@@ -54,7 +54,7 @@ export default {
   name: "CartProductList",
   components: { ItemCounter },
   computed: {
-    ...mapState("Builder", ["cartItems"]),
+    ...mapState("Cart", ["cartItems"]),
   },
   methods: {
     getSizeAndDoughDescription(size, dough) {

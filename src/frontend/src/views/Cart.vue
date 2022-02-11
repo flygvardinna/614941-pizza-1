@@ -40,7 +40,7 @@ export default {
     CartFooter,
   },
   computed: {
-    ...mapState("Builder", ["cartItems"]),
+    ...mapState("Cart", ["cartItems"]),
     isCartEmpty() {
       return this.cartItems.length === 0;
     },

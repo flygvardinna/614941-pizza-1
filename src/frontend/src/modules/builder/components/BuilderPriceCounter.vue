@@ -25,7 +25,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions("Builder", ["addToCart"]),
+    ...mapActions("Cart", ["addToCart"]),
   },
 };
 </script>

@@ -26,7 +26,7 @@ export default {
   name: "CartFooter",
   /*components: { SelectorItem },*/
   computed: {
-    ...mapGetters("Builder", ["totalPrice"]),
+    ...mapGetters("Cart", ["totalPrice"]),
   },
   /*methods: {
     ...mapActions("Builder", ["changeSelectedItem"]),

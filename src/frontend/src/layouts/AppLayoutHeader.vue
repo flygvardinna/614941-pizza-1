@@ -50,7 +50,7 @@ export default {
   name: "AppLayoutHeader",
   computed: {
     ...mapState("Auth", ["user"]),
-    ...mapGetters("Builder", ["totalPrice"]),
+    ...mapGetters("Cart", ["totalPrice"]),
   },
 };
 </script>
