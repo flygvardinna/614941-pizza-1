@@ -22,7 +22,7 @@ export const getCartItems = () => {
   return [];
 };
 
-export const setCartItems = (items) => {
+export const setCartItemsToLS = (items) => {
   localStorage.setItem("items", JSON.stringify(items));
 };
 

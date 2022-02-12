@@ -50,6 +50,7 @@
               <ItemCounter
                 class="ingredients__counter"
                 :value="ingredient.value"
+                :isOrangeBtn="false"
                 @changeItemValue="
                   changeIngredientValue({
                     value: $event,

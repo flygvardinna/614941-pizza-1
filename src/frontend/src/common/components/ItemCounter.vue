@@ -36,6 +36,7 @@ export default {
     isOrangeBtn: {
       type: Boolean,
       required: true,
+      // переделай все в default
     },
   },
   data: function () {

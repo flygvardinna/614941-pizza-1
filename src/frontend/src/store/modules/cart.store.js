@@ -1,7 +1,6 @@
 //import { cloneDeep } from "lodash";
 import { SET_ENTITY, ADD_ENTITY } from "@/store/mutation-types";
-import { capitalize } from "@/common/helpers";
-import { getCartItems, setCartItems } from "@/common/helpers";
+import { capitalize, getCartItems, setCartItemsToLS } from "@/common/helpers";
 
 const module = capitalize("cart");
 
@@ -30,14 +29,14 @@ export default {
         { root: true }
       );
     },
-    addToCart({ state, commit, dispatch, rootGetters }) {
+    addToCart({ state, commit, dispatch, rootState, rootGetters }) {
       const newPizza = {
-        dough: rootGetters.selectedDough,
-        sauce: rootGetters.selectedSauce,
-        size: rootGetters.selectedSize,
-        ingredients: rootGetters.selectedIngredients,
-        name: rootGetters.pizzaName,
-        price: rootGetters.pizzaPrice,
+        dough: rootGetters["Builder/selectedDough"],
+        sauce: rootGetters["Builder/selectedSauce"],
+        size: rootGetters["Builder/selectedSize"],
+        ingredients: rootGetters["Builder/selectedIngredients"],
+        name: rootState.Builder.pizzaName,
+        price: rootGetters["Builder/pizzaPrice"],
         value: 1,
       };
 
@@ -49,11 +48,14 @@ export default {
           value: newPizza,
         },
         { root: true }
+        // Для запуска действий или совершения мутаций в глобальном пространстве имён нужно
+        // добавить { root: true } 3-м аргументом в dispatch и commit.
+        // где не глобальное, можно убрать, получается?
       );
       console.log("all pizzas", state.cartItems);
-      setCartItems(state.cartItems);
+      setCartItemsToLS(state.cartItems);
       //dispatch("updateTotalPrice", state.totalPrice);
-      dispatch("Builder/setPizzaName", "");
+      dispatch("Builder/setPizzaName", "", { root: true });
     },
     /*changeIngredientValue({ state, commit }, { name, value }) {
       const data = cloneDeep(state.ingredients);

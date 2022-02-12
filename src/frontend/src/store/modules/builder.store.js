@@ -1,8 +1,8 @@
 import { cloneDeep } from "lodash";
 import { SET_ENTITY } from "@/store/mutation-types";
-import { capitalize } from "@/common/helpers";
 import pizza from "@/static/pizza.json";
 import {
+  capitalize,
   normalizeDetail,
   normalizeIngredients,
   findSelectedItem,
@@ -23,6 +23,8 @@ export default {
     selectedSize: null,
     selectedIngredients: [],
     pizzaName: "",
+    //cartItems: [],
+    //totalPrice: 0,
     //newPizza: null,
     // мб текущую пиццу надо хранить в сторе? и чтоб в методе addToCart она клалась в корзину сама
     // и в ней же, в текущей пицце (геттер), хранить selectedDough итд?
@@ -52,8 +54,24 @@ export default {
         getters.selectedSize.multiplier
       );
     },
+    /*totalPrice({ cartItems }) {
+      const pizzaPrices = cartItems.map((item) => item.price);
+      return pizzaPrices.length ? pizzaPrices.reduce((a, b) => a + b, 0) : 0;
+    },*/
   },
   actions: {
+    /*setCartItems({ commit }) {
+      const data = getCartItems();
+      commit(
+        SET_ENTITY,
+        {
+          module,
+          entity: "cartItems",
+          value: data,
+        },
+        { root: true }
+      );
+    },*/
     fetchPizzaParts({ commit }) {
       const dough = pizza.dough.map((item) => normalizeDetail(Dough, item));
       const sauces = pizza.sauces.map((item) => normalizeDetail(Sauce, item));
@@ -157,8 +175,8 @@ export default {
         { root: true }
       );
       console.log("all pizzas", state.cartItems);
-      setCartItems(state.cartItems);
-      dispatch("updateTotalPrice", state.totalPrice);
+      setCartItemsToLS(state.cartItems);
+      //dispatch("updateTotalPrice", state.totalPrice);
       dispatch("setPizzaName", "");
     },*/
     changeSelectedItem({ state, commit }, { newValue, itemName }) {
