@@ -17,6 +17,9 @@ export default {
   name: "SelectorItem",
   components: { RadioButton },
   props: {
+    // это value тоже хранить в сторе?
+    // видимо, нет - в vuework это остается в компонентах
+    // в сторе храним только основные данные, пицца итд
     item: {
       type: Object,
       required: true,

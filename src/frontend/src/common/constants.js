@@ -37,3 +37,6 @@ export const DATA_TRANSFER_PAYLOAD = "payload";
 
 export const MIN_INGREDIENT_VALUE = 0;
 export const MAX_INGREDIENT_VALUE = 3;
+
+export const MIN_CART_ITEM_VALUE = 0;
+export const MAX_CART_ITEM_VALUE = 10;

@@ -51,6 +51,8 @@
                 class="ingredients__counter"
                 :value="ingredient.value"
                 :isOrangeBtn="false"
+                :minValue="minIngredientValue"
+                :maxValue="maxIngredientValue"
                 @changeItemValue="
                   changeIngredientValue({
                     value: $event,
@@ -67,7 +69,7 @@
 </template>
 
 <script>
-import { MAX_INGREDIENT_VALUE } from "@/common/constants";
+import { MIN_INGREDIENT_VALUE, MAX_INGREDIENT_VALUE } from "@/common/constants";
 import { mapState, mapActions } from "vuex";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
@@ -79,11 +81,17 @@ export default {
   components: { AppDrag, AppDrop, SelectorItem, ItemCounter },
   computed: {
     ...mapState("Builder", ["sauces", "ingredients"]),
+    minIngredientValue() {
+      return MIN_INGREDIENT_VALUE;
+    },
+    maxIngredientValue() {
+      return MAX_INGREDIENT_VALUE;
+    },
   },
   methods: {
     ...mapActions("Builder", ["changeSelectedItem", "changeIngredientValue"]),
     checkIsIngredientDraggable(ingredient) {
-      return ingredient.value < MAX_INGREDIENT_VALUE;
+      return ingredient.value < this.maxIngredientValue;
     },
   },
 };

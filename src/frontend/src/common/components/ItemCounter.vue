@@ -24,12 +24,21 @@
 </template>
 
 <script>
-import { MIN_INGREDIENT_VALUE, MAX_INGREDIENT_VALUE } from "@/common/constants";
-
 export default {
   name: "ItemCounter",
   props: {
+    // это value тоже хранить в сторе?
+    // видимо, нет - в vuework это остается в компонентах
+    // в сторе храним только основные данные, пицца итд
     value: {
+      type: Number,
+      required: true,
+    },
+    minValue: {
+      type: Number,
+      required: true,
+    },
+    maxValue: {
       type: Number,
       required: true,
     },
@@ -46,10 +55,10 @@ export default {
   },
   computed: {
     isMinusBtnDisabled() {
-      return this.value === MIN_INGREDIENT_VALUE;
+      return this.value === this.minValue;
     },
     isPlusBtnDisabled() {
-      return this.value === MAX_INGREDIENT_VALUE;
+      return this.value === this.maxValue;
     },
   },
   watch: {

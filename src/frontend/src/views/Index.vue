@@ -35,10 +35,10 @@ export default {
   mounted() {
     // для очистки стора
     //localStorage.clear();
-    console.log("cart items", this.cartItems);
+    console.log("cart items", this.pizzaItems);
   },
   computed: {
-    ...mapState("Cart", ["cartItems"]),
+    ...mapState("Cart", ["pizzaItems"]),
   },
   /*data() {
     return {
