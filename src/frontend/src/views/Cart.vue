@@ -108,19 +108,12 @@ export default {
         this.$router.push({ name: "Orders" });
       } else {
         this.$router.push({ name: "IndexHome" });
-        // сейчас здесь само очищается, но написано в ТЗ
-        // Очистить состояния конструктора и корзины (Vuex)
-
-        // аналог clickOutside нужен/не нужен?
       }
       this.resetBuilderState();
       this.resetCartState();
       this.fetchPizzaParts();
-      this.fetchAdditionalItems();
-      // последнее нужно для того, чтоб после сброса при переходе в корзину выводились доп товары
-      // потом может переедет куда-то
-      // сейчас это первый раз вызывается в index.js
-      // возможно, должно вызываться при mounted в корзине
+      // аналог clickOutside нужен/не нужен?
+      // в vueWork есть, добавь
     },
   },
 };

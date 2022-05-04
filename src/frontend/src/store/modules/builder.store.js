@@ -20,51 +20,37 @@ const initialState = () => ({
   sauces: [],
   sizes: [],
   ingredients: [],
-  selectedDough: null,
-  selectedSauce: null,
-  selectedSize: null,
-  selectedIngredients: [],
   pizzaName: "",
   pizzaId: null,
-  //cartItems: [],
-  //totalPrice: 0,
-  //newPizza: null,
-  // мб текущую пиццу надо хранить в сторе? и чтоб в методе addToCart она клалась в корзину сама
-  // и в ней же, в текущей пицце (геттер), хранить selectedDough итд?
 });
 
 export default {
   namespaced: true,
   state: initialState(),
   getters: {
-    selectedDough({ dough }) {
-      return findSelectedItem(dough);
-    },
-    selectedSauce({ sauces }) {
-      return findSelectedItem(sauces);
-    },
-    selectedSize({ sizes }) {
-      return findSelectedItem(sizes);
-    },
-    selectedIngredients({ ingredients }) {
-      return ingredients.filter((item) => item.value > 0);
+    currentPizza({ dough, sauces, sizes, ingredients, pizzaName, pizzaId }) {
+      return {
+        dough: findSelectedItem(dough),
+        sauce: findSelectedItem(sauces),
+        size: findSelectedItem(sizes),
+        ingredients: ingredients.filter((item) => item.value > 0),
+        name: pizzaName,
+        id: pizzaId,
+        value: 1,
+      };
     },
     pizzaPrice(state, getters) {
-      const ingredientsPrices = getters.selectedIngredients.map(
+      const ingredientsPrices = getters.currentPizza.ingredients.map(
         (item) => item.price * item.value
       );
       const ingredientsSum = ingredientsPrices.reduce((a, b) => a + b, 0);
       return (
-        (getters.selectedDough.price +
-          getters.selectedSauce.price +
+        (getters.currentPizza.dough.price +
+          getters.currentPizza.sauce.price +
           ingredientsSum) *
-        getters.selectedSize.multiplier
+        getters.currentPizza.size.multiplier
       );
     },
-    /*totalPrice({ cartItems }) {
-      const pizzaPrices = cartItems.map((item) => item.price);
-      return pizzaPrices.length ? pizzaPrices.reduce((a, b) => a + b, 0) : 0;
-    },*/
   },
   // вместо того, чтоб экспортить мутацию, сделать метод, где она будет выызваться и экспортить его?
   mutations: {
@@ -73,18 +59,6 @@ export default {
     },
   },
   actions: {
-    /*setCartItems({ commit }) {
-      const data = getCartItems();
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "cartItems",
-          value: data,
-        },
-        { root: true }
-      );
-    },*/
     fetchPizzaParts({ commit }) {
       const dough = pizza.dough.map((item) => normalizeDetail(Dough, item));
       const sauces = pizza.sauces.map((item) => normalizeDetail(Sauce, item));
@@ -140,8 +114,7 @@ export default {
         { root: true }
       );
     },
-    setPizzaId({ state, commit }, id) {
-      console.log("pizza id", id);
+    setPizzaId({ commit }, id) {
       commit(
         SET_ENTITY,
         {
@@ -151,60 +124,7 @@ export default {
         },
         { root: true }
       );
-      console.log("pizza id after update", state.pizzaId);
     },
-    /*setNewPizza(
-      { state, commit },
-      selectedDough,
-      selectedSauce,
-      selectedSize,
-      selectedIngredients,
-      pizzaPrice
-    ) {
-      const data = {
-        dough: selectedDough,
-        sauce: selectedSauce,
-        size: selectedSize,
-        ingredients: selectedIngredients,
-        name: state.pizzaName,
-        price: pizzaPrice,
-      };
-
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "newPizza",
-          value: data,
-        },
-        { root: true }
-      );
-    },*/
-    /*addToCart({ state, getters, commit, dispatch }) {
-      const newPizza = {
-        dough: getters.selectedDough,
-        sauce: getters.selectedSauce,
-        size: getters.selectedSize,
-        ingredients: getters.selectedIngredients,
-        name: state.pizzaName,
-        price: getters.pizzaPrice,
-        value: 1,
-      };
-
-      commit(
-        ADD_ENTITY,
-        {
-          module,
-          entity: "cartItems",
-          value: newPizza,
-        },
-        { root: true }
-      );
-      console.log("all pizzas", state.cartItems);
-      setCartItemsToLS(state.cartItems);
-      //dispatch("updateTotalPrice", state.totalPrice);
-      dispatch("setPizzaName", "");
-    },*/
     changeSelectedItem({ state, commit }, { newValue, itemName }) {
       const data = cloneDeep(state[itemName]);
       // const data = state[itemName];
@@ -241,27 +161,6 @@ export default {
         // тут тоже
         // придется передавать весь ингредиент с новым значением value тогда
         // здесь как раз идеально переписать на UPDATE
-        {
-          module,
-          entity: "ingredients",
-          value: data,
-        },
-        { root: true }
-      );
-    },
-    setSelectedIngredients({ state, commit }, ingredients) {
-      const data = cloneDeep(state.ingredients);
-      ingredients.map(
-        (ingredient) =>
-          (data.find((item) => item.name === ingredient.name).value =
-            ingredient.value)
-      );
-      // а остальные ингредиенты не из списка должны быть по нулям, всем выставить значение ноль
-
-      commit(
-        SET_ENTITY,
-        // тут тоже
-        // придется передавать весь ингредиент с новым значением value тогда
         {
           module,
           entity: "ingredients",

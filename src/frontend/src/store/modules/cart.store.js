@@ -79,7 +79,11 @@ export default {
       );
     },
     addToCart({ state, commit, dispatch, rootState, rootGetters }) {
-      const currentPizza = {
+      // НАЧНИ ТУТ
+      // КАЖЕТСЯ ЧТО НЕТ СМЫСЛА ВОТ ТАК ТЯЖКО ЭТО ВСЕ ЭКСПОРТИРОВАТЬ
+      // НАДО ХРАНИТЬ ОБЪЕКТ CURRENT PIZZA В STATE ?
+      // И ПРИ РЕДАКТИРОВАНИИ ПОДСТАВЛЯТЬ ДАННЫЕ ИЗ АЙТЕМА КОРЗИНЫ В ЭТОТ ОБЪЕКТ ?
+      /*const currentPizza = {
         dough: rootGetters["Builder/selectedDough"],
         sauce: rootGetters["Builder/selectedSauce"],
         size: rootGetters["Builder/selectedSize"],
@@ -87,6 +91,12 @@ export default {
         name: rootState.Builder.pizzaName,
         price: rootGetters["Builder/pizzaPrice"],
         value: 1,
+        id: rootState.Builder.pizzaId ?? createUUIDv4(),
+      };*/
+
+      const pizza = {
+        ...rootGetters["Builder/currentPizza"],
+        price: rootGetters["Builder/pizzaPrice"],
         id: rootState.Builder.pizzaId ?? createUUIDv4(),
       };
 
@@ -96,7 +106,7 @@ export default {
           {
             module,
             entity: "pizzaItems",
-            value: currentPizza,
+            value: pizza,
           },
           { root: true }
         );
@@ -106,7 +116,7 @@ export default {
           {
             module,
             entity: "pizzaItems",
-            value: currentPizza,
+            value: pizza,
           },
           { root: true }
           // Для запуска действий или совершения мутаций в глобальном пространстве имён нужно
@@ -124,20 +134,6 @@ export default {
       dispatch("Builder/setPizzaId", null, { root: true });
       this.$router.push({ name: "IndexHome" });
     },
-    /*removeFromCart({ state, commit }, pizzaName) {
-      const data = cloneDeep(state.cartItems);
-      data.find((item) => item.name === name).value = value;
-
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "cartItems",
-          value: data,
-        },
-        { root: true }
-      );
-    },*/
     changeItemValue({ state, commit }, value) {
       commit(
         UPDATE_ENTITY,

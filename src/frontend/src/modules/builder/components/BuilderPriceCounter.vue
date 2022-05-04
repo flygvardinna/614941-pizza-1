@@ -19,9 +19,10 @@ export default {
   name: "BuilderPriceCounter",
   computed: {
     ...mapState("Builder", ["pizzaName"]),
-    ...mapGetters("Builder", ["pizzaPrice", "selectedIngredients"]),
+    //...mapGetters("Builder", ["pizzaPrice", "selectedIngredients"]),
+    ...mapGetters("Builder", ["currentPizza", "pizzaPrice"]),
     isBtnDisabled() {
-      return !this.selectedIngredients.length || !this.pizzaName;
+      return !this.currentPizza.ingredients.length || !this.pizzaName;
     },
   },
   methods: {

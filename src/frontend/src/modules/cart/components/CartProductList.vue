@@ -105,6 +105,9 @@ export default {
       }
     },
     goToPizzaBuilder(pizza) {
+      // можно передавать в роут id
+      // в билдере находить по id такую пиццу в корзине
+      // брать из роута id и подставлять нужные параметры
       console.log(pizza);
       this.resetBuilderState();
       this.fetchPizzaParts();
@@ -153,6 +156,7 @@ export default {
       // И ДЛЯ КАЖДОГО ВЫЗВАТЬ ЭТОТ ACTION
       // тут надо как-то сделать, чтоб не новая пицца добавлялась в корзину, а изменялась та, что уже есть - работать с id
       this.$router.push({ name: "IndexHome" });
+      // this.$router.push({ name: "EditPizza", params: { id: pizza.id } });
       // вынести названия роутов в константы
     },
   },

@@ -16,7 +16,7 @@
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
             <div
-              v-for="ingredient in selectedIngredients"
+              v-for="ingredient in currentPizza.ingredients"
               :key="ingredient.name"
               class="pizza__filling"
               :class="[
@@ -35,13 +35,16 @@
 
 <script>
 import { MAX_INGREDIENT_VALUE } from "@/common/constants";
-import { mapActions, mapGetters, mapState } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import AppDrop from "@/common/components/AppDrop";
 import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounter";
 
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop, BuilderPriceCounter },
+  /*data: () => ({
+    pizzaName: "",
+  }),*/
   computed: {
     ...mapState("Builder", [
       /*"selectedDough",
@@ -50,13 +53,14 @@ export default {
       "pizzaName",
     ]),
     ...mapGetters("Builder", [
-      "selectedDough",
+      "currentPizza",
+      /*"selectedDough",
       "selectedSauce",
-      "selectedIngredients",
+      "selectedIngredients",*/
     ]),
     pizzaClassName() {
-      const dough = this.selectedDough.value === "large" ? "big" : "small";
-      return `pizza--foundation--${dough}-${this.selectedSauce.value}`;
+      const dough = this.currentPizza.dough.value === "large" ? "big" : "small";
+      return `pizza--foundation--${dough}-${this.currentPizza.sauce.value}`;
     },
   },
   methods: {
