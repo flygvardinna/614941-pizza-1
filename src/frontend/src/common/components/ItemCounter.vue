@@ -1,19 +1,22 @@
 <template>
-  <div class="counter counter--orange ingredients__counter">
+  <div class="counter">
     <button
       type="button"
       class="counter__button counter__button--minus"
       :disabled="isMinusBtnDisabled"
-      @click="removeIngredient"
+      @click="removeItem"
     >
       <span class="visually-hidden">Меньше</span>
     </button>
     <input :value="value" type="text" name="counter" class="counter__input" />
     <button
       type="button"
-      class="counter__button counter__button--plus"
+      :class="[
+        'counter__button counter__button--plus',
+        isOrangeBtn ? 'counter__button--orange' : '',
+      ]"
       :disabled="isPlusBtnDisabled"
-      @click="addIngredient"
+      @click="addItem"
     >
       <span class="visually-hidden">Больше</span>
     </button>
@@ -21,14 +24,24 @@
 </template>
 
 <script>
-import { MIN_INGREDIENT_VALUE, MAX_INGREDIENT_VALUE } from "@/common/constants";
-
 export default {
   name: "ItemCounter",
   props: {
     value: {
       type: Number,
       required: true,
+    },
+    minValue: {
+      type: Number,
+      required: true,
+    },
+    maxValue: {
+      type: Number,
+      required: true,
+    },
+    isOrangeBtn: {
+      type: Boolean,
+      default: false,
     },
   },
   data: function () {
@@ -38,10 +51,10 @@ export default {
   },
   computed: {
     isMinusBtnDisabled() {
-      return this.value === MIN_INGREDIENT_VALUE;
+      return this.value === this.minValue;
     },
     isPlusBtnDisabled() {
-      return this.value === MAX_INGREDIENT_VALUE;
+      return this.value === this.maxValue;
     },
   },
   watch: {
@@ -50,13 +63,13 @@ export default {
     },
   },
   methods: {
-    addIngredient() {
+    addItem() {
       this.counter++;
-      this.$emit("changeIngredientValue", this.counter);
+      this.$emit("changeItemValue", this.counter);
     },
-    removeIngredient() {
+    removeItem() {
       this.counter--;
-      this.$emit("changeIngredientValue", this.counter);
+      this.$emit("changeItemValue", this.counter);
     },
   },
 };

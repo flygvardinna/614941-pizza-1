@@ -7,16 +7,16 @@
         name="pizza_name"
         placeholder="Введите название пиццы"
         :value="pizzaName"
-        @input="$emit('input', $event.target.value)"
+        @input="setPizzaName($event.target.value)"
       />
     </label>
 
-    <AppDrop @drop="$emit('addIngredient', $event)">
+    <AppDrop @drop="addIngredient($event)">
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
             <div
-              v-for="ingredient in ingredients"
+              v-for="ingredient in currentPizza.ingredients"
               :key="ingredient.name"
               class="pizza__filling"
               :class="[
@@ -29,61 +29,29 @@
       </div>
     </AppDrop>
 
-    <BuilderPriceCounter
-      :price="price"
-      :pizzaName="pizzaName"
-      :ingredients="ingredients"
-      @addToCart="$emit('addToCart')"
-    />
+    <BuilderPriceCounter />
   </div>
 </template>
 
 <script>
 import { MAX_INGREDIENT_VALUE } from "@/common/constants";
+import { mapState, mapActions, mapGetters } from "vuex";
 import AppDrop from "@/common/components/AppDrop";
 import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounter";
 
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop, BuilderPriceCounter },
-  model: {
-    prop: "pizzaName",
-    event: "input",
-  },
-  props: {
-    dough: {
-      type: String,
-      required: true,
-    },
-    sauce: {
-      type: String,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
-    },
-    pizzaName: {
-      type: String,
-      required: true,
-    },
-    price: {
-      type: Number,
-      required: true,
-    },
-  },
-  data() {
-    return {
-      value: "",
-    };
-  },
   computed: {
+    ...mapState("Builder", ["pizzaName"]),
+    ...mapGetters("Builder", ["currentPizza"]),
     pizzaClassName() {
-      const dough = this.dough === "large" ? "big" : "small";
-      return `pizza--foundation--${dough}-${this.sauce}`;
+      const dough = this.currentPizza.dough.value === "large" ? "big" : "small";
+      return `pizza--foundation--${dough}-${this.currentPizza.sauce.value}`;
     },
   },
   methods: {
+    ...mapActions("Builder", ["setPizzaName", "changeIngredientValue"]),
     getIngredientClassName(value) {
       if (value < 2) {
         return;
@@ -91,6 +59,14 @@ export default {
       return value === MAX_INGREDIENT_VALUE
         ? `pizza__filling--third`
         : `pizza__filling--second`;
+    },
+    addIngredient(ingredient) {
+      if (ingredient.value !== MAX_INGREDIENT_VALUE) {
+        this.changeIngredientValue({
+          ...ingredient,
+          value: ingredient.value + 1,
+        });
+      }
     },
   },
 };

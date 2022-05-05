@@ -1,12 +1,11 @@
 <template>
   <div class="content__result">
-    <p>Итого: {{ price }} ₽</p>
+    <p>Итого: {{ pizzaPrice }} ₽</p>
     <button
       type="button"
       class="button"
-      :class="{ 'button--disabled': isBtnDisabled }"
       :disabled="isBtnDisabled"
-      @click="$emit('addToCart')"
+      @click="addToCart"
     >
       Готовьте!
     </button>
@@ -14,25 +13,25 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
+
 export default {
   name: "BuilderPriceCounter",
-  props: {
-    price: {
-      type: Number,
-      required: true,
-    },
-    pizzaName: {
-      type: String,
-      required: true,
-    },
-    ingredients: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["pizzaName"]),
+    ...mapGetters("Builder", ["currentPizza", "pizzaPrice"]),
+    isBtnDisabled() {
+      return !this.currentPizza.ingredients.length || !this.pizzaName;
     },
   },
-  computed: {
-    isBtnDisabled() {
-      return !this.ingredients.length || !this.pizzaName;
+  methods: {
+    ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
+    ...mapActions("Cart", ["addItem"]),
+    addToCart() {
+      this.addItem();
+      this.resetBuilderState();
+      this.fetchPizzaParts();
+      void this.$router.push({ name: "IndexHome" });
     },
   },
 };

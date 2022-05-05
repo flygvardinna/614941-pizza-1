@@ -12,7 +12,7 @@
           :inputName="'dought'"
           :className="`dough__input dough__input--${item.value}`"
           @changeSelectedItem="
-            $emit('changeSelectedItem', {
+            changeSelectedItem({
               newValue: $event.target.value,
               itemName: 'dough',
             })
@@ -27,16 +27,17 @@
 </template>
 
 <script>
+import { mapState, mapActions } from "vuex";
 import SelectorItem from "@/common/components/SelectorItem";
 
 export default {
   name: "BuilderDoughSelector",
   components: { SelectorItem },
-  props: {
-    dough: {
-      type: Array,
-      required: true,
-    },
+  computed: {
+    ...mapState("Builder", ["dough"]),
+  },
+  methods: {
+    ...mapActions("Builder", ["changeSelectedItem"]),
   },
 };
 </script>

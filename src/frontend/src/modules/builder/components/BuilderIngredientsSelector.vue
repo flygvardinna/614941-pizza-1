@@ -15,7 +15,7 @@
             :inputName="'sauce'"
             :className="'radio ingredients__input'"
             @changeSelectedItem="
-              $emit('changeSelectedItem', {
+              changeSelectedItem({
                 newValue: $event.target.value,
                 itemName: 'sauces',
               })
@@ -48,11 +48,14 @@
                 </AppDrag>
               </AppDrop>
               <ItemCounter
+                class="ingredients__counter"
                 :value="ingredient.value"
-                @changeIngredientValue="
-                  $emit('changeIngredientValue', {
+                :minValue="minIngredientValue"
+                :maxValue="maxIngredientValue"
+                @changeItemValue="
+                  changeIngredientValue({
+                    ...ingredient,
                     value: $event,
-                    name: ingredient.name,
                   })
                 "
               />
@@ -65,7 +68,8 @@
 </template>
 
 <script>
-import { MAX_INGREDIENT_VALUE } from "@/common/constants";
+import { MIN_INGREDIENT_VALUE, MAX_INGREDIENT_VALUE } from "@/common/constants";
+import { mapState, mapActions } from "vuex";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
 import SelectorItem from "@/common/components/SelectorItem";
@@ -74,19 +78,19 @@ import ItemCounter from "@/common/components/ItemCounter";
 export default {
   name: "BuilderIngredientsSelector",
   components: { AppDrag, AppDrop, SelectorItem, ItemCounter },
-  props: {
-    sauces: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["sauces", "ingredients"]),
+    minIngredientValue() {
+      return MIN_INGREDIENT_VALUE;
     },
-    ingredients: {
-      type: Array,
-      required: true,
+    maxIngredientValue() {
+      return MAX_INGREDIENT_VALUE;
     },
   },
   methods: {
+    ...mapActions("Builder", ["changeSelectedItem", "changeIngredientValue"]),
     checkIsIngredientDraggable(ingredient) {
-      return ingredient.value < MAX_INGREDIENT_VALUE;
+      return ingredient.value < this.maxIngredientValue;
     },
   },
 };
