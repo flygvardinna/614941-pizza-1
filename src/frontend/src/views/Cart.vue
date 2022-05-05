@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <div>
     <form action="#" method="post" class="layout-form">
       <main class="content cart">
         <div class="container">
@@ -43,8 +43,7 @@
 </template>
 
 <script>
-import { RESET_BUILDER_STATE, RESET_CART_STATE } from "@/store/mutation-types";
-import { mapActions, mapMutations, mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 import CartProductList from "@/modules/cart/components/CartProductList";
 import CartAdditionalList from "@/modules/cart/components/CartAdditionalList";
 import CartOrderForm from "@/modules/cart/components/CartOrderForm";
@@ -69,34 +68,24 @@ export default {
     },
   },
   mounted() {
-    // для очистки стора
-    // localStorage.clear();
-    //this.fetchAdditionalItems();
-    //this.setCartItems();
-    if (this.additionalItems.length === 0 || this.pizzaItems.length === 0) {
-      // проверять количество пицц надо для того, чтоб если пицц нет, то стор с additionalItems очищался
-      // так как дополнительное можно заказать только вместе с пиццей
+    if (this.additionalItems.length === 0) {
       this.fetchAdditionalItems();
     }
-    console.log("cart items", this.pizzaItems);
   },
-  // НАЧНИ ТУТ
-  // fetchAdditionalItems надо делать не в index.js, а в корзине?
-  // но смотри что спрашивали в чате. Чтоб не поломалось сохранение этих айтемов
-  // если сходили в конструктор обратно и вернулись в корзину
+  updated() {
+    if (this.pizzaItems.length === 0) {
+      this.fetchAdditionalItems();
+    }
+  },
   methods: {
-    ...mapActions("Builder", ["fetchPizzaParts"]),
-    ...mapActions("Cart", ["fetchAdditionalItems", "setCartItems"]),
-    ...mapMutations("Builder", {
-      resetBuilderState: RESET_BUILDER_STATE,
-    }),
-    ...mapMutations("Cart", {
-      resetCartState: RESET_CART_STATE,
-    }),
+    ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
+    ...mapActions("Cart", [
+      "resetCartState",
+      "fetchAdditionalItems",
+      "setCartItems",
+    ]),
     goToBuilderPage() {
       this.$router.push({ name: "IndexHome" });
-      this.resetBuilderState();
-      this.fetchPizzaParts();
     },
     showDialog(event) {
       event.preventDefault();
@@ -112,8 +101,7 @@ export default {
       this.resetBuilderState();
       this.resetCartState();
       this.fetchPizzaParts();
-      // аналог clickOutside нужен/не нужен?
-      // в vueWork есть, добавь
+      localStorage.clear();
     },
   },
 };

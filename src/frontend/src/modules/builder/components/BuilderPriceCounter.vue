@@ -19,14 +19,20 @@ export default {
   name: "BuilderPriceCounter",
   computed: {
     ...mapState("Builder", ["pizzaName"]),
-    //...mapGetters("Builder", ["pizzaPrice", "selectedIngredients"]),
     ...mapGetters("Builder", ["currentPizza", "pizzaPrice"]),
     isBtnDisabled() {
       return !this.currentPizza.ingredients.length || !this.pizzaName;
     },
   },
   methods: {
-    ...mapActions("Cart", ["addToCart"]),
+    ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
+    ...mapActions("Cart", ["addItem"]),
+    addToCart() {
+      this.addItem();
+      this.resetBuilderState();
+      this.fetchPizzaParts();
+      void this.$router.push({ name: "IndexHome" });
+    },
   },
 };
 </script>

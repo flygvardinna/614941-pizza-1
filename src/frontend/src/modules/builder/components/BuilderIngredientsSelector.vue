@@ -50,13 +50,12 @@
               <ItemCounter
                 class="ingredients__counter"
                 :value="ingredient.value"
-                :isOrangeBtn="false"
                 :minValue="minIngredientValue"
                 :maxValue="maxIngredientValue"
                 @changeItemValue="
                   changeIngredientValue({
+                    ...ingredient,
                     value: $event,
-                    name: ingredient.name,
                   })
                 "
               />

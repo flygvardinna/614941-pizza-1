@@ -3,7 +3,6 @@ import {
   ADD_ENTITY,
   UPDATE_ENTITY,
   DELETE_ENTITY,
-  //RESET_BUILDER_STATE,
   RESET_CART_STATE,
 } from "@/store/mutation-types";
 import additionalItems from "@/static/misc.json";
@@ -42,6 +41,9 @@ export default {
     },
   },
   actions: {
+    resetCartState({ commit }) {
+      commit(RESET_CART_STATE, { root: true });
+    },
     fetchAdditionalItems({ commit }) {
       const items = additionalItems.map((item) =>
         normalizeAdditionalItems(item)
@@ -78,84 +80,46 @@ export default {
         { root: true }
       );
     },
-    addToCart({ state, commit, dispatch, rootState, rootGetters }) {
-      // НАЧНИ ТУТ
-      // КАЖЕТСЯ ЧТО НЕТ СМЫСЛА ВОТ ТАК ТЯЖКО ЭТО ВСЕ ЭКСПОРТИРОВАТЬ
-      // НАДО ХРАНИТЬ ОБЪЕКТ CURRENT PIZZA В STATE ?
-      // И ПРИ РЕДАКТИРОВАНИИ ПОДСТАВЛЯТЬ ДАННЫЕ ИЗ АЙТЕМА КОРЗИНЫ В ЭТОТ ОБЪЕКТ ?
-      /*const currentPizza = {
-        dough: rootGetters["Builder/selectedDough"],
-        sauce: rootGetters["Builder/selectedSauce"],
-        size: rootGetters["Builder/selectedSize"],
-        ingredients: rootGetters["Builder/selectedIngredients"],
-        name: rootState.Builder.pizzaName,
-        price: rootGetters["Builder/pizzaPrice"],
-        value: 1,
-        id: rootState.Builder.pizzaId ?? createUUIDv4(),
-      };*/
-
+    addItem({ state, commit, rootState, rootGetters }) {
+      const pizzaId = rootState.Builder.pizzaId;
       const pizza = {
         ...rootGetters["Builder/currentPizza"],
         price: rootGetters["Builder/pizzaPrice"],
-        id: rootState.Builder.pizzaId ?? createUUIDv4(),
+        id: pizzaId ?? createUUIDv4(),
       };
+      const mutationName = pizzaId !== null ? UPDATE_ENTITY : ADD_ENTITY;
 
-      if (rootState.Builder.pizzaId !== null) {
-        commit(
-          UPDATE_ENTITY,
-          {
-            module,
-            entity: "pizzaItems",
-            value: pizza,
-          },
-          { root: true }
-        );
-      } else {
-        commit(
-          ADD_ENTITY,
-          {
-            module,
-            entity: "pizzaItems",
-            value: pizza,
-          },
-          { root: true }
-          // Для запуска действий или совершения мутаций в глобальном пространстве имён нужно
-          // добавить { root: true } 3-м аргументом в dispatch и commit.
-          // где не глобальное, можно убрать, получается?
-          // в vueWork это остается везде
-        );
-      }
-      console.log("all pizzas", state.pizzaItems);
+      commit(
+        mutationName,
+        {
+          module,
+          entity: "pizzaItems",
+          value: pizza,
+        },
+        { root: true }
+      );
+
       setCartItemsToLS("pizzaItems", state.pizzaItems);
-      // commit(RESET_BUILDER_STATE, { root: true });
-      // вернись к этому позже
-      // скорей всего нужен метод в Builder, который вызывает эту мутацию
-      dispatch("Builder/setPizzaName", "", { root: true });
-      dispatch("Builder/setPizzaId", null, { root: true });
-      this.$router.push({ name: "IndexHome" });
     },
-    changeItemValue({ state, commit }, value) {
+    changeItemValue({ state, commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
           module,
           entity: "pizzaItems",
-          value: value,
+          value: item,
         },
         { root: true }
       );
-      console.log("items after change", state.pizzaItems);
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    // убрать отдельный метод ?
-    // ОБА МЕТОДА МОЖНО СОЕДИНИИТЬ В ОДИН, ЕСЛИ ПЕРЕДАВАТЬ ИМЯ ДЛЯ ENTITY
-    changeAdditionalItemValue({ state, commit }, value) {
+    changeAdditionalItemValue({ state, commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
           module,
           entity: "additionalItems",
-          value: value,
+          value: item,
         },
         { root: true }
       );
@@ -171,7 +135,6 @@ export default {
         },
         { root: true }
       );
-      console.log("items after delete", state.pizzaItems);
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
   },

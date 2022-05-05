@@ -44,7 +44,6 @@
 import { MIN_CART_ITEM_VALUE, MAX_CART_ITEM_VALUE } from "@/common/constants";
 import { mapActions, mapState } from "vuex";
 import ItemCounter from "@/common/components/ItemCounter";
-import { cloneDeep } from "lodash";
 
 export default {
   name: "CartAdditionalList",
@@ -64,9 +63,7 @@ export default {
       return item.value > 0 ? item.price * item.value : item.price;
     },
     changeItemQuantity({ item, value }) {
-      const data = cloneDeep(item);
-      data.value = value;
-      this.changeAdditionalItemValue(data);
+      this.changeAdditionalItemValue({ ...item, value });
     },
   },
 };

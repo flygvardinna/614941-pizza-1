@@ -64,14 +64,10 @@
 </template>
 
 <script>
-//import { mapState, mapActions } from "vuex";
-//import SelectorItem from "@/common/components/SelectorItem";
-
 import { mapState } from "vuex";
 
 export default {
   name: "CartOrderForm",
-  /*components: { SelectorItem },*/
   data: () => ({
     isAddressFormDisplayed: false,
     isAddressReadonly: false,

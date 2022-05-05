@@ -27,9 +27,6 @@
 export default {
   name: "ItemCounter",
   props: {
-    // это value тоже хранить в сторе?
-    // видимо, нет - в vuework это остается в компонентах
-    // в сторе храним только основные данные, пицца итд
     value: {
       type: Number,
       required: true,
@@ -44,8 +41,7 @@ export default {
     },
     isOrangeBtn: {
       type: Boolean,
-      required: true,
-      // переделай все в default
+      default: false,
     },
   },
   data: function () {

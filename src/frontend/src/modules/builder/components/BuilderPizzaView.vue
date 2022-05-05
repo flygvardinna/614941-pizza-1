@@ -42,22 +42,9 @@ import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounte
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop, BuilderPriceCounter },
-  /*data: () => ({
-    pizzaName: "",
-  }),*/
   computed: {
-    ...mapState("Builder", [
-      /*"selectedDough",
-      "selectedSauce",
-      "selectedIngredients",*/
-      "pizzaName",
-    ]),
-    ...mapGetters("Builder", [
-      "currentPizza",
-      /*"selectedDough",
-      "selectedSauce",
-      "selectedIngredients",*/
-    ]),
+    ...mapState("Builder", ["pizzaName"]),
+    ...mapGetters("Builder", ["currentPizza"]),
     pizzaClassName() {
       const dough = this.currentPizza.dough.value === "large" ? "big" : "small";
       return `pizza--foundation--${dough}-${this.currentPizza.sauce.value}`;
@@ -76,7 +63,7 @@ export default {
     addIngredient(ingredient) {
       if (ingredient.value !== MAX_INGREDIENT_VALUE) {
         this.changeIngredientValue({
-          name: ingredient.name,
+          ...ingredient,
           value: ingredient.value + 1,
         });
       }
