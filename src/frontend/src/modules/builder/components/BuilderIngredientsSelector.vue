@@ -49,13 +49,13 @@
               </AppDrop>
               <ItemCounter
                 class="ingredients__counter"
-                :value="ingredient.value"
+                :value="ingredient.quantity"
                 :minValue="minIngredientValue"
                 :maxValue="maxIngredientValue"
                 @changeItemValue="
-                  changeIngredientValue({
+                  changeIngredientQuantity({
                     ...ingredient,
-                    value: $event,
+                    quantity: $event,
                   })
                 "
               />
@@ -88,9 +88,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions("Builder", ["changeSelectedItem", "changeIngredientValue"]),
+    ...mapActions("Builder", [
+      "changeSelectedItem",
+      "changeIngredientQuantity",
+    ]),
     checkIsIngredientDraggable(ingredient) {
-      return ingredient.value < this.maxIngredientValue;
+      return ingredient.quantity < this.maxIngredientValue;
     },
   },
 };

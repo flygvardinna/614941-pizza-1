@@ -13,6 +13,16 @@ export default {
   name: "App",
   components: { AppLayout },
   created() {
+    // разберись, зачем это
+    window.onerror = function (msg, url, line, col, error) {
+      console.error(error);
+    };
+
+    // Note: check auth
+    /*if (this.$jwt.getToken()) {
+      setAuth(this.$store);
+    }*/
+
     this.$store.dispatch("init");
   },
 };

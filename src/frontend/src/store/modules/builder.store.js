@@ -4,14 +4,7 @@ import {
   UPDATE_ENTITY,
   RESET_BUILDER_STATE,
 } from "@/store/mutation-types";
-import pizza from "@/static/pizza.json";
-import {
-  capitalize,
-  normalizeDetail,
-  normalizeIngredients,
-  findSelectedItem,
-} from "@/common/helpers";
-import { Dough, Sauce, Size, Ingredient } from "@/common/constants";
+import { capitalize, findSelectedItem } from "@/common/helpers";
 
 const module = capitalize("builder");
 
@@ -33,15 +26,15 @@ export default {
         dough: findSelectedItem(dough),
         sauce: findSelectedItem(sauces),
         size: findSelectedItem(sizes),
-        ingredients: ingredients.filter((item) => item.value > 0),
+        ingredients: ingredients.filter((item) => item.quantity > 0),
         name: pizzaName,
         id: pizzaId,
-        value: 1,
+        quantity: 1,
       };
     },
     pizzaPrice(state, getters) {
       const ingredientsPrices = getters.currentPizza.ingredients.map(
-        (item) => item.price * item.value
+        (item) => item.price * item.quantity
       );
       const ingredientsSum = ingredientsPrices.reduce((a, b) => a + b, 0);
       return (
@@ -59,15 +52,16 @@ export default {
   },
   actions: {
     resetBuilderState({ commit }) {
-      commit(RESET_BUILDER_STATE, { root: true });
+      commit(RESET_BUILDER_STATE);
     },
-    fetchPizzaParts({ commit }) {
-      const dough = pizza.dough.map((item) => normalizeDetail(Dough, item));
-      const sauces = pizza.sauces.map((item) => normalizeDetail(Sauce, item));
-      const sizes = pizza.sizes.map((item) => normalizeDetail(Size, item));
-      const ingredients = pizza.ingredients.map((item) =>
-        normalizeIngredients(Ingredient, item)
-      );
+    async fetchPizzaParts({ commit }) {
+      const dough = await this.$api.builder.fetchDough();
+      const sauces = await this.$api.builder.fetchSauces();
+      // const sizes = await this.$api.builder.fetchDetail("sizes", Size);
+      const sizes = await this.$api.builder.fetchSizes();
+      const ingredients = await this.$api.builder.fetchIngredients();
+      console.log("ready ingredients", ingredients);
+
       commit(
         SET_ENTITY,
         {
@@ -143,7 +137,7 @@ export default {
         { root: true }
       );
     },
-    changeIngredientValue({ commit }, ingredient) {
+    changeIngredientQuantity({ commit }, ingredient) {
       commit(
         UPDATE_ENTITY,
         {

@@ -77,12 +77,19 @@ export default {
   }),
   computed: {
     ...mapState("Auth", ["user"]),
+    /*isAddressFormDisplayed() {
+      return ;
+    },*/
   },
   methods: {
     onAddressSelectChanged(event) {
       switch (event.target.value) {
         case "1":
           this.isAddressFormDisplayed = false;
+          // ЗАМЕЧАНИЕ вот эти флаги лучше сделать компьютедами,
+          // завязанными на значение текущего выбранного варианта доставки
+          // пока не поняла, как должно вычисляться значение. Хранить вариант доставки в state?
+          // сделаю позже, когда буду делать адреса - может станет понятно
           break;
         case "2":
           this.isAddressFormDisplayed = true;

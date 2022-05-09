@@ -19,13 +19,13 @@
         <div class="additional-list__wrapper">
           <ItemCounter
             class="additional-list__counter"
-            :value="item.value"
+            :value="item.quantity"
             :isOrangeBtn="true"
             :minValue="minItemValue"
             :maxValue="maxItemValue"
             @changeItemValue="
               changeItemQuantity({
-                value: $event,
+                quantity: $event,
                 item,
               })
             "
@@ -58,12 +58,12 @@ export default {
     },
   },
   methods: {
-    ...mapActions("Cart", ["changeAdditionalItemValue"]),
+    ...mapActions("Cart", ["changeAdditionalItemQuantity"]),
     calculateItemPrice(item) {
-      return item.value > 0 ? item.price * item.value : item.price;
+      return item.quantity > 0 ? item.price * item.quantity : item.price;
     },
-    changeItemQuantity({ item, value }) {
-      this.changeAdditionalItemValue({ ...item, value });
+    changeItemQuantity({ item, quantity }) {
+      this.changeAdditionalItemQuantity({ ...item, quantity });
     },
   },
 };

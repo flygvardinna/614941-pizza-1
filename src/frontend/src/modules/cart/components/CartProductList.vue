@@ -25,13 +25,13 @@
 
       <ItemCounter
         class="cart-list__counter"
-        :value="pizza.value"
+        :value="pizza.quantity"
         :isOrangeBtn="true"
         :minValue="minPizzaValue"
         :maxValue="maxPizzaValue"
         @changeItemValue="
           changePizzaQuantity({
-            value: $event,
+            quantity: $event,
             pizza,
           })
         "
@@ -72,10 +72,10 @@ export default {
     },
   },
   methods: {
-    ...mapActions("Cart", ["changeItemValue", "deleteItem"]),
+    ...mapActions("Cart", ["changeItemQuantity", "deleteItem"]),
     ...mapActions("Builder", [
       "changeSelectedItem",
-      "changeIngredientValue",
+      "changeIngredientQuantity",
       "setPizzaName",
       "setPizzaId",
     ]),
@@ -87,13 +87,13 @@ export default {
       return ingredients.map((item) => item.name.toLowerCase()).join(", ");
     },
     calculatePizzaPrice(pizza) {
-      return pizza.price * pizza.value;
+      return pizza.price * pizza.quantity;
     },
-    changePizzaQuantity({ pizza, value }) {
-      if (value === 0) {
+    changePizzaQuantity({ pizza, quantity }) {
+      if (quantity === 0) {
         this.deleteItem(pizza.id);
       } else {
-        this.changeItemValue({ ...pizza, value });
+        this.changeItemQuantity({ ...pizza, quantity });
       }
     },
     goToPizzaBuilder(pizza) {
@@ -114,7 +114,7 @@ export default {
       });
 
       pizza.ingredients.forEach((ingredient) => {
-        this.changeIngredientValue(ingredient);
+        this.changeIngredientQuantity(ingredient);
       });
 
       this.$router.push({ name: "IndexHome" });

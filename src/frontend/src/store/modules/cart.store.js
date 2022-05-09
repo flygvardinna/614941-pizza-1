@@ -5,7 +5,6 @@ import {
   DELETE_ENTITY,
   RESET_CART_STATE,
 } from "@/store/mutation-types";
-import additionalItems from "@/static/misc.json";
 import {
   capitalize,
   getCartItems,
@@ -19,7 +18,6 @@ const module = capitalize("cart");
 const initialState = () => ({
   pizzaItems: [],
   additionalItems: [],
-  totalPrice: 0,
 });
 
 export default {
@@ -27,9 +25,9 @@ export default {
   state: initialState(),
   getters: {
     totalPrice({ pizzaItems, additionalItems }) {
-      const pizzaPrices = pizzaItems.map((item) => item.price * item.value);
+      const pizzaPrices = pizzaItems.map((item) => item.price * item.quantity);
       const additionalItemsPrices = additionalItems.map(
-        (item) => item.price * item.value
+        (item) => item.price * item.quantity
       );
       const allPrices = pizzaPrices.concat(additionalItemsPrices);
       return allPrices.length ? allPrices.reduce((a, b) => a + b, 0) : 0;
@@ -42,12 +40,19 @@ export default {
   },
   actions: {
     resetCartState({ commit }) {
-      commit(RESET_CART_STATE, { root: true });
+      commit(RESET_CART_STATE);
     },
-    fetchAdditionalItems({ commit }) {
-      const items = additionalItems.map((item) =>
-        normalizeAdditionalItems(item)
-      );
+    async fetchAdditionalItems({ commit }) {
+      const data = await this.$api.misc.query();
+      const items = data.map((item) => normalizeAdditionalItems(item));
+      // пока пусть тут остается, но надо тоже в api вынести вообще
+      // тут бы как-то переписать, чтоб не заводить 2 переменные
+      // но когда просто изменяю data в итоге нормалайз не произойдет
+      // видимо потому что const нельзя изменять
+      // если сделать let data - тоже не поможет
+      // кажется тут надо что-то типа .then обработка промисов, но тоже пока некраиво все выглядело и не работало
+      // подумай
+
       commit(
         SET_ENTITY,
         {
@@ -86,6 +91,15 @@ export default {
         ...rootGetters["Builder/currentPizza"],
         price: rootGetters["Builder/pizzaPrice"],
         id: pizzaId ?? createUUIDv4(),
+        // по api цену и id пиццы отправлять не надо
+        // id нужен мне только чтоб работать с пиццами в корзине - изменять/удалять
+        // в инфе о заказе у пиццы потом будет id, но уже какой-то другой
+
+        // можно делать как в примере в api
+        // Форматирование данных перед отправкой на сервер (убираем лишнее)
+        //  _createRequest(task) {
+        //  const { ticks, comments, status, timeStatus, user, ...request } = task;
+        //  return request;
       };
       const mutationName = pizzaId !== null ? UPDATE_ENTITY : ADD_ENTITY;
 
@@ -101,7 +115,7 @@ export default {
 
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    changeItemValue({ state, commit }, item) {
+    changeItemQuantity({ state, commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
@@ -113,7 +127,7 @@ export default {
       );
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    changeAdditionalItemValue({ state, commit }, item) {
+    changeAdditionalItemQuantity({ state, commit }, item) {
       commit(
         UPDATE_ENTITY,
         {

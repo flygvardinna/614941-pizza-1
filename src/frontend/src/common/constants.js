@@ -40,3 +40,5 @@ export const MAX_INGREDIENT_VALUE = 3;
 
 export const MIN_CART_ITEM_VALUE = 0;
 export const MAX_CART_ITEM_VALUE = 10;
+
+export const MESSAGE_LIVE_TIME = 3000;

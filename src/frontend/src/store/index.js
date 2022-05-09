@@ -1,17 +1,23 @@
+import { uniqueId } from "lodash";
 import Vue from "vue";
 import Vuex from "vuex";
+import VuexPlugins from "@/plugins/vuexPlugins";
 import modules from "@/store/modules";
 import {
+  ADD_NOTIFICATION,
+  DELETE_NOTIFICATION,
   SET_ENTITY,
   ADD_ENTITY,
   UPDATE_ENTITY,
   DELETE_ENTITY,
 } from "@/store/mutation-types";
+import { MESSAGE_LIVE_TIME } from "@/common/constants";
 import jsonUser from "@/static/user.json";
 
 Vue.use(Vuex);
 
 const state = () => ({
+  notifications: [],
   userData: null,
 });
 
@@ -21,6 +27,17 @@ const actions = {
     dispatch("Builder/fetchPizzaParts");
     dispatch("Cart/setCartItems");
   },
+  async createNotification({ commit }, { ...notification }) {
+    const uniqueNotification = {
+      ...notification,
+      id: uniqueId(),
+    };
+    commit(ADD_NOTIFICATION, uniqueNotification);
+    setTimeout(
+      () => commit(DELETE_NOTIFICATION, uniqueNotification.id),
+      MESSAGE_LIVE_TIME
+    );
+  },
   fetchUser({ commit }) {
     const user = jsonUser;
     commit(SET_ENTITY, { module: null, entity: "userData", value: user });
@@ -28,6 +45,14 @@ const actions = {
 };
 
 const mutations = {
+  [ADD_NOTIFICATION](state, notification) {
+    state.notifications = [...state.notifications, notification];
+  },
+  [DELETE_NOTIFICATION](state, id) {
+    state.notifications = state.notifications.filter(
+      (notification) => notification.id !== id
+    );
+  },
   [SET_ENTITY](state, { module, entity, value }) {
     module ? (state[module][entity] = value) : (state[entity] = value);
   },
@@ -66,5 +91,6 @@ export default new Vuex.Store({
   state,
   actions,
   mutations,
+  plugins: [VuexPlugins],
   modules,
 });

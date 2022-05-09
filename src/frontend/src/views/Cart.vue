@@ -24,11 +24,11 @@
       <CartFooter
         v-if="!isCartEmpty"
         @moreBtnClicked="goToBuilderPage"
-        @submitBtnClicked="showDialog($event)"
+        @submitBtnClicked="makeNewOrder($event)"
       />
     </form>
     <div class="popup" v-if="isOrderPopupDisplayed">
-      <a class="close" @click="finishOrder">
+      <a class="close" @click="closePopup">
         <span class="visually-hidden">Закрыть попап</span>
       </a>
       <div class="popup__title">
@@ -36,7 +36,7 @@
       </div>
       <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
       <div class="popup__button">
-        <a class="button" @click="finishOrder">Отлично, я жду!</a>
+        <a class="button" @click="closePopup">Отлично, я жду!</a>
       </div>
     </div>
   </div>
@@ -48,6 +48,7 @@ import CartProductList from "@/modules/cart/components/CartProductList";
 import CartAdditionalList from "@/modules/cart/components/CartAdditionalList";
 import CartOrderForm from "@/modules/cart/components/CartOrderForm";
 import CartFooter from "@/modules/cart/components/CartFooter";
+/*import { cleanPizzas, cleanMisc } from "@/common/helpers";*/
 
 export default {
   name: "Cart",
@@ -68,6 +69,7 @@ export default {
     },
   },
   mounted() {
+    //localStorage.clear();
     if (this.additionalItems.length === 0) {
       this.fetchAdditionalItems();
     }
@@ -84,14 +86,22 @@ export default {
       "fetchAdditionalItems",
       "setCartItems",
     ]),
+    ...mapActions("Orders", ["createOrder"]),
     goToBuilderPage() {
       this.$router.push({ name: "IndexHome" });
     },
-    showDialog(event) {
+    makeNewOrder(event) {
       event.preventDefault();
       this.isOrderPopupDisplayed = true;
+
+      /*const newOrder = {
+        userId: null,
+        phone: "",
+        address: null,
+        pizzas: misc,
+      };*/
     },
-    finishOrder() {
+    closePopup() {
       this.isOrderPopupDisplayed = false;
       if (this.user) {
         this.$router.push({ name: "Orders" });
@@ -102,6 +112,9 @@ export default {
       this.resetCartState();
       this.fetchPizzaParts();
       localStorage.clear();
+      // здесь заменить на localStorage.removeItem как в jwt-сервисе,
+      // а иначе будет вместе с товарами удалять токен авторизации
+      // или это вообще исчезнет после подключения api
     },
   },
 };
