@@ -41,6 +41,7 @@
 </template>
 
 <script>
+// поменять альты на просто :alt="item.name" - так будет работать
 import { MIN_CART_ITEM_VALUE, MAX_CART_ITEM_VALUE } from "@/common/constants";
 import { mapActions, mapState } from "vuex";
 import ItemCounter from "@/common/components/ItemCounter";

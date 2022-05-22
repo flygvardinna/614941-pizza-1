@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form action="#" method="post" class="layout-form">
+    <form class="layout-form" @submit="makeNewOrder($event)">
       <main class="content cart">
         <div class="container">
           <div class="cart__title">
@@ -16,16 +16,12 @@
 
             <CartAdditionalList />
 
-            <CartOrderForm />
+            <CartOrderForm @setAddress="setAddress($event)" />
           </div>
         </div>
       </main>
 
-      <CartFooter
-        v-if="!isCartEmpty"
-        @moreBtnClicked="goToBuilderPage"
-        @submitBtnClicked="makeNewOrder($event)"
-      />
+      <CartFooter v-if="!isCartEmpty" />
     </form>
     <div class="popup" v-if="isOrderPopupDisplayed">
       <a class="close" @click="closePopup">
@@ -60,6 +56,8 @@ export default {
   },
   data: () => ({
     isOrderPopupDisplayed: false,
+    address: {},
+    phone: "",
   }),
   computed: {
     ...mapState("Cart", ["pizzaItems", "additionalItems"]),
@@ -87,19 +85,15 @@ export default {
       "setCartItems",
     ]),
     ...mapActions("Orders", ["createOrder"]),
-    goToBuilderPage() {
-      this.$router.push({ name: "IndexHome" });
-    },
-    makeNewOrder(event) {
-      event.preventDefault();
-      this.isOrderPopupDisplayed = true;
+    async makeNewOrder() {
+      //console.log(event);
+      //event.preventDefault();
+      await this.createOrder({
+        phone: this.phone,
+        address: this.address,
+      });
 
-      /*const newOrder = {
-        userId: null,
-        phone: "",
-        address: null,
-        pizzas: misc,
-      };*/
+      this.isOrderPopupDisplayed = true;
     },
     closePopup() {
       this.isOrderPopupDisplayed = false;
@@ -115,6 +109,11 @@ export default {
       // здесь заменить на localStorage.removeItem как в jwt-сервисе,
       // а иначе будет вместе с товарами удалять токен авторизации
       // или это вообще исчезнет после подключения api
+    },
+    setAddress(event) {
+      const { phone, address } = event;
+      this.phone = phone;
+      this.address = address;
     },
   },
 };

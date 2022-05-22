@@ -6,6 +6,29 @@ import {
   BuilderApiService,
 } from "@/services/api.service";
 
+export const setAuth = (store) => {
+  store.$api.auth.setAuthHeader();
+  store.dispatch("Auth/getMe");
+};
+
+/*export const getPizzaPartNameById = (list, id) => {
+  const item = list.find((item) => item.id == id);
+  return item.name;
+};
+// также был вариант в чате от настнавника
+// Попробуйте создать объект мапу, где id будет ключ, а значение будет название
+// И вот так обращаться там где надо использовать название IngrainedMap[ingradientId]
+
+export const getPizzaPartPriceById = (list, id) => {
+  const item = list.find((item) => item.id == id);
+  return item.price;
+};
+
+export const getMultiplierById = (list, id) => {
+  const item = list.find((item) => item.id == id);
+  return item.multiplier;
+};*/
+
 /*export const normalizeDetail = (detail, item) => {
   return {
     ...item,
@@ -29,16 +52,35 @@ export const normalizeAdditionalItems = (item) => {
   };
 };
 
-/*export const cleanPizzas = (pizzas) => {
+export const formatPizzas = (pizzas) => {
   return pizzas.map((pizza) => {
-    const { price, id, ...request } = pizza;
-    pizza.ingredients.map((ingredient) => {
-      const { price, id, ...ingredient } = ingredient;
-      return ingredient;
-    })
-    return request;
+    const ingredients = pizza.ingredients.map((ingredient) => {
+      return {
+        ingredientId: ingredient.id,
+        quantity: ingredient.quantity,
+      };
+    });
+    return {
+      name: pizza.name,
+      quantity: pizza.quantity,
+      doughId: pizza.dough.id,
+      sauceId: pizza.sauce.id,
+      sizeId: pizza.size.id,
+      ingredients,
+    };
   });
-};*/
+};
+
+export const formatMisc = (misc) => {
+  return misc.map((item) => {
+    return {
+      miscId: item.id,
+      quantity: item.quantity,
+    };
+    // здесь не надо отбирать только те misc, где больше 1, тк иначе ошибка 422 unprocessable
+    // уточни у наставника, это ок?
+  });
+};
 
 export const getCartItems = (keyName) => {
   const items = localStorage.getItem(keyName);

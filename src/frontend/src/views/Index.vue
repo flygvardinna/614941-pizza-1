@@ -1,5 +1,5 @@
 <template>
-  <div class="content">
+  <main class="content">
     <router-view />
     <form action="#" method="post">
       <div class="content__wrapper">
@@ -14,7 +14,7 @@
         <BuilderPizzaView />
       </div>
     </form>
-  </div>
+  </main>
 </template>
 
 <script>

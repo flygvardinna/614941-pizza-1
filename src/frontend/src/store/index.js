@@ -12,19 +12,19 @@ import {
   DELETE_ENTITY,
 } from "@/store/mutation-types";
 import { MESSAGE_LIVE_TIME } from "@/common/constants";
-import jsonUser from "@/static/user.json";
 
 Vue.use(Vuex);
 
 const state = () => ({
   notifications: [],
-  userData: null,
 });
 
 const actions = {
   async init({ dispatch }) {
-    dispatch("fetchUser");
     dispatch("Builder/fetchPizzaParts");
+    // не должно срабатывать при загрузке любой страницы?
+    // вынести в mounted страницы Index?
+    // а то сейчас срабатывает на любой
     dispatch("Cart/setCartItems");
   },
   async createNotification({ commit }, { ...notification }) {
@@ -37,10 +37,6 @@ const actions = {
       () => commit(DELETE_NOTIFICATION, uniqueNotification.id),
       MESSAGE_LIVE_TIME
     );
-  },
-  fetchUser({ commit }) {
-    const user = jsonUser;
-    commit(SET_ENTITY, { module: null, entity: "userData", value: user });
   },
 };
 

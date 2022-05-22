@@ -1,10 +1,7 @@
 <template>
   <section class="footer">
     <div class="footer__more">
-      <a
-        class="button button--border button--arrow"
-        @click="$emit('moreBtnClicked')"
-      >
+      <a class="button button--border button--arrow" @click="goToBuilderPage">
         Хочу еще одну
       </a>
     </div>
@@ -16,13 +13,7 @@
     </div>
 
     <div class="footer__submit">
-      <button
-        type="submit"
-        class="button"
-        @click="$emit('submitBtnClicked', $event)"
-      >
-        Оформить заказ
-      </button>
+      <button type="submit" class="button">Оформить заказ</button>
     </div>
   </section>
 </template>
@@ -34,6 +25,11 @@ export default {
   name: "CartFooter",
   computed: {
     ...mapGetters("Cart", ["totalPrice"]),
+  },
+  methods: {
+    goToBuilderPage() {
+      this.$router.push({ name: "IndexHome" });
+    },
   },
 };
 </script>

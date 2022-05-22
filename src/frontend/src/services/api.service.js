@@ -13,6 +13,8 @@ class BaseApiService {
   }
 }
 
+// сделай авторизацию - сперва хватит метода whoAmI?
+// мне пока надо только чтоб работали страницы профиля и истории заказов
 export class AuthApiService extends BaseApiService {
   constructor(notifier) {
     super(notifier);
@@ -97,7 +99,7 @@ export class BuilderApiService extends CrudApiService {
     };
   }
 
-  _normalizeSizes(item) {
+  _normalizeSize(item) {
     return {
       ...item,
       value: Size[item.name],
@@ -105,7 +107,7 @@ export class BuilderApiService extends CrudApiService {
     };
   }
 
-  _normalizeIngredients(item) {
+  _normalizeIngredient(item) {
     return {
       ...item,
       englishName: Ingredient[item.name],
@@ -118,7 +120,7 @@ export class BuilderApiService extends CrudApiService {
   // тк теперь еще и размеры сортировать
   async fetchDetail(resource, detail) {
     const { data } = await axios.get(resource);
-    console.log("data", data);
+    // console.log("data", data);
     // const data = await super.query(config);
     // не могу придумать как использовать super.query если у меня в resource должен быть разный урл каждый раз
     // но это не обязательно - использовать так же, как в учебном проекте
@@ -134,23 +136,23 @@ export class BuilderApiService extends CrudApiService {
   // просто сделать модификацию метода query? чтоб везде было одинаково с .query без .fetchSmth для всех модулей
   async fetchDough() {
     const { data } = await axios.get("dough");
-    console.log("dough", data);
+    // console.log("dough", data);
     return data.map((item) => this._normalizeDetail(Dough, item));
     // тут тоже NormalizeDough?
   }
 
   async fetchSauces() {
     const { data } = await axios.get("sauces");
-    console.log("sauces", data);
+    // console.log("sauces", data);
     return data.map((item) => this._normalizeDetail(Sauce, item));
     // тут тоже NormalizeSauce?
   }
 
   async fetchSizes() {
     const { data } = await axios.get("sizes");
-    console.log("sizes", data);
+    // console.log("sizes", data);
     return data
-      .map((item) => this._normalizeSizes(item))
+      .map((item) => this._normalizeSize(item))
       .sort((a, b) => a.multiplier - b.multiplier);
     // console.log("sizes", data);
     // data.sort((a, b) => a.multiplier - b.multiplier);
@@ -165,6 +167,6 @@ export class BuilderApiService extends CrudApiService {
   async fetchIngredients() {
     const { data } = await axios.get("ingredients");
     console.log("ingredients", data);
-    return data.map((item) => this._normalizeIngredients(item));
+    return data.map((item) => this._normalizeIngredient(item));
   }
 }

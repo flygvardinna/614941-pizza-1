@@ -21,6 +21,14 @@ export default {
   namespaced: true,
   state: initialState(),
   getters: {
+    // тут важный вопрос, когда выкидывать все лишнее
+    // уже тут (и тогда надо переписать геттер pizzaPrice
+    // или уже потом при формировании заказа
+    // важно, чтоб было удобно изменять пиццу (там все ок, но поменять newValue для теста итд на id)
+    // думаю что лучше на этапе заказа
+    // но с другой стороны много лишней инфы в корзине получается
+    // мы используем метод update для additionalItem и ingredientId
+    // вот там для универсальности должно оставаться id вместо ingredientId
     currentPizza({ dough, sauces, sizes, ingredients, pizzaName, pizzaId }) {
       return {
         dough: findSelectedItem(dough),
@@ -60,7 +68,7 @@ export default {
       // const sizes = await this.$api.builder.fetchDetail("sizes", Size);
       const sizes = await this.$api.builder.fetchSizes();
       const ingredients = await this.$api.builder.fetchIngredients();
-      console.log("ready ingredients", ingredients);
+      // console.log("ready ingredients", ingredients);
 
       commit(
         SET_ENTITY,

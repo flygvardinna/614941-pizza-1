@@ -32,6 +32,7 @@ export default {
       this.resetBuilderState();
       this.fetchPizzaParts();
       void this.$router.push({ name: "IndexHome" });
+      // у меня сейчас можно добавить пиццу с пробелом вместо названия - пофиксить!
     },
   },
 };

@@ -1,4 +1,6 @@
 import { SET_ENTITY, ADD_ENTITY, DELETE_ENTITY } from "@/store/mutation-types";
+import { formatPizzas, formatMisc } from "@/common/helpers";
+import { cloneDeep } from "lodash";
 import { capitalize } from "@/common/helpers";
 
 const entity = "orders";
@@ -23,6 +25,41 @@ export default {
   actions: {
     async fetchOrders({ commit }) {
       const orders = await this.$api.orders.query();
+      console.log("orders from api", orders);
+
+      /*const dough = rootState.Builder.dough;
+      const sauces = rootState.Builder.sauces;
+      const sizes = rootState.Builder.sizes;
+      const ingredients = rootState.Builder.ingredients;*/
+
+      /*const normalizedOrders = () => {
+        return orders.map((order) => {
+          const pizzas = order.orderPizzas.map((pizza) => {
+            return {
+              ingredientId: ingredient.id,
+              quantity: ingredient.quantity,
+            };
+          });
+          const misc = pizza.ingredients.map((ingredient) => {
+            return {
+              ingredientId: ingredient.id,
+              quantity: ingredient.quantity,
+            };
+          });
+          const totalPrice = pizza.ingredients.map((ingredient) => {
+            return {
+              ingredientId: ingredient.id,
+              quantity: ingredient.quantity,
+            };
+          });
+          return {
+            ...order,
+            orderPizzas: pizzas,
+            orderMisc: misc,
+            totalPrice,
+          };
+        });
+      };*/
 
       commit(
         SET_ENTITY,
@@ -33,8 +70,23 @@ export default {
         { root: true }
       );
     },
-    async createOrder({ commit }, order) {
+    async createOrder({ commit, rootState }, { phone, address }) {
+      const pizzasCopy = cloneDeep(rootState.Cart.pizzaItems);
+      const miscCopy = cloneDeep(rootState.Cart.additionalItems);
+
+      const order = {
+        userId: rootState.Auth.user.id,
+        phone,
+        // но в форме можно ввести другой телефон
+        // разберись с этим - что-то писали в чате про телефон
+        address,
+        pizzas: formatPizzas(pizzasCopy),
+        misc: formatMisc(miscCopy),
+      };
+
+      console.log("order itself", order);
       const data = await this.$api.orders.post(order);
+      console.log("order data", data);
 
       // вроде должно быть такое, только я хз, зачем мне это хранить
       commit(
@@ -46,93 +98,17 @@ export default {
         { root: true }
       );
     },
-    /*setCartItems({ commit }) {
-      const pizzaItems = getCartItems("pizzaItems");
-      const additionalItems = getCartItems("additionalItems");
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "pizzaItems",
-          value: pizzaItems,
-        },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "additionalItems",
-          value: additionalItems,
-        },
-        { root: true }
-      );
-    },
-    addItem({ state, commit, rootState, rootGetters }) {
-      const pizzaId = rootState.Builder.pizzaId;
-      const pizza = {
-        ...rootGetters["Builder/currentPizza"],
-        price: rootGetters["Builder/pizzaPrice"],
-        id: pizzaId ?? createUUIDv4(),
-        // по api цену и id пиццы отправлять не надо
-        // id нужен мне только чтоб работать с пиццами в корзине - изменять/удалять
-        // в инфе о заказе у пиццы потом будет id, но уже какой-то другой
+    async deleteOrder({ commit }, id) {
+      await this.$api.orders.delete(id);
 
-        // можно делать как в примере в api
-        // Форматирование данных перед отправкой на сервер (убираем лишнее)
-        //  _createRequest(task) {
-        //  const { ticks, comments, status, timeStatus, user, ...request } = task;
-        //  return request;
-      };
-      const mutationName = pizzaId !== null ? UPDATE_ENTITY : ADD_ENTITY;
-
-      commit(
-        mutationName,
-        {
-          module,
-          entity: "pizzaItems",
-          value: pizza,
-        },
-        { root: true }
-      );
-
-      setCartItemsToLS("pizzaItems", state.pizzaItems);
-    },
-    changeItemQuantity({ state, commit }, item) {
-      commit(
-        UPDATE_ENTITY,
-        {
-          module,
-          entity: "pizzaItems",
-          value: item,
-        },
-        { root: true }
-      );
-      setCartItemsToLS("pizzaItems", state.pizzaItems);
-    },
-    changeAdditionalItemQuantity({ state, commit }, item) {
-      commit(
-        UPDATE_ENTITY,
-        {
-          module,
-          entity: "additionalItems",
-          value: item,
-        },
-        { root: true }
-      );
-      setCartItemsToLS("additionalItems", state.additionalItems);
-    },*/
-    /*deleteItem({ state, commit }, id) {
       commit(
         DELETE_ENTITY,
         {
-          module,
-          entity: "pizzaItems",
+          ...namespace,
           id,
         },
         { root: true }
       );
-      setCartItemsToLS("pizzaItems", state.pizzaItems);
-    },*/
+    },
   },
 };

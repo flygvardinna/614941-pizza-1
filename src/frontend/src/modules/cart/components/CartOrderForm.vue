@@ -7,21 +7,33 @@
         <select
           name="test"
           class="select"
-          @change="onAddressSelectChanged($event)"
+          @change="changeAddress($event.target.value)"
         >
-          <option value="1">Заберу сам</option>
-          <option value="2">Новый адрес</option>
-          <option v-if="user" value="3">Дом</option>
+          <option value="pickup">Заберу сам</option>
+          <option value="newAddress">Новый адрес</option>
+          <option
+            v-for="address in addresses"
+            :key="address.id"
+            :value="address.id"
+          >
+            {{ address.name }}
+          </option>
         </select>
       </label>
 
       <label class="input input--big-label">
         <span>Контактный телефон:</span>
-        <input type="text" name="tel" placeholder="+7 999-999-99-99" />
+        <input
+          type="text"
+          name="tel"
+          placeholder="+7 999-999-99-99"
+          :value="userPhone"
+          @change="setOrderAddress"
+        />
       </label>
 
       <div v-if="isAddressFormDisplayed" class="cart-form__address">
-        <span class="cart-form__label">Новый адрес:</span>
+        <span class="cart-form__label">{{ addressFormName }}:</span>
 
         <div class="cart-form__input">
           <label class="input">
@@ -29,8 +41,10 @@
             <input
               type="text"
               name="street"
+              required
               :value="street"
               :readonly="isAddressReadonly"
+              @change="setOrderAddress"
             />
           </label>
         </div>
@@ -40,9 +54,11 @@
             <span>Дом*</span>
             <input
               type="text"
-              name="house"
-              :value="house"
+              name="building"
+              required
+              :value="building"
               :readonly="isAddressReadonly"
+              @change="setOrderAddress"
             />
           </label>
         </div>
@@ -52,9 +68,10 @@
             <span>Квартира</span>
             <input
               type="text"
-              name="apartment"
-              :value="apartment"
+              name="flat"
+              :value="flat"
               :readonly="isAddressReadonly"
+              @change="setOrderAddress"
             />
           </label>
         </div>
@@ -64,47 +81,76 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapActions, mapState } from "vuex";
 
 export default {
   name: "CartOrderForm",
   data: () => ({
-    isAddressFormDisplayed: false,
-    isAddressReadonly: false,
+    deliveryOption: "pickup",
+    id: null,
+    phone: "",
     street: "",
-    house: "",
-    apartment: "",
+    building: "",
+    flat: "",
+    comment: "",
+    addressFormName: "Новый адрес",
   }),
   computed: {
     ...mapState("Auth", ["user"]),
-    /*isAddressFormDisplayed() {
-      return ;
-    },*/
+    ...mapState("Addresses", ["addresses"]),
+    isAddressFormDisplayed() {
+      return this.deliveryOption !== "pickup";
+    },
+    isAddressReadonly() {
+      return this.deliveryOption !== "newAddress";
+    },
+    userPhone() {
+      return this.user ? this.user.phone : this.phone;
+      // сделай валидацию поля с телефоном?
+    },
+  },
+  async mounted() {
+    if (this.user !== null) {
+      await this.fetchAddresses();
+      console.log("addresses from cart", this.addresses);
+    }
   },
   methods: {
-    onAddressSelectChanged(event) {
-      switch (event.target.value) {
-        case "1":
-          this.isAddressFormDisplayed = false;
-          // ЗАМЕЧАНИЕ вот эти флаги лучше сделать компьютедами,
-          // завязанными на значение текущего выбранного варианта доставки
-          // пока не поняла, как должно вычисляться значение. Хранить вариант доставки в state?
-          // сделаю позже, когда буду делать адреса - может станет понятно
-          break;
-        case "2":
-          this.isAddressFormDisplayed = true;
-          this.isAddressReadonly = false;
-          this.street = "";
-          this.house = "";
-          this.apartment = "";
-          break;
-        default:
-          this.isAddressFormDisplayed = true;
-          this.isAddressReadonly = true;
-          this.street = "Пушкина";
-          this.house = "5";
-          this.apartment = "42";
+    ...mapActions("Addresses", ["fetchAddresses"]),
+    changeAddress(value) {
+      this.deliveryOption = value;
+
+      if (value === "newAddress") {
+        this.id = null;
+        this.street = "";
+        this.building = "";
+        this.flat = "";
+        this.comment = "";
+        this.addressFormName = "Новый адрес";
+      } else if (value !== "pickup") {
+        const address = this.addresses.find((address) => address.id == +value);
+
+        this.id = address.id;
+        this.street = address.street;
+        this.building = address.building;
+        this.flat = address.flat;
+        this.comment = address.comment;
+        this.addressFormName = "Адрес";
       }
+
+      this.setOrderAddress();
+    },
+    setOrderAddress() {
+      this.$emit("setAddress", {
+        phone: this.phone,
+        address: {
+          id: this.id,
+          street: this.street,
+          building: this.building,
+          flat: this.flat,
+          comment: this.comment,
+        },
+      });
     },
   },
 };
