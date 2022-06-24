@@ -166,7 +166,7 @@ export class BuilderApiService extends CrudApiService {
 
   async fetchIngredients() {
     const { data } = await axios.get("ingredients");
-    console.log("ingredients", data);
+    //console.log("ingredients", data);
     return data.map((item) => this._normalizeIngredient(item));
   }
 }

@@ -10,11 +10,22 @@
   display: flex;
   align-items: center;
 
+  max-width: 50%;
   margin-right: auto;
+
+  .select {
+    max-width: 200px;
+
+    text-overflow: ellipsis;
+  }
 
   span {
     margin-right: 16px;
   }
+}
+
+.cart-form__phone {
+  max-width: 50%;
 }
 
 .cart-form__label {

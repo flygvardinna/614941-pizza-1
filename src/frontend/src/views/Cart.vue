@@ -1,6 +1,6 @@
 <template>
   <div>
-    <form class="layout-form" @submit="makeNewOrder($event)">
+    <form class="layout-form" @submit.prevent="makeNewOrder($event)">
       <main class="content cart">
         <div class="container">
           <div class="cart__title">
@@ -16,7 +16,10 @@
 
             <CartAdditionalList />
 
-            <CartOrderForm @setAddress="setAddress($event)" />
+            <CartOrderForm
+              :addressId="addressId"
+              @setAddress="setAddress($event)"
+            />
           </div>
         </div>
       </main>
@@ -44,6 +47,7 @@ import CartProductList from "@/modules/cart/components/CartProductList";
 import CartAdditionalList from "@/modules/cart/components/CartAdditionalList";
 import CartOrderForm from "@/modules/cart/components/CartOrderForm";
 import CartFooter from "@/modules/cart/components/CartFooter";
+import { formatMisc, formatPizzas } from "@/common/helpers";
 /*import { cleanPizzas, cleanMisc } from "@/common/helpers";*/
 
 export default {
@@ -56,7 +60,8 @@ export default {
   },
   data: () => ({
     isOrderPopupDisplayed: false,
-    address: {},
+    address: null,
+    addressId: null,
     phone: "",
   }),
   computed: {
@@ -67,48 +72,62 @@ export default {
     },
   },
   mounted() {
-    //localStorage.clear();
+    // при перезагрузке страницы корзины где-то происходит reset и все обнуляется - убрать!
     if (this.additionalItems.length === 0) {
       this.fetchAdditionalItems();
     }
+    this.addressId = this.$route.params.addressId;
+    console.log("cart pizza items", this.pizzaItems);
+    console.log("cart additional items", this.additionalItems);
   },
+  // проверь, точно ли нужно updated. Зачем?
   updated() {
     if (this.pizzaItems.length === 0) {
       this.fetchAdditionalItems();
+      // тут уже забыла, почему если пицц нет мы заново фетчим additional?
     }
+    // выглядит избыточно, что 2 раза это - подумай
   },
   methods: {
     ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
-    ...mapActions("Cart", [
-      "resetCartState",
-      "fetchAdditionalItems",
-      "setCartItems",
-    ]),
+    ...mapActions("Cart", ["resetCartState", "fetchAdditionalItems"]),
     ...mapActions("Orders", ["createOrder"]),
     async makeNewOrder() {
       //console.log(event);
       //event.preventDefault();
-      await this.createOrder({
+      const order = {
+        userId: this.user ? this.user.id : null,
         phone: this.phone,
+        // но в форме можно ввести другой телефон
+        // разберись с этим - что-то писали в чате про телефон
         address: this.address,
-      });
+        pizzas: formatPizzas(this.pizzaItems),
+        // но теперь тут надо убрать лишнее - это id пиццы перед отправкой на сервер
+        // pizzas: this.pizzaItems,
+        // misc тоже переделать? чтобы было единообразно с пиццами? и сразу добавлялись id
+        misc: formatMisc(this.additionalItems),
+      };
 
+      console.log("order that im going to send", order);
+
+      await this.createOrder(order);
       this.isOrderPopupDisplayed = true;
+      // то, что новый адрес появляется в личном кабинете - это отлично, так и должно быть
+      // следи, чтоб так и осталось
     },
     closePopup() {
       this.isOrderPopupDisplayed = false;
+      this.resetBuilderState();
+      this.resetCartState();
+
       if (this.user) {
         this.$router.push({ name: "Orders" });
       } else {
+        this.fetchPizzaParts();
+        // это нужно для того, чтоб если перейдем на главную там все было
+        // в Orders тоже вызывается этот метод - на случай если после авторизации сразу зашли в историю заказов
         this.$router.push({ name: "IndexHome" });
       }
-      this.resetBuilderState();
-      this.resetCartState();
-      this.fetchPizzaParts();
-      localStorage.clear();
-      // здесь заменить на localStorage.removeItem как в jwt-сервисе,
-      // а иначе будет вместе с товарами удалять токен авторизации
-      // или это вообще исчезнет после подключения api
     },
     setAddress(event) {
       const { phone, address } = event;

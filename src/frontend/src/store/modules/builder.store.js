@@ -15,6 +15,7 @@ const initialState = () => ({
   ingredients: [],
   pizzaName: "",
   pizzaId: null,
+  pizzaQuantity: 1,
 });
 
 export default {
@@ -29,18 +30,23 @@ export default {
     // но с другой стороны много лишней инфы в корзине получается
     // мы используем метод update для additionalItem и ingredientId
     // вот там для универсальности должно оставаться id вместо ingredientId
-    currentPizza({ dough, sauces, sizes, ingredients, pizzaName, pizzaId }) {
+
+    // НАЧНИ ОТСЮДА
+    // геттер срабатывает раньше чем fetchPizzaParts и поэтому ошибка в консоли в билдере - не может взять value
+    // тут подумай
+    currentPizza(state) {
       return {
-        dough: findSelectedItem(dough),
-        sauce: findSelectedItem(sauces),
-        size: findSelectedItem(sizes),
-        ingredients: ingredients.filter((item) => item.quantity > 0),
-        name: pizzaName,
-        id: pizzaId,
-        quantity: 1,
+        dough: findSelectedItem(state.dough),
+        sauce: findSelectedItem(state.sauces),
+        size: findSelectedItem(state.sizes),
+        ingredients: state.ingredients.filter((item) => item.quantity > 0),
+        name: state.pizzaName,
+        id: state.pizzaId,
+        quantity: state.pizzaQuantity,
       };
     },
     pizzaPrice(state, getters) {
+      console.log("current pizza in store", getters.currentPizza);
       const ingredientsPrices = getters.currentPizza.ingredients.map(
         (item) => item.price * item.quantity
       );
@@ -118,6 +124,17 @@ export default {
         { root: true }
       );
     },
+    setPizzaQuantity({ commit }, quantity) {
+      commit(
+        SET_ENTITY,
+        {
+          module,
+          entity: "pizzaQuantity",
+          value: quantity,
+        },
+        { root: true }
+      );
+    },
     setPizzaId({ commit }, id) {
       commit(
         SET_ENTITY,
@@ -155,6 +172,28 @@ export default {
         },
         { root: true }
       );
+    },
+    // возвращает Промис!
+    // подумай тут как следуеет - зачем мне и геттер currentPizza и метод
+    getCurrentPizza({ state, getters }) {
+      return {
+        doughId: findSelectedItem(state.dough).id,
+        sauceId: findSelectedItem(state.sauces).id,
+        sizeId: findSelectedItem(state.sizes).id,
+        ingredients: state.ingredients
+          .filter((item) => item.quantity > 0)
+          .map((ingredient) => {
+            return {
+              ingredientId: ingredient.id,
+              quantity: ingredient.quantity,
+            };
+          }),
+        name: state.pizzaName,
+        id: state.pizzaId,
+        quantity: state.pizzaQuantity,
+        // точно норм тут использовать getters для вычисления price?
+        price: getters.pizzaPrice,
+      };
     },
   },
 };

@@ -20,14 +20,14 @@ const state = () => ({
 });
 
 const actions = {
-  async init({ dispatch }) {
+  init({ dispatch }) {
+    console.log("im fetching pizza parts");
     dispatch("Builder/fetchPizzaParts");
     // не должно срабатывать при загрузке любой страницы?
     // вынести в mounted страницы Index?
     // а то сейчас срабатывает на любой
-    dispatch("Cart/setCartItems");
   },
-  async createNotification({ commit }, { ...notification }) {
+  createNotification({ commit }, { ...notification }) {
     const uniqueNotification = {
       ...notification,
       id: uniqueId(),

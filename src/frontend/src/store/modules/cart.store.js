@@ -7,9 +7,7 @@ import {
 } from "@/store/mutation-types";
 import {
   capitalize,
-  getCartItems,
   normalizeAdditionalItems,
-  setCartItemsToLS,
   createUUIDv4,
 } from "@/common/helpers";
 
@@ -40,6 +38,7 @@ export default {
   },
   actions: {
     resetCartState({ commit }) {
+      console.log("im resetting cart state");
       commit(RESET_CART_STATE);
     },
     async fetchAdditionalItems({ commit }) {
@@ -63,34 +62,32 @@ export default {
         { root: true }
       );
     },
-    setCartItems({ commit }) {
-      const pizzaItems = getCartItems("pizzaItems");
-      const additionalItems = getCartItems("additionalItems");
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "pizzaItems",
-          value: pizzaItems,
-        },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "additionalItems",
-          value: additionalItems,
-        },
-        { root: true }
-      );
-    },
-    addItem({ state, commit, rootState, rootGetters }) {
-      const pizzaId = rootState.Builder.pizzaId;
-      const pizza = {
-        ...rootGetters["Builder/currentPizza"],
+    addItem({ state, commit }, pizza) {
+      console.log("pizza when added in store", pizza);
+      //const pizzaId = rootState.Builder.pizzaId;
+      const newPizza = {
+        //...rootGetters["Builder/currentPizza"],
+        // НАЧНИ ОТСЮДА
+        // здесь нужно все переделать, тк когда переходим из истории заказов и добавляем выбранные пиццы в корзину
+        // там есть только doughId итд, а не просто dough
+        // соответственно в pizzaItems будут лежать айдишники, а не полные объекты
+        // pizzaItems в этом контексте используется только в списке товаров в корзине и там как раз я использую pizza.dough
+        // вместо pizza.doughId - а мне как раз надо было переписать на использование айдишников, чтоб был единый компонент
+        // pizzaItem с одинаковыми методами!
+        // доделай эту часть, с повторением заказа, доделай роутинг (закрыть страницы от неавторизованных)
+        /*dough: pizza.dough,
+        sauce: pizza.sauce,
+        size: pizza.size,
+        ingredients: pizza.ingredients,
+        name: pizza.name,
+        quantity: pizza.quantity,
         price: rootGetters["Builder/pizzaPrice"],
-        id: pizzaId ?? createUUIDv4(),
+         */
+        ...pizza,
+        id: pizza.id ?? createUUIDv4(),
+        // c price придется переписать и вычислять в корзине?
+        // тк если из истории заказов берем, то там не current pizza price уже
+
         // по api цену и id пиццы отправлять не надо
         // id нужен мне только чтоб работать с пиццами в корзине - изменять/удалять
         // в инфе о заказе у пиццы потом будет id, но уже какой-то другой
@@ -101,21 +98,37 @@ export default {
         //  const { ticks, comments, status, timeStatus, user, ...request } = task;
         //  return request;
       };
-      const mutationName = pizzaId !== null ? UPDATE_ENTITY : ADD_ENTITY;
+      console.log("current pizza items in store", state.pizzaItems);
+      // пока закомменчу - не будет нормально работать Изменить тогда, позже разобраться
+      const mutationName =
+        pizza.orderId === undefined && pizza.id !== null
+          ? UPDATE_ENTITY
+          : ADD_ENTITY;
+      // работает идеально, когда добавляем через Повторить orderId есть
+      // но когда после Изменить нажмем Готовить его уже не будет
+      // так как там this.getCurrentPizza не включит orderId
+      // и как раз вызовет Update
+
+      // видимо надо смотреть что если прям отдельно передали id то редактируем
+      // либо можно не добавлять id пиццам в корзине (убрать createUUIDv4) и смотреть если id нет то редактируем
+      // но как мы тогда будем искать для UPDATE_ENTITY ведь там как раз нужен id
+      // и как будем без id удалять пиццы из корзины?
+      // нет, убрать id не пойдет
+      // можно смотреть на orderId - у пицц в корзине его нет !
+      // старый вариант - неправильно, так как когда повторяем заказ то в сторе ничего нет,
+      // а id у пиццы есть и я пытаюсь обновить то, чего нет
 
       commit(
         mutationName,
         {
           module,
           entity: "pizzaItems",
-          value: pizza,
+          value: newPizza,
         },
         { root: true }
       );
-
-      setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    changeItemQuantity({ state, commit }, item) {
+    changeItemQuantity({ commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
@@ -125,9 +138,8 @@ export default {
         },
         { root: true }
       );
-      setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    changeAdditionalItemQuantity({ state, commit }, item) {
+    changeAdditionalItemQuantity({ commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
@@ -137,9 +149,8 @@ export default {
         },
         { root: true }
       );
-      setCartItemsToLS("additionalItems", state.additionalItems);
     },
-    deleteItem({ state, commit }, id) {
+    deleteItem({ commit }, id) {
       commit(
         DELETE_ENTITY,
         {
@@ -149,7 +160,6 @@ export default {
         },
         { root: true }
       );
-      setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
   },
 };

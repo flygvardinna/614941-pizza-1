@@ -1,6 +1,4 @@
-import { SET_ENTITY, ADD_ENTITY, DELETE_ENTITY } from "@/store/mutation-types";
-import { formatPizzas, formatMisc } from "@/common/helpers";
-import { cloneDeep } from "lodash";
+import { SET_ENTITY, DELETE_ENTITY } from "@/store/mutation-types";
 import { capitalize } from "@/common/helpers";
 
 const entity = "orders";
@@ -70,33 +68,23 @@ export default {
         { root: true }
       );
     },
-    async createOrder({ commit, rootState }, { phone, address }) {
-      const pizzasCopy = cloneDeep(rootState.Cart.pizzaItems);
-      const miscCopy = cloneDeep(rootState.Cart.additionalItems);
-
-      const order = {
-        userId: rootState.Auth.user.id,
-        phone,
-        // но в форме можно ввести другой телефон
-        // разберись с этим - что-то писали в чате про телефон
-        address,
-        pizzas: formatPizzas(pizzasCopy),
-        misc: formatMisc(miscCopy),
-      };
-
+    async createOrder(context, order) {
       console.log("order itself", order);
       const data = await this.$api.orders.post(order);
       console.log("order data", data);
 
       // вроде должно быть такое, только я хз, зачем мне это хранить
-      commit(
+      // это не надо хранить, сейчас добавляем кривые данные о заказе вместо полноценного
+      // мб тут надо фетчить все заказы, чтоб при переходе в историю их не надо было подтягивать?
+      // но наверное необязательно
+      /*commit(
         ADD_ENTITY,
         {
           ...namespace,
           value: data,
         },
         { root: true }
-      );
+      );*/
     },
     async deleteOrder({ commit }, id) {
       await this.$api.orders.delete(id);

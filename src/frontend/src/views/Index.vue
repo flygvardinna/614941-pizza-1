@@ -22,6 +22,7 @@ import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelec
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
+// import { mapActions } from "vuex";
 
 export default {
   name: "IndexHome",
@@ -31,6 +32,12 @@ export default {
     BuilderIngredientsSelector,
     BuilderPizzaView,
   },
+  /*beforeCreate() {
+    this.fetchPizzaParts();
+  },
+  methods: {
+    ...mapActions("Builder", ["fetchPizzaParts"]),
+  },*/
 };
 </script>
 

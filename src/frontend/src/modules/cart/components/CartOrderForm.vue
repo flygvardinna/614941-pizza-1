@@ -21,13 +21,13 @@
         </select>
       </label>
 
-      <label class="input input--big-label">
+      <label class="cart-form__phone input input--big-label">
         <span>Контактный телефон:</span>
         <input
+          v-model="phone"
           type="text"
           name="tel"
           placeholder="+7 999-999-99-99"
-          :value="userPhone"
           @change="setOrderAddress"
         />
       </label>
@@ -39,10 +39,10 @@
           <label class="input">
             <span>Улица*</span>
             <input
+              v-model="street"
               type="text"
               name="street"
               required
-              :value="street"
               :readonly="isAddressReadonly"
               @change="setOrderAddress"
             />
@@ -53,10 +53,10 @@
           <label class="input">
             <span>Дом*</span>
             <input
+              v-model="building"
               type="text"
               name="building"
               required
-              :value="building"
               :readonly="isAddressReadonly"
               @change="setOrderAddress"
             />
@@ -67,9 +67,9 @@
           <label class="input">
             <span>Квартира</span>
             <input
+              v-model="flat"
               type="text"
               name="flat"
-              :value="flat"
               :readonly="isAddressReadonly"
               @change="setOrderAddress"
             />
@@ -85,10 +85,17 @@ import { mapActions, mapState } from "vuex";
 
 export default {
   name: "CartOrderForm",
+  props: {
+    addressId: {
+      type: Number,
+      default: null,
+    },
+  },
   data: () => ({
     deliveryOption: "pickup",
     id: null,
-    phone: "",
+    //phone: "",
+    // phone: this.user ? this.user.phone : "",
     street: "",
     building: "",
     flat: "",
@@ -104,8 +111,8 @@ export default {
     isAddressReadonly() {
       return this.deliveryOption !== "newAddress";
     },
-    userPhone() {
-      return this.user ? this.user.phone : this.phone;
+    phone() {
+      return this.user ? this.user.phone : "";
       // сделай валидацию поля с телефоном?
     },
   },
@@ -113,6 +120,11 @@ export default {
     if (this.user !== null) {
       await this.fetchAddresses();
       console.log("addresses from cart", this.addresses);
+    }
+
+    if (this.addressId !== null) {
+      document.querySelector(".select").value = this.addressId;
+      this.changeAddress(this.addressId);
     }
   },
   methods: {
@@ -128,7 +140,7 @@ export default {
         this.comment = "";
         this.addressFormName = "Новый адрес";
       } else if (value !== "pickup") {
-        const address = this.addresses.find((address) => address.id == +value);
+        const address = this.addresses.find((address) => address.id === +value);
 
         this.id = address.id;
         this.street = address.street;
@@ -141,15 +153,18 @@ export default {
       this.setOrderAddress();
     },
     setOrderAddress() {
+      // позже доделай валидацию полей, чтоб выводились красные ошибки - тут и в профиле в форме адреса
+      const formAddress = {
+        id: this.id,
+        street: this.street,
+        building: this.building,
+        flat: this.flat,
+        comment: this.comment,
+      };
+
       this.$emit("setAddress", {
         phone: this.phone,
-        address: {
-          id: this.id,
-          street: this.street,
-          building: this.building,
-          flat: this.flat,
-          comment: this.comment,
-        },
+        address: this.deliveryOption === "pickup" ? null : formAddress,
       });
     },
   },

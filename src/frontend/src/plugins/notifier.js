@@ -19,6 +19,7 @@ export default class Notifier {
       type: notificationTypes.SUCCESS,
     });
   }
+  // сейчас это используется для уведомления при логауте - Вы успешно вышли. Убрать?
 
   error(text) {
     this.#store.dispatch("createNotification", {

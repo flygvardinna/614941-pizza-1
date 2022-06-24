@@ -54,20 +54,30 @@ export const normalizeAdditionalItems = (item) => {
 
 export const formatPizzas = (pizzas) => {
   return pizzas.map((pizza) => {
-    const ingredients = pizza.ingredients.map((ingredient) => {
-      return {
-        ingredientId: ingredient.id,
-        quantity: ingredient.quantity,
-      };
-    });
+    // eslint-disable-next-line no-unused-vars
+    //const { id, price, orderId, ...formattedPizza } = pizza;
+    //return formattedPizza;
+    // вариант с убиранием не годится, так как там при клике на Повторить надо еще для ингредиентов убирать поля id и pizzaId
+    // либо это можно убирать на этапе this.addItem в OrdersItem когда добавляем эти пиццы в корзину
+    // это ок, убирать все здесь на этапе отправления заказа
     return {
       name: pizza.name,
       quantity: pizza.quantity,
-      doughId: pizza.dough.id,
-      sauceId: pizza.sauce.id,
-      sizeId: pizza.size.id,
-      ingredients,
+      doughId: pizza.doughId,
+      sauceId: pizza.sauceId,
+      sizeId: pizza.sizeId,
+      ingredients: pizza.ingredients.map((ingredient) => {
+        return {
+          ingredientId: ingredient.ingredientId,
+          quantity: ingredient.quantity,
+        };
+      }),
     };
+    // тут теперь осталось только убрать лишнее поле id перед отправкой на сервер
+    // убираем лишнее как тут
+    // https://up.htmlacademy.ru/vue/1/module/5/item/2
+    // не очень хорошо, что приходится suppress es-lint, но и формировать новый объект, как было - избыточно
+    // внести это исключение из правил eslint в конифг?
   });
 };
 
@@ -77,21 +87,8 @@ export const formatMisc = (misc) => {
       miscId: item.id,
       quantity: item.quantity,
     };
-    // здесь не надо отбирать только те misc, где больше 1, тк иначе ошибка 422 unprocessable
-    // уточни у наставника, это ок?
+    // здесь не надо отбирать только те misc, где больше 0, тк иначе ошибка 422 unprocessable
   });
-};
-
-export const getCartItems = (keyName) => {
-  const items = localStorage.getItem(keyName);
-  if (items) {
-    return JSON.parse(items);
-  }
-  return [];
-};
-
-export const setCartItemsToLS = (keyName, items) => {
-  localStorage.setItem(keyName, JSON.stringify(items));
 };
 
 export const capitalize = (string) =>
@@ -99,6 +96,10 @@ export const capitalize = (string) =>
 
 export const findSelectedItem = (items) => {
   return items.find((item) => item.isChecked);
+};
+
+export const getPizzaPartById = (list, id) => {
+  return list.find((item) => item.id === id);
 };
 
 export const createUUIDv4 = () => {
