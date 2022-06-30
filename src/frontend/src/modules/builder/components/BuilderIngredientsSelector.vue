@@ -7,22 +7,21 @@
         <div class="ingredients__sauce">
           <p>Основной соус:</p>
 
-          <SelectorItem
+          <AppSelectorItem
             v-for="sauce in sauces"
-            :item="sauce"
             :key="sauce.id"
-            :isChecked="sauce.isChecked"
-            :inputName="'sauce'"
-            :className="'radio ingredients__input'"
+            :item="sauce"
+            :input-name="'sauce'"
+            class="radio ingredients__input"
             @changeSelectedItem="
               changeSelectedItem({
-                newValue: $event.target.value,
+                id: sauce.id,
                 itemName: 'sauces',
               })
             "
           >
             <span>{{ sauce.name }}</span>
-          </SelectorItem>
+          </AppSelectorItem>
         </div>
 
         <div class="ingredients__filling">
@@ -37,25 +36,22 @@
               <AppDrop @drop="$emit('drop', ingredient)">
                 <AppDrag
                   :transfer-data="ingredient"
-                  :isDraggable="checkIsIngredientDraggable(ingredient)"
+                  :is-draggable="checkIsIngredientDraggable(ingredient)"
                 >
-                  <span
-                    class="filling"
-                    :class="`filling--${ingredient.englishName}`"
-                  >
+                  <span class="filling" :class="`filling--${ingredient.value}`">
                     {{ ingredient.name }}
                   </span>
                 </AppDrag>
               </AppDrop>
-              <ItemCounter
+              <AppItemCounter
                 class="ingredients__counter"
-                :value="ingredient.value"
-                :minValue="minIngredientValue"
-                :maxValue="maxIngredientValue"
+                :value="ingredient.quantity"
+                :min-value="minIngredientValue"
+                :max-value="maxIngredientValue"
                 @changeItemValue="
-                  changeIngredientValue({
+                  changeIngredientQuantity({
                     ...ingredient,
-                    value: $event,
+                    quantity: $event,
                   })
                 "
               />
@@ -72,25 +68,33 @@ import { MIN_INGREDIENT_VALUE, MAX_INGREDIENT_VALUE } from "@/common/constants";
 import { mapState, mapActions } from "vuex";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
-import SelectorItem from "@/common/components/SelectorItem";
-import ItemCounter from "@/common/components/ItemCounter";
+import AppSelectorItem from "@/common/components/AppSelectorItem";
+import AppItemCounter from "@/common/components/AppItemCounter";
 
 export default {
   name: "BuilderIngredientsSelector",
-  components: { AppDrag, AppDrop, SelectorItem, ItemCounter },
+  components: { AppDrag, AppDrop, AppSelectorItem, AppItemCounter },
+
   computed: {
     ...mapState("Builder", ["sauces", "ingredients"]),
+
     minIngredientValue() {
       return MIN_INGREDIENT_VALUE;
     },
+
     maxIngredientValue() {
       return MAX_INGREDIENT_VALUE;
     },
   },
+
   methods: {
-    ...mapActions("Builder", ["changeSelectedItem", "changeIngredientValue"]),
+    ...mapActions("Builder", [
+      "changeSelectedItem",
+      "changeIngredientQuantity",
+    ]),
+
     checkIsIngredientDraggable(ingredient) {
-      return ingredient.value < this.maxIngredientValue;
+      return ingredient.quantity < this.maxIngredientValue;
     },
   },
 };

@@ -4,22 +4,21 @@
       <h2 class="title title--small sheet__title">Выберите размер</h2>
 
       <div class="sheet__content diameter">
-        <SelectorItem
+        <AppSelectorItem
           v-for="size in sizes"
-          :item="size"
           :key="size.id"
-          :isChecked="size.isChecked"
-          :inputName="'diameter'"
-          :className="`diameter__input diameter__input--${size.value}`"
+          :item="size"
+          :input-name="'diameter'"
+          :class="`diameter__input diameter__input--${size.value}`"
           @changeSelectedItem="
             changeSelectedItem({
-              newValue: $event.target.value,
+              id: size.id,
               itemName: 'sizes',
             })
           "
         >
           <span>{{ size.name }}</span>
-        </SelectorItem>
+        </AppSelectorItem>
       </div>
     </div>
   </div>
@@ -27,14 +26,16 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import SelectorItem from "@/common/components/SelectorItem";
+import AppSelectorItem from "@/common/components/AppSelectorItem";
 
 export default {
   name: "BuilderSizeSelector",
-  components: { SelectorItem },
+  components: { AppSelectorItem },
+
   computed: {
     ...mapState("Builder", ["sizes"]),
   },
+
   methods: {
     ...mapActions("Builder", ["changeSelectedItem"]),
   },

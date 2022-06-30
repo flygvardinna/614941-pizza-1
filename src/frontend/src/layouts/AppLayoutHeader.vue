@@ -15,28 +15,26 @@
     </div>
     <div class="header__user">
       <router-link v-if="user" to="/profile">
-        <picture>
-          <source
-            type="image/webp"
-            srcset="
-              @/assets/img/users/user5.webp    1x,
-              @/assets/img/users/user5@2x.webp 2x
-            "
-          />
-          <img
-            src="@/assets/img/users/user5.jpg"
-            srcset="@/assets/img/users/user5@2x.jpg"
-            alt="Василий Ложкин"
-            width="32"
-            height="32"
-          />
-        </picture>
-        <span>Василий Ложкин</span>
+        <AppPicture
+          :src="user.avatar"
+          :alt="user.name"
+          :width="32"
+          :height="32"
+        />
+        <span>{{ user.name }}</span>
       </router-link>
 
-      <a v-if="user" href="#" class="header__logout"><span>Выйти</span></a>
+      <a
+        v-if="user"
+        key="logout-link"
+        href="#"
+        class="header__logout"
+        @click="$logout"
+      >
+        <span>Выйти</span>
+      </a>
 
-      <router-link v-else to="/login" class="header__login">
+      <router-link v-else key="login-link" to="/login" class="header__login">
         <span>Войти</span>
       </router-link>
     </div>
@@ -44,12 +42,18 @@
 </template>
 
 <script>
+import AppPicture from "@/common/components/AppPicture";
 import { mapState, mapGetters } from "vuex";
+import { logout } from "@/common/mixins";
 
 export default {
   name: "AppLayoutHeader",
+  components: { AppPicture },
+  mixins: [logout],
+
   computed: {
     ...mapState("Auth", ["user"]),
+
     ...mapGetters("Cart", ["totalPrice"]),
   },
 };

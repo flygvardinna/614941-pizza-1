@@ -1,7 +1,7 @@
 <template>
-  <div class="content">
+  <main class="content">
     <router-view />
-    <form action="#" method="post">
+    <form>
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
@@ -14,7 +14,7 @@
         <BuilderPizzaView />
       </div>
     </form>
-  </div>
+  </main>
 </template>
 
 <script>

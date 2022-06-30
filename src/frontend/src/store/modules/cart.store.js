@@ -5,13 +5,14 @@ import {
   DELETE_ENTITY,
   RESET_CART_STATE,
 } from "@/store/mutation-types";
-import additionalItems from "@/static/misc.json";
 import {
   capitalize,
-  getCartItems,
   normalizeAdditionalItems,
+  getCartItemsFromLS,
   setCartItemsToLS,
+  clearCartItemsFromLS,
   createUUIDv4,
+  getOrderPrice,
 } from "@/common/helpers";
 
 const module = capitalize("cart");
@@ -19,35 +20,35 @@ const module = capitalize("cart");
 const initialState = () => ({
   pizzaItems: [],
   additionalItems: [],
-  totalPrice: 0,
 });
 
 export default {
   namespaced: true,
   state: initialState(),
+
   getters: {
-    totalPrice({ pizzaItems, additionalItems }) {
-      const pizzaPrices = pizzaItems.map((item) => item.price * item.value);
-      const additionalItemsPrices = additionalItems.map(
-        (item) => item.price * item.value
-      );
-      const allPrices = pizzaPrices.concat(additionalItemsPrices);
-      return allPrices.length ? allPrices.reduce((a, b) => a + b, 0) : 0;
+    totalPrice(state) {
+      return getOrderPrice(state.pizzaItems, state.additionalItems);
     },
   },
+
   mutations: {
     [RESET_CART_STATE](state) {
       Object.assign(state, initialState());
     },
   },
+
   actions: {
     resetCartState({ commit }) {
-      commit(RESET_CART_STATE, { root: true });
+      commit(RESET_CART_STATE);
+      clearCartItemsFromLS("pizzaItems");
+      clearCartItemsFromLS("additionalItems");
     },
-    fetchAdditionalItems({ commit }) {
-      const items = additionalItems.map((item) =>
-        normalizeAdditionalItems(item)
-      );
+
+    async fetchAdditionalItems({ commit }) {
+      const data = await this.$api.misc.query();
+      const items = data.map((item) => normalizeAdditionalItems(item));
+
       commit(
         SET_ENTITY,
         {
@@ -58,50 +59,53 @@ export default {
         { root: true }
       );
     },
-    setCartItems({ commit }) {
-      const pizzaItems = getCartItems("pizzaItems");
-      const additionalItems = getCartItems("additionalItems");
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "pizzaItems",
-          value: pizzaItems,
-        },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "additionalItems",
-          value: additionalItems,
-        },
-        { root: true }
-      );
+
+    setCartItemsFromLS({ commit }) {
+      const pizzaItems = getCartItemsFromLS("pizzaItems");
+      const additionalItems = getCartItemsFromLS("additionalItems");
+
+      if (pizzaItems.length > 0) {
+        commit(
+          SET_ENTITY,
+          {
+            module,
+            entity: "pizzaItems",
+            value: pizzaItems,
+          },
+          { root: true }
+        );
+      }
+
+      if (additionalItems.length > 0) {
+        commit(
+          SET_ENTITY,
+          {
+            module,
+            entity: "additionalItems",
+            value: additionalItems,
+          },
+          { root: true }
+        );
+      }
     },
-    addItem({ state, commit, rootState, rootGetters }) {
-      const pizzaId = rootState.Builder.pizzaId;
-      const pizza = {
-        ...rootGetters["Builder/currentPizza"],
-        price: rootGetters["Builder/pizzaPrice"],
-        id: pizzaId ?? createUUIDv4(),
-      };
-      const mutationName = pizzaId !== null ? UPDATE_ENTITY : ADD_ENTITY;
+
+    addItem({ state, commit }, pizza) {
+      const mutation = pizza.id ? UPDATE_ENTITY : ADD_ENTITY;
 
       commit(
-        mutationName,
+        mutation,
         {
           module,
           entity: "pizzaItems",
-          value: pizza,
+          value: pizza.id ? pizza : { ...pizza, id: createUUIDv4() },
         },
         { root: true }
       );
 
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    changeItemValue({ state, commit }, item) {
+
+    changeItemQuantity({ state, commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
@@ -111,9 +115,11 @@ export default {
         },
         { root: true }
       );
+
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
-    changeAdditionalItemValue({ state, commit }, item) {
+
+    changeAdditionalItemQuantity({ state, commit }, item) {
       commit(
         UPDATE_ENTITY,
         {
@@ -123,8 +129,10 @@ export default {
         },
         { root: true }
       );
+
       setCartItemsToLS("additionalItems", state.additionalItems);
     },
+
     deleteItem({ state, commit }, id) {
       commit(
         DELETE_ENTITY,
@@ -135,6 +143,7 @@ export default {
         },
         { root: true }
       );
+
       setCartItemsToLS("pizzaItems", state.pizzaItems);
     },
   },

@@ -1,16 +1,20 @@
 <template>
-  <div class="app-layout-default">
+  <div>
+    <NotificationsContainer />
     <AppLayoutHeader />
     <slot />
   </div>
 </template>
 
 <script>
+import NotificationsContainer from "@/common/components/NotificationsContainer";
 import AppLayoutHeader from "@/layouts/AppLayoutHeader";
 
 export default {
-  name: "AppLayoutDefault",
+  name: "AppLayoutProfile",
+
   components: {
+    NotificationsContainer,
     AppLayoutHeader,
   },
 };
