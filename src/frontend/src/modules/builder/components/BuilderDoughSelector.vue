@@ -4,23 +4,22 @@
       <h2 class="title title--small sheet__title">Выберите тесто</h2>
 
       <div class="sheet__content dough">
-        <SelectorItem
+        <AppSelectorItem
           v-for="item in dough"
-          :item="item"
           :key="item.id"
-          :isChecked="item.isChecked"
-          :inputName="'dought'"
-          :className="`dough__input dough__input--${item.value}`"
+          :item="item"
+          :input-name="'dough'"
+          :class="`dough__input dough__input--${item.value}`"
           @changeSelectedItem="
             changeSelectedItem({
-              newValue: $event.target.value,
+              id: item.id,
               itemName: 'dough',
             })
           "
         >
           <b>{{ item.name }}</b>
           <span>{{ item.description }}</span>
-        </SelectorItem>
+        </AppSelectorItem>
       </div>
     </div>
   </div>
@@ -28,14 +27,16 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
-import SelectorItem from "@/common/components/SelectorItem";
+import AppSelectorItem from "@/common/components/AppSelectorItem";
 
 export default {
   name: "BuilderDoughSelector",
-  components: { SelectorItem },
+  components: { AppSelectorItem },
+
   computed: {
     ...mapState("Builder", ["dough"]),
   },
+
   methods: {
     ...mapActions("Builder", ["changeSelectedItem"]),
   },

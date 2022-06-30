@@ -6,7 +6,7 @@
     <div class="sign-form__title">
       <h1 class="title title--small">Авторизуйтесь на сайте</h1>
     </div>
-    <form @submit.prevent="login">
+    <form @submit.prevent="onSubmit">
       <div class="sign-form__input">
         <label class="input">
           <span>E-mail</span>
@@ -41,44 +41,48 @@
 <script>
 import { validator } from "@/common/mixins";
 import AppInput from "@/common/components/AppInput";
+import { mapActions } from "vuex";
 
-// сейчас если неверный пароль никакая ошибка не выводится
-// это надо пофиксить
 export default {
   name: "Login",
-  components: {
-    AppInput,
-  },
+  components: { AppInput },
   mixins: [validator],
-  data: () => ({
-    email: "",
-    password: "",
-    validations: {
-      email: {
-        error: "",
-        rules: ["required", "email"],
+
+  data() {
+    return {
+      email: "",
+      password: "",
+      validations: {
+        email: {
+          error: "",
+          rules: ["required", "email"],
+        },
+        password: {
+          error: "",
+          rules: ["required"],
+        },
       },
-      password: {
-        error: "",
-        rules: ["required"],
-        // в пропс тогда не надо передавать required? в vuework не передаем
-        // но тогда зачем этот пропс?
-      },
-    },
-  }),
+    };
+  },
+
   watch: {
     email() {
-      this.$clearValidationErrors();
+      this.$clearValidationError("email");
     },
+
     password() {
-      this.$clearValidationErrors();
+      this.$clearValidationError("password");
     },
   },
+
   mounted() {
     this.$refs.email.$refs.input.focus();
   },
+
   methods: {
-    async login() {
+    ...mapActions("Auth", ["login"]),
+
+    async onSubmit() {
       if (
         !this.$validateFields(
           { email: this.email, password: this.password },
@@ -87,12 +91,14 @@ export default {
       ) {
         return;
       }
-      await this.$store.dispatch("Auth/login", {
+
+      await this.login({
         email: this.email,
         password: this.password,
       });
       await this.$router.push("/");
     },
+
     closeDialog() {
       this.$router.push("/");
     },

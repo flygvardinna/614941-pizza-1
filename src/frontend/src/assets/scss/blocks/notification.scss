@@ -1,0 +1,41 @@
+.notification {
+  box-sizing: border-box;
+  width: 100%;
+  max-width: 100%;
+  padding: 20px;
+
+  text-align: center;
+
+  color: $white;
+  border-bottom: 2px solid transparent;
+
+  &__wrapper {
+    position: fixed;
+    z-index: 9999;
+    top: $header-height;
+    right: 0;
+
+    width: 420px;
+    padding: 10px;
+  }
+
+  &--info {
+    border-color: $purple-800;
+    background: $purple-300;
+  }
+
+  &--error {
+    border-color: $red-800;
+    background: $red-300;
+  }
+
+  &--success {
+    border-color: $green-600;
+    background: $green-300;
+  }
+
+  &--warning {
+    border-color: $orange-100;
+    background: $orange-400;
+  }
+}

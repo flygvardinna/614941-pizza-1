@@ -23,9 +23,11 @@ import { mapGetters } from "vuex";
 
 export default {
   name: "CartFooter",
+
   computed: {
     ...mapGetters("Cart", ["totalPrice"]),
   },
+
   methods: {
     goToBuilderPage() {
       this.$router.push({ name: "IndexHome" });

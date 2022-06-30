@@ -6,7 +6,7 @@
       :name="inputName"
       type="radio"
       class="visually-hidden"
-      @change="$emit('changeSelectedItem', $event)"
+      @change="$emit('change')"
     />
     <slot />
   </label>
@@ -14,16 +14,19 @@
 
 <script>
 export default {
-  name: "RadioButton",
+  name: "AppRadioButton",
+
   props: {
     value: {
       type: String,
       required: true,
     },
+
     isChecked: {
       type: Boolean,
       required: true,
     },
+
     inputName: {
       type: String,
       required: true,

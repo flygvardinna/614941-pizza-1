@@ -3,29 +3,34 @@ import {
   ADD_ENTITY,
   UPDATE_ENTITY,
   DELETE_ENTITY,
+  RESET_ADDRESSES_STATE,
 } from "@/store/mutation-types";
 import { capitalize } from "@/common/helpers";
-// import { cloneDeep } from "lodash";
 
 const entity = "addresses";
 const module = capitalize(entity);
 const namespace = { entity, module };
 
+const initialState = () => ({
+  addresses: [],
+});
+
 export default {
   namespaced: true,
-  state: {
-    addresses: [],
+  state: initialState(),
+
+  mutations: {
+    [RESET_ADDRESSES_STATE](state) {
+      Object.assign(state, initialState());
+    },
   },
+
   actions: {
+    resetAddressesState({ commit }) {
+      commit(RESET_ADDRESSES_STATE);
+    },
     async fetchAddresses({ commit }) {
       const addresses = await this.$api.addresses.query();
-      /*const addresses = data.map((address) => {
-        return {
-          ...address,
-          isFormOpened: false,
-        };
-      });*/
-      //console.log("addresses from api", addresses);
 
       commit(
         SET_ENTITY,
@@ -36,10 +41,9 @@ export default {
         { root: true }
       );
     },
+
     async addAddress({ commit }, address) {
       const data = await this.$api.addresses.post(address);
-      // data отличается от address тем, что там добавится id
-      // не знаю зачем сохряняем в state но в columns так же
 
       commit(
         ADD_ENTITY,
@@ -50,11 +54,10 @@ export default {
         { root: true }
       );
     },
+
     async editAddress({ commit }, address) {
       await this.$api.addresses.put(address);
 
-      // не знаю, зачем сохранять это в state
-      // но в vuework в tasks и в columns тоже сохраняем
       commit(
         UPDATE_ENTITY,
         {
@@ -64,6 +67,7 @@ export default {
         { root: true }
       );
     },
+
     async deleteAddress({ commit }, id) {
       await this.$api.addresses.delete(id);
 

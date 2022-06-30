@@ -1,7 +1,7 @@
 <template>
   <main class="content">
     <router-view />
-    <form action="#" method="post">
+    <form>
       <div class="content__wrapper">
         <h1 class="title title--big">Конструктор пиццы</h1>
 
@@ -22,7 +22,6 @@ import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelec
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector";
 import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngredientsSelector";
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
-// import { mapActions } from "vuex";
 
 export default {
   name: "IndexHome",
@@ -32,12 +31,6 @@ export default {
     BuilderIngredientsSelector,
     BuilderPizzaView,
   },
-  /*beforeCreate() {
-    this.fetchPizzaParts();
-  },
-  methods: {
-    ...mapActions("Builder", ["fetchPizzaParts"]),
-  },*/
 };
 </script>
 

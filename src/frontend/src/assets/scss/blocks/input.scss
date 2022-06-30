@@ -32,6 +32,10 @@
     &:focus {
       border-color: $green-500;
     }
+
+    &.text-field__input--error {
+      border: 1px solid $red-800;
+    }
   }
 
   &:hover {
@@ -51,5 +55,10 @@
 
       white-space: nowrap;
     }
+  }
+
+  .text-field__text {
+    padding-top: 5px;
+    color: $red-800;
   }
 }

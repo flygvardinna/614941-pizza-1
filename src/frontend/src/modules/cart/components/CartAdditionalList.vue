@@ -7,22 +7,17 @@
         class="additional-list__item sheet"
       >
         <p class="additional-list__description">
-          <img
-            width="39"
-            height="60"
-            :src="`${item.image}`"
-            :alt="`${item.name}`"
-          />
+          <img width="39" height="60" :src="item.image" :alt="item.name" />
           <span>{{ item.name }}</span>
         </p>
 
         <div class="additional-list__wrapper">
-          <ItemCounter
+          <AppItemCounter
             class="additional-list__counter"
             :value="item.quantity"
-            :isOrangeBtn="true"
-            :minValue="minItemValue"
-            :maxValue="maxItemValue"
+            :is-orange-btn="true"
+            :min-value="minItemValue"
+            :max-value="maxItemValue"
             @changeItemValue="
               changeItemQuantity({
                 quantity: $event,
@@ -41,28 +36,33 @@
 </template>
 
 <script>
-// поменять альты на просто :alt="item.name" - так будет работать
 import { MIN_CART_ITEM_VALUE, MAX_CART_ITEM_VALUE } from "@/common/constants";
 import { mapActions, mapState } from "vuex";
-import ItemCounter from "@/common/components/ItemCounter";
+import AppItemCounter from "@/common/components/AppItemCounter";
 
 export default {
   name: "CartAdditionalList",
-  components: { ItemCounter },
+  components: { AppItemCounter },
+
   computed: {
     ...mapState("Cart", ["additionalItems"]),
+
     minItemValue() {
       return MIN_CART_ITEM_VALUE;
     },
+
     maxItemValue() {
       return MAX_CART_ITEM_VALUE;
     },
   },
+
   methods: {
     ...mapActions("Cart", ["changeAdditionalItemQuantity"]),
+
     calculateItemPrice(item) {
       return item.quantity > 0 ? item.price * item.quantity : item.price;
     },
+
     changeItemQuantity({ item, quantity }) {
       this.changeAdditionalItemQuantity({ ...item, quantity });
     },

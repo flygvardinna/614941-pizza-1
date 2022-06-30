@@ -14,16 +14,19 @@ import { DATA_TRANSFER_PAYLOAD, MOVE } from "@/common/constants";
 
 export default {
   name: "AppDrag",
+
   props: {
     transferData: {
       type: Object,
       required: true,
     },
+
     isDraggable: {
       type: Boolean,
       required: true,
     },
   },
+
   methods: {
     onDrag({ dataTransfer }) {
       dataTransfer.effectAllowed = MOVE;

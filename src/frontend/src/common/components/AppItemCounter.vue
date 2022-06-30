@@ -25,29 +25,35 @@
 
 <script>
 export default {
-  name: "ItemCounter",
+  name: "AppItemCounter",
+
   props: {
     value: {
       type: Number,
       required: true,
     },
+
     minValue: {
       type: Number,
       required: true,
     },
+
     maxValue: {
       type: Number,
       required: true,
     },
+
     isOrangeBtn: {
       type: Boolean,
       default: false,
     },
   },
+
   computed: {
     isMinusBtnDisabled() {
       return this.value === this.minValue;
     },
+
     isPlusBtnDisabled() {
       return this.value === this.maxValue;
     },

@@ -20,18 +20,18 @@ const state = () => ({
 });
 
 const actions = {
-  init({ dispatch }) {
-    console.log("im fetching pizza parts");
-    dispatch("Builder/fetchPizzaParts");
-    // не должно срабатывать при загрузке любой страницы?
-    // вынести в mounted страницы Index?
-    // а то сейчас срабатывает на любой
+  async init({ dispatch }) {
+    await dispatch("Builder/fetchPizzaParts");
+    await dispatch("Cart/fetchAdditionalItems");
+    await dispatch("Cart/setCartItemsFromLS");
   },
+
   createNotification({ commit }, { ...notification }) {
     const uniqueNotification = {
       ...notification,
       id: uniqueId(),
     };
+
     commit(ADD_NOTIFICATION, uniqueNotification);
     setTimeout(
       () => commit(DELETE_NOTIFICATION, uniqueNotification.id),
@@ -44,14 +44,17 @@ const mutations = {
   [ADD_NOTIFICATION](state, notification) {
     state.notifications = [...state.notifications, notification];
   },
+
   [DELETE_NOTIFICATION](state, id) {
     state.notifications = state.notifications.filter(
       (notification) => notification.id !== id
     );
   },
+
   [SET_ENTITY](state, { module, entity, value }) {
     module ? (state[module][entity] = value) : (state[entity] = value);
   },
+
   [ADD_ENTITY](state, { module, entity, value }) {
     if (module) {
       state[module][entity] = [...state[module][entity], value];
@@ -59,21 +62,25 @@ const mutations = {
       state[entity] = [...state[entity], value];
     }
   },
+
   [UPDATE_ENTITY](state, { module, entity, value }) {
     if (module) {
       const index = state[module][entity].findIndex(
         ({ id }) => id === value.id
       );
+
       if (~index) {
         state[module][entity].splice(index, 1, value);
       }
     } else {
       const index = state[entity].findIndex(({ id }) => id === value.id);
+
       if (~index) {
         state[entity].splice(index, 1, value);
       }
     }
   },
+
   [DELETE_ENTITY](state, { module, entity, id }) {
     if (module) {
       state[module][entity] = state[module][entity].filter((e) => e.id !== id);

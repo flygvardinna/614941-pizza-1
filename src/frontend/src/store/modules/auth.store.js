@@ -3,20 +3,9 @@ import { SET_ENTITY } from "@/store/mutation-types";
 export default {
   namespaced: true,
   state: {
-    isAuthenticated: false,
-    // isAuthenticated мне, возможно, тоже не нужно
-    // рассмотри подробнее зачем это во vueWork
-    // по идее это заменеятся пустым user
-    // но может есть какие-то нюансы
     user: null,
   },
-  getters: {
-    // проверь нужно ли мне
-    // используется так в vuework
-    // v-if="getUserAttribute('isAdmin')"
-    // показываем кнопку только администратору
-    getUserAttribute: (state) => (attr) => state.user ? state.user[attr] : "",
-  },
+
   actions: {
     async login({ dispatch }, credentials) {
       const data = await this.$api.auth.login(credentials);
@@ -32,23 +21,14 @@ export default {
       this.$api.auth.setAuthHeader();
       commit(
         SET_ENTITY,
-        { module: "Auth", entity: "isAuthenticated", value: false },
-        { root: true }
-      );
-      commit(
-        SET_ENTITY,
         { module: "Auth", entity: "user", value: null },
         { root: true }
       );
     },
+
     async getMe({ commit, dispatch }) {
       try {
         const data = await this.$api.auth.getMe();
-        commit(
-          SET_ENTITY,
-          { module: "Auth", entity: "isAuthenticated", value: true },
-          { root: true }
-        );
         commit(
           SET_ENTITY,
           { module: "Auth", entity: "user", value: data },
