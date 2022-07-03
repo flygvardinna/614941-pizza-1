@@ -43,3 +43,11 @@
 @import "blocks/tel-form.scss";
 @import "blocks/address-form.scss";
 @import "blocks/notification.scss";
+
+.slide-enter-active {
+  transition: all 0.5s ease-out;
+}
+.slide-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}

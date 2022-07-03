@@ -31,8 +31,3 @@ export default {
   name: "AppLayoutSidebar",
 };
 </script>
-
-<style lang="scss" scoped>
-@import "~@/assets/scss/mixins/mixins.scss";
-@import "~@/assets/scss/layout/sidebar.scss";
-</style>

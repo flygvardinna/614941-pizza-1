@@ -44,7 +44,6 @@ export default {
   },
 
   methods: {
-    ...mapActions("Builder", ["fetchPizzaParts"]),
     ...mapActions("Cart", ["fetchAdditionalItems"]),
     ...mapActions("Orders", ["fetchOrders"]),
   },

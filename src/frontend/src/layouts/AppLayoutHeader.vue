@@ -58,8 +58,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "~@/assets/scss/mixins/mixins.scss";
-@import "~@/assets/scss/layout/header.scss";
-</style>
