@@ -33,14 +33,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped>
-@import "~@/assets/scss/mixins/mixins.scss";
-@import "~@/assets/scss/layout/content.scss";
-@import "~@/assets/scss/layout/sheet.scss";
-@import "~@/assets/scss/blocks/diameter.scss";
-@import "~@/assets/scss/blocks/dough.scss";
-@import "~@/assets/scss/blocks/filling.scss";
-@import "~@/assets/scss/blocks/ingredients.scss";
-@import "~@/assets/scss/blocks/pizza.scss";
-</style>

@@ -16,25 +16,31 @@
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
-            <div
-              v-for="ingredient in selectedIngredients"
-              :key="ingredient.name"
-            >
+            <transition-group name="ingredient">
               <div
-                class="pizza__filling"
-                :class="`pizza__filling--${ingredient.value}`"
-              ></div>
-              <div
-                v-if="ingredient.quantity >= 2"
-                class="pizza__filling pizza__filling--second"
-                :class="`pizza__filling--${ingredient.value}`"
-              ></div>
-              <div
-                v-if="ingredient.quantity === 3"
-                class="pizza__filling pizza__filling--third"
-                :class="`pizza__filling--${ingredient.value}`"
-              ></div>
-            </div>
+                v-for="ingredient in selectedIngredients"
+                :key="ingredient.id"
+              >
+                <div
+                  class="pizza__filling"
+                  :class="`pizza__filling--${ingredient.value}`"
+                />
+                <transition name="ingredient-second">
+                  <div
+                    v-if="ingredient.quantity >= 2"
+                    class="pizza__filling pizza__filling--second"
+                    :class="`pizza__filling--${ingredient.value}`"
+                  />
+                </transition>
+                <transition name="ingredient-third">
+                  <div
+                    v-if="ingredient.quantity === 3"
+                    class="pizza__filling pizza__filling--third"
+                    :class="`pizza__filling--${ingredient.value}`"
+                  />
+                </transition>
+              </div>
+            </transition-group>
           </div>
         </div>
       </div>
@@ -91,4 +97,30 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.ingredient-enter-active,
+.ingredient-second-enter-active,
+.ingredient-third-enter-active,
+.ingredient-leave-active,
+.ingredient-second-leave-active,
+.ingredient-third-leave-active {
+  transition: all 0.5s;
+}
+
+.ingredient-enter,
+.ingredient-second-enter,
+.ingredient-third-enter,
+.ingredient-leave-to,
+.ingredient-second-leave-to,
+.ingredient-third-leave-to {
+  opacity: 0;
+}
+
+.ingredient-second-enter {
+  transform: rotate(15deg);
+}
+
+.ingredient-third-enter {
+  transform: rotate(-15deg);
+}
+</style>

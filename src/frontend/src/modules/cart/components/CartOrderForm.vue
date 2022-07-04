@@ -15,6 +15,7 @@
             v-for="address in addresses"
             :key="address.id"
             :value="address.id"
+            :selected="addressId === address.id"
           >
             {{ address.name }}
           </option>
@@ -147,7 +148,6 @@ export default {
     }
 
     if (this.reorderAddressId !== null) {
-      document.querySelector(".select").value = this.reorderAddressId;
       this.changeAddress(this.reorderAddressId);
     }
   },
@@ -196,5 +196,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

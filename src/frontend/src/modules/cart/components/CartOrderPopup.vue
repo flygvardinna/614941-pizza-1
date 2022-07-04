@@ -18,5 +18,3 @@ export default {
   name: "CartOrderPopup",
 };
 </script>
-
-<style lang="scss" scoped></style>

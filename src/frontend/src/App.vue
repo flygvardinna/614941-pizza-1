@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <AppLayout>
-      <router-view />
+      <transition name="slide" :appear="isAnimated">
+        <router-view />
+      </transition>
     </AppLayout>
   </div>
 </template>
@@ -13,6 +15,12 @@ import AppLayout from "@/layouts/AppLayout";
 export default {
   name: "App",
   components: { AppLayout },
+
+  computed: {
+    isAnimated() {
+      return this.$route.name !== "Login";
+    },
+  },
 
   created() {
     if (this.$jwt.getToken()) {

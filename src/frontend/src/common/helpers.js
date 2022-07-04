@@ -4,7 +4,7 @@ import {
   CrudApiService,
   ReadOnlyApiService,
   BuilderApiService,
-} from "@/services/api.service";
+} from "@/services";
 
 export const setAuth = (store) => {
   store.$api.auth.setAuthHeader();
