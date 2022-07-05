@@ -29,12 +29,12 @@ export default {
     },
 
     width: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
 
     height: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
   },
