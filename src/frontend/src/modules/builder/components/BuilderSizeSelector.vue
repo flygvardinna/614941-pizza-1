@@ -10,7 +10,6 @@
           :item="size"
           :input-name="'diameter'"
           :class="`diameter__input diameter__input--${size.value}`"
-          data-test="diameter__input"
           @changeSelectedItem="
             changeSelectedItem({
               id: size.id,

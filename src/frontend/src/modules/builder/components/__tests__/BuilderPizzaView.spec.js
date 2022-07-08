@@ -61,7 +61,7 @@ describe("BuilderPizzaView", () => {
   it("adds ingredient to pizza on drop event", () => {
     createComponent({ localVue, store });
     const spyOnAction = jest.spyOn(wrapper.vm, "changeIngredientQuantity");
-    const pizzaWrapper = wrapper.find('[data-test="pizza__wrapper"]');
+    const pizzaWrapper = wrapper.find('[data-test="pizza-wrapper"]');
     pizzaWrapper.vm.$emit("drop", testIngredient);
     expect(spyOnAction).toHaveBeenCalledWith({
       ...testIngredient,

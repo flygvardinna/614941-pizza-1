@@ -13,7 +13,7 @@
             :item="sauce"
             :input-name="'sauce'"
             class="radio ingredients__input"
-            data-test="sauce__input"
+            data-test="sauce-input"
             @changeSelectedItem="
               changeSelectedItem({
                 id: sauce.id,
@@ -33,7 +33,7 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               class="ingredients__item"
-              data-test="ingredients__item"
+              data-test="ingredients-item"
             >
               <AppDrop data-test="app-drop" @drop="$emit('drop', ingredient)">
                 <AppDrag
@@ -50,7 +50,7 @@
                 :value="ingredient.quantity"
                 :min-value="minIngredientValue"
                 :max-value="maxIngredientValue"
-                data-test="ingredients__counter"
+                data-test="ingredients-counter"
                 @changeItemValue="
                   changeIngredientQuantity({
                     ...ingredient,

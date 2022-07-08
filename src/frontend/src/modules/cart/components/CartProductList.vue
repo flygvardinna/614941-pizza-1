@@ -9,7 +9,7 @@
         :is-orange-btn="true"
         :min-value="minPizzaValue"
         :max-value="maxPizzaValue"
-        data-test="cart-list__counter"
+        data-test="cart-list-counter"
         @changeItemValue="
           changePizzaQuantity({
             quantity: $event,
@@ -26,7 +26,7 @@
         <button
           type="button"
           class="cart-list__edit"
-          data-test="cart-list__edit"
+          data-test="cart-list-edit"
           @click="setPizzaToBuilder(pizza)"
         >
           Изменить

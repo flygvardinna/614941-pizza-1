@@ -38,11 +38,7 @@
       <CartFooter v-if="!isCartEmpty" data-test="cart-footer" />
     </form>
 
-    <transition
-      name="fade"
-      data-test="success-popup-transition"
-      @after-leave="leavePage"
-    >
+    <transition name="fade" @after-leave="leavePage">
       <CartOrderPopup
         v-if="isOrderPopupDisplayed"
         data-test="success-popup"

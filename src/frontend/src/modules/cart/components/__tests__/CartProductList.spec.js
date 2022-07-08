@@ -49,7 +49,7 @@ describe("CartProductList", () => {
 
   it("changes pizza quantity on counter click if new quantity is more than 1", async () => {
     createComponent({ localVue, store, mocks, stubs });
-    const counter = wrapper.find('[data-test="cart-list__counter"]');
+    const counter = wrapper.find('[data-test="cart-list-counter"]');
     const inputValue = parseInt(counter.find("input").element.value);
     await counter.vm.$emit("changeItemValue", inputValue + 1);
     expect(actions.Cart.changeItemQuantity).toHaveBeenCalled();
@@ -57,7 +57,7 @@ describe("CartProductList", () => {
 
   it("deletes pizza on counter click if new quantity is 0", async () => {
     createComponent({ localVue, store, mocks, stubs });
-    const counter = wrapper.find('[data-test="cart-list__counter"]');
+    const counter = wrapper.find('[data-test="cart-list-counter"]');
     const inputValue = parseInt(counter.find("input").element.value);
     await counter.vm.$emit("changeItemValue", inputValue - 1);
     expect(actions.Cart.deleteItem).toHaveBeenCalled();
@@ -65,7 +65,7 @@ describe("CartProductList", () => {
 
   it("set pizza to builder on edit button clicked and redirects to index page", async () => {
     createComponent({ localVue, store, mocks, stubs });
-    const editBtn = wrapper.find('[data-test="cart-list__edit"]');
+    const editBtn = wrapper.find('[data-test="cart-list-edit"]');
     await editBtn.trigger("click");
     expect(actions.Builder.editPizza).toHaveBeenCalled();
     expect(mocks.$router.push).toHaveBeenCalledWith("/");
