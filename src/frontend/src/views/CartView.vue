@@ -8,7 +8,9 @@
       <main class="content cart">
         <div class="container">
           <div class="cart__title">
-            <h1 class="title title--big">Корзина</h1>
+            <h1 class="title title--big">
+              Корзина
+            </h1>
           </div>
 
           <div
@@ -20,7 +22,11 @@
             <p>В корзине нет ни одного товара</p>
           </div>
 
-          <div v-else key="cart-items" data-test="cart-items">
+          <div
+            v-else
+            key="cart-items"
+            data-test="cart-items"
+          >
             <CartProductList />
 
             <CartAdditionalList />
@@ -35,10 +41,16 @@
         </div>
       </main>
 
-      <CartFooter v-if="!isCartEmpty" data-test="cart-footer" />
+      <CartFooter
+        v-if="!isCartEmpty"
+        data-test="cart-footer"
+      />
     </form>
 
-    <transition name="fade" @after-leave="leavePage">
+    <transition
+      name="fade"
+      @after-leave="leavePage"
+    >
       <CartOrderPopup
         v-if="isOrderPopupDisplayed"
         data-test="success-popup"

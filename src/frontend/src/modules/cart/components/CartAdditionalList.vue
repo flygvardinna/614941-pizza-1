@@ -7,7 +7,12 @@
         class="additional-list__item sheet"
       >
         <p class="additional-list__description">
-          <img width="39" height="60" :src="item.image" :alt="item.name" />
+          <img
+            width="39"
+            height="60"
+            :src="item.image"
+            :alt="item.name"
+          />
           <span>{{ item.name }}</span>
         </p>
 

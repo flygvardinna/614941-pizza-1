@@ -17,7 +17,12 @@
     </div>
 
     <div class="footer__submit">
-      <button type="submit" class="button">Оформить заказ</button>
+      <button
+        type="submit"
+        class="button"
+      >
+        Оформить заказ
+      </button>
     </div>
   </section>
 </template>

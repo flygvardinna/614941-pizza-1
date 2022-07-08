@@ -35,22 +35,29 @@ export default {
   computed: {
     ...mapState("Builder", ["dough", "sauces", "sizes", "ingredients"]),
 
-    sizeAndDoughDescription() {
-      const size = getItemById(this.sizes, this.pizza.sizeId).name;
-      const dough = getItemById(this.dough, this.pizza.doughId).name;
-      const doughName = dough === "Толстое" ? "толстом" : "тонком";
-
-      return `${size}, на ${doughName} тесте`;
-    },
-
     sauceName() {
       return getItemById(this.sauces, this.pizza.sauceId).name.toLowerCase();
+    },
+
+    sizeName() {
+      return getItemById(this.sizes, this.pizza.sizeId).name;
+    },
+
+    doughName() {
+      const dough = getItemById(this.dough, this.pizza.doughId).name;
+
+      return dough === "Толстое" ? "толстом" : "тонком";
+    },
+
+    sizeAndDoughDescription() {
+      return `${this.sizeName}, на ${this.doughName} тесте`;
     },
 
     ingredientsList() {
       const names = this.pizza.ingredients.map((ingredient) => {
         return getItemById(this.ingredients, ingredient.ingredientId).name;
       });
+
       return names.map((name) => name.toLowerCase()).join(", ");
     },
   },

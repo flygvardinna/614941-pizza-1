@@ -34,7 +34,10 @@
         />
       </label>
 
-      <div v-if="isAddressFormDisplayed" class="cart-form__address">
+      <div
+        v-if="isAddressFormDisplayed"
+        class="cart-form__address"
+      >
         <span class="cart-form__label">{{ addressFormName }}:</span>
 
         <div class="cart-form__input">

@@ -6,14 +6,17 @@
       :type="type"
       :name="name"
       class="text-field__input"
-      :class="{ 'text-field__input--error': showError }"
+      :class="{ 'text-field__input--error': isErrorDisplayed }"
       :placeholder="placeholder"
       :required="required"
       :disabled="disabled"
       @input="$emit('input', $event.target.value)"
       @change="$emit('change', $event.target.value)"
     />
-    <span v-if="showError" class="text-field__text">
+    <span
+      v-if="isErrorDisplayed"
+      class="text-field__text"
+    >
       {{ errorText }}
     </span>
   </div>
@@ -66,7 +69,7 @@ export default {
   },
 
   computed: {
-    showError() {
+    isErrorDisplayed() {
       return !!this.errorText;
     },
   },

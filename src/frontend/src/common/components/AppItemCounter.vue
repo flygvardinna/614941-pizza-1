@@ -8,7 +8,12 @@
     >
       <span class="visually-hidden">Меньше</span>
     </button>
-    <input :value="value" type="text" name="counter" class="counter__input" />
+    <input
+      :value="value"
+      type="text"
+      name="counter"
+      class="counter__input"
+    />
     <button
       type="button"
       :class="[

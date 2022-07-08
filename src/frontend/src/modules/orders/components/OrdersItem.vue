@@ -32,18 +32,30 @@
     </div>
 
     <ul class="order__list">
-      <li v-for="pizza in pizzas" :key="pizza.id" class="order__item">
+      <li
+        v-for="pizza in pizzas"
+        :key="pizza.id"
+        class="order__item"
+      >
         <PizzaItem :pizza="pizza" />
 
-        <p class="order__price">{{ displayPizzaPrice(pizza) }} ₽</p>
+        <p class="order__price">
+          {{ displayPizzaPrice(pizza) }} ₽
+        </p>
       </li>
     </ul>
 
     <ul class="order__additional">
-      <OrdersAdditionalItem v-for="item in misc" :key="item.id" :item="item" />
+      <OrdersAdditionalItem
+        v-for="item in misc"
+        :key="item.id"
+        :item="item"
+      />
     </ul>
 
-    <p class="order__address">Адрес доставки: {{ address }}</p>
+    <p class="order__address">
+      Адрес доставки: {{ address }}
+    </p>
   </div>
 </template>
 

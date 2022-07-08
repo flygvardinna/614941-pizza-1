@@ -1,7 +1,10 @@
 <template>
   <header class="header">
     <div class="header__logo">
-      <router-link to="/" class="logo">
+      <router-link
+        to="/"
+        class="logo"
+      >
         <img
           src="@/assets/img/logo.svg"
           alt="V!U!E! Pizza logo"
@@ -11,12 +14,19 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link to="/cart" data-test="cart-link">
+      <router-link
+        to="/cart"
+        data-test="cart-link"
+      >
         {{ totalPrice }} ₽
       </router-link>
     </div>
     <div class="header__user">
-      <router-link v-if="user" to="/profile" data-test="profile-link">
+      <router-link
+        v-if="user"
+        to="/profile"
+        data-test="profile-link"
+      >
         <AppPicture
           :src="user.avatar"
           :alt="user.name"

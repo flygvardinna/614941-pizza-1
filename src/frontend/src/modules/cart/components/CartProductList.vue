@@ -1,7 +1,14 @@
 <template>
   <ul class="cart-list sheet">
-    <li v-for="pizza in pizzaItems" :key="pizza.id" class="cart-list__item">
-      <PizzaItem class="cart-list__product" :pizza="pizza" />
+    <li
+      v-for="pizza in pizzaItems"
+      :key="pizza.id"
+      class="cart-list__item"
+    >
+      <PizzaItem
+        class="cart-list__product"
+        :pizza="pizza"
+      />
 
       <AppItemCounter
         class="cart-list__counter"

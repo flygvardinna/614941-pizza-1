@@ -1,12 +1,18 @@
 <template>
   <div class="layout__content">
     <div class="layout__title">
-      <h1 class="title title--big">Мои данные</h1>
+      <h1 class="title title--big">
+        Мои данные
+      </h1>
     </div>
 
     <ProfileUserBlock />
 
-    <div v-for="address in addresses" :key="address.id" class="layout__address">
+    <div
+      v-for="address in addresses"
+      :key="address.id"
+      class="layout__address"
+    >
       <ProfileAddressForm
         v-if="address.id === editableAddressId"
         :address="address"
@@ -14,7 +20,11 @@
         @close="closeEditForm"
       />
 
-      <div v-else class="sheet address-form" data-test="address-card">
+      <div
+        v-else
+        class="sheet address-form"
+        data-test="address-card"
+      >
         <div class="address-form__header">
           <b>Адрес №{{ address.id }}. {{ address.name }}</b>
           <div class="address-form__edit">
@@ -33,7 +43,10 @@
       </div>
     </div>
 
-    <div v-if="isNewAddressFormDisplayed" class="layout__address">
+    <div
+      v-if="isNewAddressFormDisplayed"
+      class="layout__address"
+    >
       <ProfileAddressForm
         :address="newAddressData"
         data-test="new-address-form"

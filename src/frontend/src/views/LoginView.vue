@@ -1,10 +1,16 @@
 <template>
   <div class="sign-form">
-    <a class="close close--white" data-test="close-button" @click="closeDialog">
+    <a
+      class="close close--white"
+      data-test="close-button"
+      @click="closeDialog"
+    >
       <span class="visually-hidden">Закрыть форму авторизации</span>
     </a>
     <div class="sign-form__title">
-      <h1 class="title title--small">Авторизуйтесь на сайте</h1>
+      <h1 class="title title--small">
+        Авторизуйтесь на сайте
+      </h1>
     </div>
     <form @submit.prevent="onSubmit">
       <div class="sign-form__input">
@@ -33,7 +39,12 @@
           />
         </label>
       </div>
-      <button type="submit" class="button">Авторизоваться</button>
+      <button
+        type="submit"
+        class="button"
+      >
+        Авторизоваться
+      </button>
     </form>
   </div>
 </template>

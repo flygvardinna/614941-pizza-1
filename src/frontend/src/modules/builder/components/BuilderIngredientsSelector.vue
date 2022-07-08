@@ -1,7 +1,9 @@
 <template>
   <div class="content__ingredients">
     <div class="sheet">
-      <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
+      <h2 class="title title--small sheet__title">
+        Выберите ингредиенты
+      </h2>
 
       <div class="sheet__content ingredients">
         <div class="ingredients__sauce">
@@ -35,12 +37,18 @@
               class="ingredients__item"
               data-test="ingredients-item"
             >
-              <AppDrop data-test="app-drop" @drop="$emit('drop', ingredient)">
+              <AppDrop
+                data-test="app-drop"
+                @drop="$emit('drop', ingredient)"
+              >
                 <AppDrag
                   :transfer-data="ingredient"
                   :is-draggable="checkIsIngredientDraggable(ingredient)"
                 >
-                  <span class="filling" :class="`filling--${ingredient.value}`">
+                  <span
+                    class="filling"
+                    :class="`filling--${ingredient.value}`"
+                  >
                     {{ ingredient.name }}
                   </span>
                 </AppDrag>
