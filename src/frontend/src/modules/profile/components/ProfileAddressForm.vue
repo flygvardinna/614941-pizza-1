@@ -73,11 +73,14 @@
         v-if="isAddressEdited"
         type="button"
         class="button button--transparent"
+        data-test="delete-button"
         @click="deleteAddress(address.id)"
       >
         Удалить
       </button>
-      <button type="submit" class="button">Сохранить</button>
+      <button type="submit" class="button" data-test="submit-button">
+        Сохранить
+      </button>
     </div>
   </form>
 </template>
@@ -88,7 +91,7 @@ import { validator } from "@/common/mixins";
 import { mapActions } from "vuex";
 
 export default {
-  name: "ProfileAddressesForm",
+  name: "ProfileAddressForm",
   components: { AppInput },
   mixins: [validator],
 
@@ -160,7 +163,7 @@ export default {
   methods: {
     ...mapActions("Addresses", ["addAddress", "editAddress", "deleteAddress"]),
 
-    saveAddress($event) {
+    async saveAddress() {
       if (
         !this.$validateFields(
           {
@@ -184,12 +187,12 @@ export default {
       };
 
       if (this.isAddressEdited) {
-        this.editAddress(address);
+        await this.editAddress(address);
       } else {
-        this.addAddress(address);
+        await this.addAddress(address);
       }
 
-      $event.target.submit();
+      this.$emit("close");
     },
   },
 };

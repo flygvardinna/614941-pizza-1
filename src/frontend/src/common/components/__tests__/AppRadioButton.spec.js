@@ -48,7 +48,7 @@ describe("AppRadioButton", () => {
   });
 
   it("renders out the slot content", () => {
-    createComponent({ ...propsData, ...slots });
+    createComponent({ propsData, slots });
     expect(wrapper.html()).toContain(slots.default);
   });
 });

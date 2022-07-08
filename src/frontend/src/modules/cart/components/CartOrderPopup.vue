@@ -1,6 +1,6 @@
 <template>
   <div class="popup">
-    <a class="close" @click="$emit('close')">
+    <a class="close" data-test="close-btn" @click="$emit('close')">
       <span class="visually-hidden">Закрыть попап</span>
     </a>
     <div class="popup__title">
@@ -8,7 +8,9 @@
     </div>
     <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
     <div class="popup__button">
-      <a class="button" @click="$emit('close')">Отлично, я жду!</a>
+      <a class="button" data-test="popup__button" @click="$emit('close')"
+        >Отлично, я жду!</a
+      >
     </div>
   </div>
 </template>

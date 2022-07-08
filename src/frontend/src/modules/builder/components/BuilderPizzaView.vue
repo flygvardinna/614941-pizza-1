@@ -12,7 +12,7 @@
       />
     </label>
 
-    <AppDrop @drop="addIngredient($event)">
+    <AppDrop data-test="pizza__wrapper" @drop="addIngredient($event)">
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">

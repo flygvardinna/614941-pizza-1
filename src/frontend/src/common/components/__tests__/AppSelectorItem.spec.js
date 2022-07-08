@@ -3,7 +3,6 @@ import AppSelectorItem from "@/common/components/AppSelectorItem";
 
 describe("AppSelectorItem", () => {
   const slots = { default: "content" };
-  const listeners = { changeSelectedItem: null };
   const propsData = {
     item: {
       value: "testValue",
@@ -26,10 +25,10 @@ describe("AppSelectorItem", () => {
     expect(wrapper.html()).toContain(slots.default);
   });
 
-  // тут доделать, сейчас не работает
-  it("raises changeSelectedItem event on click", async () => {
-    createComponent({ listeners });
-    await wrapper.trigger("click");
-    expect(listeners.changeSelectedItem).toHaveBeenCalled();
+  it("emits changeSelectedItem event when radio button value changed", async () => {
+    createComponent({ propsData });
+    let input = wrapper.find("input");
+    await input.trigger("change");
+    expect(wrapper.emitted("changeSelectedItem")).toBeTruthy();
   });
 });

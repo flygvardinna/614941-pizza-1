@@ -25,7 +25,7 @@ describe("NotificationsContainer", () => {
     expect(wrapper.html()).toBeFalsy();
   });
 
-  it("renders out when we have notifications", () => {
+  it("renders out when we notifications exist", () => {
     mocks.$store.state.notifications = [{ text: "text", type: "warning" }];
     createComponent({ mocks });
     expect(wrapper.html()).toBeTruthy();

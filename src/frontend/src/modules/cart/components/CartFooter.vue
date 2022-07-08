@@ -1,7 +1,11 @@
 <template>
   <section class="footer">
     <div class="footer__more">
-      <a class="button button--border button--arrow" @click="goToBuilderPage">
+      <a
+        class="button button--border button--arrow"
+        data-test="builder-page-link"
+        @click="goToBuilderPage"
+      >
         Хочу еще одну
       </a>
     </div>
@@ -30,7 +34,7 @@ export default {
 
   methods: {
     goToBuilderPage() {
-      this.$router.push({ name: "IndexHome" });
+      this.$router.push("/");
     },
   },
 };

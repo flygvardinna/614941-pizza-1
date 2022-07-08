@@ -13,13 +13,19 @@
         <button
           type="button"
           class="button button--border"
+          data-test="delete-btn"
           @click="deleteOrder(order.id)"
         >
           Удалить
         </button>
       </div>
       <div class="order__button">
-        <button type="button" class="button" @click="repeatOrder">
+        <button
+          type="button"
+          class="button"
+          data-test="repeat-btn"
+          @click="repeatOrder"
+        >
           Повторить
         </button>
       </div>

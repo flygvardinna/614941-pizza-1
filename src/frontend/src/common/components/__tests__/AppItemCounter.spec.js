@@ -25,22 +25,22 @@ describe("AppItemCounter", () => {
     );
   });
 
-  it("emits incremented input value when plus button clicked", async () => {
+  it("emits changeItemValue event and incremented input value when plus button clicked", async () => {
     createComponent({ propsData });
     const plusButton = wrapper.find(".counter__button--plus");
     await plusButton.trigger("click");
-    expect(wrapper.emitted("changeItemValue")[0]).toEqual([
-      propsData.value + 1,
-    ]);
+    expect(wrapper.emitted("changeItemValue")[0][0]).toEqual(
+      propsData.value + 1
+    );
   });
 
-  it("emits decremented input value when minus button clicked", async () => {
+  it("emits changeItemValue event and decremented input value when minus button clicked", async () => {
     createComponent({ propsData });
     const plusButton = wrapper.find(".counter__button--minus");
     await plusButton.trigger("click");
-    expect(wrapper.emitted("changeItemValue")[0]).toEqual([
-      propsData.value - 1,
-    ]);
+    expect(wrapper.emitted("changeItemValue")[0][0]).toEqual(
+      propsData.value - 1
+    );
   });
 
   it("plus button is disabled when value is equal to max value", () => {

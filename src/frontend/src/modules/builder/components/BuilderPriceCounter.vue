@@ -5,6 +5,7 @@
       type="button"
       class="button"
       :disabled="isBtnDisabled"
+      data-test="add-to-cart-btn"
       @click="addToCart"
     >
       Готовьте!

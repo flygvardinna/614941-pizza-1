@@ -16,6 +16,7 @@
             :key="address.id"
             :value="address.id"
             :selected="addressId === address.id"
+            data-test="user-address"
           >
             {{ address.name }}
           </option>
@@ -99,7 +100,7 @@ export default {
 
     validations: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
 

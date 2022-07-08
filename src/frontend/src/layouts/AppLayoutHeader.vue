@@ -11,10 +11,12 @@
       </router-link>
     </div>
     <div class="header__cart">
-      <router-link to="/cart"> {{ totalPrice }} ₽ </router-link>
+      <router-link to="/cart" data-test="cart-link">
+        {{ totalPrice }} ₽
+      </router-link>
     </div>
     <div class="header__user">
-      <router-link v-if="user" to="/profile">
+      <router-link v-if="user" to="/profile" data-test="profile-link">
         <AppPicture
           :src="user.avatar"
           :alt="user.name"
@@ -29,12 +31,19 @@
         key="logout-link"
         href="#"
         class="header__logout"
+        data-test="logout-link"
         @click="$logout"
       >
         <span>Выйти</span>
       </a>
 
-      <router-link v-else key="login-link" to="/login" class="header__login">
+      <router-link
+        v-else
+        key="login-link"
+        to="/login"
+        class="header__login"
+        data-test="login-link"
+      >
         <span>Войти</span>
       </router-link>
     </div>

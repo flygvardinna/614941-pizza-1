@@ -9,6 +9,7 @@
         :is-orange-btn="true"
         :min-value="minPizzaValue"
         :max-value="maxPizzaValue"
+        data-test="cart-list__counter"
         @changeItemValue="
           changePizzaQuantity({
             quantity: $event,
@@ -25,6 +26,7 @@
         <button
           type="button"
           class="cart-list__edit"
+          data-test="cart-list__edit"
           @click="setPizzaToBuilder(pizza)"
         >
           Изменить
@@ -75,7 +77,7 @@ export default {
     async setPizzaToBuilder(pizza) {
       this.editPizza(pizza);
 
-      await this.$router.push({ name: "IndexHome" });
+      await this.$router.push("/");
     },
   },
 };

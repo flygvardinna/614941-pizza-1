@@ -13,6 +13,7 @@
       to="/orders"
       class="layout__link"
       active-class="layout__link--active"
+      data-test="orders-link"
     >
       История заказов
     </router-link>
@@ -20,6 +21,7 @@
       to="/profile"
       class="layout__link"
       active-class="layout__link--active"
+      data-test="profile-link"
     >
       Мои данные
     </router-link>

@@ -2,7 +2,6 @@ import { shallowMount } from "@vue/test-utils";
 import AppInput from "@/common/components/AppInput";
 
 describe("AppInput", () => {
-  const errorClass = "text-field__input--error";
   const propsData = {
     value: "testValue",
     name: "testName",
@@ -27,7 +26,7 @@ describe("AppInput", () => {
     expect(wrapper.find("input").element.value).toBe(propsData.value);
   });
 
-  it("emits an input event when typing", async () => {
+  it("emits input event when typing", async () => {
     createComponent({ propsData });
     let input = wrapper.find("input");
     await input.trigger("input");
@@ -40,6 +39,14 @@ describe("AppInput", () => {
     input.element.value = "test";
     await input.trigger("input");
     expect(wrapper.emitted().input[0][0]).toEqual("test");
+  });
+
+  it("emits change event with the current input value", async () => {
+    createComponent({ propsData });
+    let input = wrapper.find("input");
+    input.element.value = "test";
+    await input.trigger("change");
+    expect(wrapper.emitted().change[0][0]).toEqual("test");
   });
 
   it("input name is prop name", () => {
@@ -63,7 +70,7 @@ describe("AppInput", () => {
   it("has error class if error text has been passed in prop", () => {
     createComponent({ propsData });
     let input = wrapper.find("input");
-    expect(input.attributes("class")).toContain(errorClass);
+    expect(input.attributes("class")).toContain("text-field__input--error");
   });
 
   it("has error message if error text has been passed in prop", () => {
@@ -83,11 +90,6 @@ describe("AppInput", () => {
     expect(input.attributes("disabled")).toBeUndefined();
   });
 
-  // если будет время разберись, почему если не мутировать propsData а делать так
-  // createComponent({ ...propsData, disabled: true }) появляются ворнинги
-  // [Vue warn]: Missing required prop: "value"
-  // и тесты фейлятся
-  // в текущей версии проблема, что переписывается исходный объект и если тесты поменять местами, то они сломаются
   it("is disabled if prop disabled is true", () => {
     propsData.disabled = true;
     createComponent({ propsData });

@@ -18,6 +18,7 @@
             :is-orange-btn="true"
             :min-value="minItemValue"
             :max-value="maxItemValue"
+            data-test="additional-list-counter"
             @changeItemValue="
               changeItemQuantity({
                 quantity: $event,
