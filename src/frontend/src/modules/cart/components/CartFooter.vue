@@ -1,7 +1,11 @@
 <template>
   <section class="footer">
     <div class="footer__more">
-      <a class="button button--border button--arrow" @click="goToBuilderPage">
+      <a
+        class="button button--border button--arrow"
+        data-test="builder-page-link"
+        @click="goToBuilderPage"
+      >
         Хочу еще одну
       </a>
     </div>
@@ -13,7 +17,12 @@
     </div>
 
     <div class="footer__submit">
-      <button type="submit" class="button">Оформить заказ</button>
+      <button
+        type="submit"
+        class="button"
+      >
+        Оформить заказ
+      </button>
     </div>
   </section>
 </template>
@@ -30,7 +39,7 @@ export default {
 
   methods: {
     goToBuilderPage() {
-      this.$router.push({ name: "IndexHome" });
+      this.$router.push("/");
     },
   },
 };

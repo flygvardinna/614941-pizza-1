@@ -48,15 +48,22 @@ export default {
       return state.ingredients.filter((item) => item.quantity > 0);
     },
 
-    pizzaPrice(state, getters) {
-      const doughPrice = getters.selectedDough.price;
-      const saucePrice = getters.selectedSauce.price;
-      const multiplier = getters.selectedSize.multiplier;
-      const ingredientsSum = getters.selectedIngredients
+    doughPrice(state, getters) {
+      return getters.selectedDough.price;
+    },
+
+    saucePrice(state, getters) {
+      return getters.selectedSauce.price;
+    },
+
+    ingredientsPrice(state, getters) {
+      return getters.selectedIngredients
         .map((item) => item.price * item.quantity)
         .reduce((a, b) => a + b, 0);
+    },
 
-      return (doughPrice + saucePrice + ingredientsSum) * multiplier;
+    pizzaPrice(state, getters) {
+      return (getters.doughPrice + getters.saucePrice + getters.ingredientsPrice) * getters.selectedSize.multiplier;
     },
 
     currentPizza(state, getters) {
@@ -82,6 +89,7 @@ export default {
     [RESET_BUILDER_STATE](state) {
       Object.assign(state, initialState());
     },
+
     [EDIT_PIZZA](state, newState) {
       Object.assign(state, newState());
     },

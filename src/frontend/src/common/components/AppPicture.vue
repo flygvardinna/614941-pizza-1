@@ -1,6 +1,9 @@
 <template>
   <picture>
-    <source type="image/webp" :srcset="imageSources.webpSrcset" />
+    <source
+      type="image/webp"
+      :srcset="imageSources.webpSrcset"
+    />
     <img
       :src="src"
       :srcset="imageSources.srcset"
@@ -29,12 +32,12 @@ export default {
     },
 
     width: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
 
     height: {
-      type: Number,
+      type: [String, Number],
       required: true,
     },
   },

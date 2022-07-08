@@ -1,6 +1,12 @@
 <template>
   <div class="user">
-    <AppPicture :src="user.avatar" :alt="user.name" :width="72" :height="72" />
+    <AppPicture
+      :src="user.avatar"
+      :alt="user.name"
+      :width="72"
+      :height="72"
+      data-test="user-avatar"
+    />
     <div class="user__name">
       <span>{{ user.name }}</span>
     </div>

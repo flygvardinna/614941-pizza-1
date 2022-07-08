@@ -12,7 +12,10 @@
       />
     </label>
 
-    <AppDrop @drop="addIngredient($event)">
+    <AppDrop
+      data-test="pizza-wrapper"
+      @drop="addIngredient($event)"
+    >
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
@@ -70,15 +73,20 @@ export default {
       "selectedIngredients",
     ]),
 
+    doughName() {
+      return this.selectedDough.value === "large" ? "big" : "small";
+    },
+
+    sauceName() {
+      return this.selectedSauce.value;
+    },
+
     pizzaClassName() {
       if (this.isPizzaDataLoading) {
         return "";
       }
 
-      const dough = this.selectedDough.value === "large" ? "big" : "small";
-      const sauce = this.selectedSauce.value;
-
-      return `pizza--foundation--${dough}-${sauce}`;
+      return `pizza--foundation--${this.doughName}-${this.sauceName}`;
     },
   },
 

@@ -1,7 +1,9 @@
 <template>
   <div class="content__ingredients">
     <div class="sheet">
-      <h2 class="title title--small sheet__title">Выберите ингредиенты</h2>
+      <h2 class="title title--small sheet__title">
+        Выберите ингредиенты
+      </h2>
 
       <div class="sheet__content ingredients">
         <div class="ingredients__sauce">
@@ -13,6 +15,7 @@
             :item="sauce"
             :input-name="'sauce'"
             class="radio ingredients__input"
+            data-test="sauce-input"
             @changeSelectedItem="
               changeSelectedItem({
                 id: sauce.id,
@@ -32,13 +35,20 @@
               v-for="ingredient in ingredients"
               :key="ingredient.id"
               class="ingredients__item"
+              data-test="ingredients-item"
             >
-              <AppDrop @drop="$emit('drop', ingredient)">
+              <AppDrop
+                data-test="app-drop"
+                @drop="$emit('drop', ingredient)"
+              >
                 <AppDrag
                   :transfer-data="ingredient"
                   :is-draggable="checkIsIngredientDraggable(ingredient)"
                 >
-                  <span class="filling" :class="`filling--${ingredient.value}`">
+                  <span
+                    class="filling"
+                    :class="`filling--${ingredient.value}`"
+                  >
                     {{ ingredient.name }}
                   </span>
                 </AppDrag>
@@ -48,6 +58,7 @@
                 :value="ingredient.quantity"
                 :min-value="minIngredientValue"
                 :max-value="maxIngredientValue"
+                data-test="ingredients-counter"
                 @changeItemValue="
                   changeIngredientQuantity({
                     ...ingredient,

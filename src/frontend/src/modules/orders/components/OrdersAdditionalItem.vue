@@ -1,6 +1,11 @@
 <template>
   <li>
-    <img :src="item.image" width="20" height="30" :alt="item.name" />
+    <img
+      :src="item.image"
+      :alt="item.name"
+      width="20"
+      height="30"
+    />
     <p>
       <span>{{ item.name }}</span>
       <b>{{ item.quantity }}х{{ item.price }} ₽</b>

@@ -16,6 +16,7 @@
             :key="address.id"
             :value="address.id"
             :selected="addressId === address.id"
+            data-test="user-address"
           >
             {{ address.name }}
           </option>
@@ -33,7 +34,10 @@
         />
       </label>
 
-      <div v-if="isAddressFormDisplayed" class="cart-form__address">
+      <div
+        v-if="isAddressFormDisplayed"
+        class="cart-form__address"
+      >
         <span class="cart-form__label">{{ addressFormName }}:</span>
 
         <div class="cart-form__input">
@@ -99,7 +103,7 @@ export default {
 
     validations: {
       type: Object,
-      default: null,
+      required: true,
     },
   },
 

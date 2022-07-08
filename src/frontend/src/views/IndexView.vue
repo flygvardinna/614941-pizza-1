@@ -3,7 +3,9 @@
     <router-view />
     <form>
       <div class="content__wrapper">
-        <h1 class="title title--big">Конструктор пиццы</h1>
+        <h1 class="title title--big">
+          Конструктор пиццы
+        </h1>
 
         <BuilderDoughSelector />
 
@@ -24,7 +26,7 @@ import BuilderIngredientsSelector from "@/modules/builder/components/BuilderIngr
 import BuilderPizzaView from "@/modules/builder/components/BuilderPizzaView";
 
 export default {
-  name: "IndexHome",
+  name: "IndexView",
   components: {
     BuilderDoughSelector,
     BuilderSizeSelector,
