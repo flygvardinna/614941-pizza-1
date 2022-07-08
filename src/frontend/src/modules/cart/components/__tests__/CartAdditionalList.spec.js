@@ -7,6 +7,7 @@ const localVue = createLocalVue();
 localVue.use(Vuex);
 
 describe("CartAdditionalList", () => {
+  let actions;
   let store;
   let wrapper;
   const createComponent = (options) => {
@@ -14,7 +15,13 @@ describe("CartAdditionalList", () => {
   };
 
   beforeEach(() => {
-    store = generateMockStore();
+    actions = {
+      Cart: {
+        changeAdditionalItemQuantity: jest.fn(),
+      },
+    };
+
+    store = generateMockStore(actions);
     setAdditionalItems(store);
   });
 
@@ -27,12 +34,10 @@ describe("CartAdditionalList", () => {
     expect(wrapper.exists()).toBeTruthy();
   });
 
-  it("changes item quantity on counter click", async () => {
+  it("changes additional item quantity on counter click", async () => {
     createComponent({ localVue, store });
-    const spyOnAction = jest.spyOn(wrapper.vm, "changeItemQuantity");
     const counter = wrapper.find('[data-test="additional-list-counter"]');
-    const inputValue = parseInt(counter.find("input").element.value);
-    await counter.vm.$emit("changeItemValue", inputValue + 1);
-    expect(spyOnAction).toHaveBeenCalled();
+    await counter.vm.$emit("changeItemValue");
+    expect(actions.Cart.changeAdditionalItemQuantity).toHaveBeenCalled();
   });
 });

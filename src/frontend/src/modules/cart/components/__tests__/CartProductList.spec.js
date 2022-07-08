@@ -50,16 +50,14 @@ describe("CartProductList", () => {
   it("changes pizza quantity on counter click if new quantity is more than 1", async () => {
     createComponent({ localVue, store, mocks, stubs });
     const counter = wrapper.find('[data-test="cart-list-counter"]');
-    const inputValue = parseInt(counter.find("input").element.value);
-    await counter.vm.$emit("changeItemValue", inputValue + 1);
+    await counter.vm.$emit("changeItemValue", 2);
     expect(actions.Cart.changeItemQuantity).toHaveBeenCalled();
   });
 
   it("deletes pizza on counter click if new quantity is 0", async () => {
     createComponent({ localVue, store, mocks, stubs });
     const counter = wrapper.find('[data-test="cart-list-counter"]');
-    const inputValue = parseInt(counter.find("input").element.value);
-    await counter.vm.$emit("changeItemValue", inputValue - 1);
+    await counter.vm.$emit("changeItemValue", 0);
     expect(actions.Cart.deleteItem).toHaveBeenCalled();
   });
 

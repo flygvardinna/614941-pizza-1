@@ -65,7 +65,7 @@ describe("BuilderPizzaView", () => {
     pizzaWrapper.vm.$emit("drop", testIngredient);
     expect(spyOnAction).toHaveBeenCalledWith({
       ...testIngredient,
-      quantity: testIngredient.quantity + 1,
+      quantity: 1,
     });
   });
 

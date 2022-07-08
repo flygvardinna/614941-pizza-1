@@ -47,7 +47,7 @@ describe("PizzaItem", () => {
 
   it("renders out pizza name", () => {
     createComponent({ localVue, store, propsData });
-    expect(wrapper.html()).toContain(propsData.pizza.name);
+    expect(wrapper.html()).toContain("Pizza name");
   });
 
   it("renders out correct size and dough description", () => {

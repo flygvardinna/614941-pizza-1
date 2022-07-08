@@ -2,7 +2,7 @@ import { shallowMount } from "@vue/test-utils";
 import AppInput from "@/common/components/AppInput";
 
 describe("AppInput", () => {
-  const propsData = {
+  const defaultPropsData = {
     value: "testValue",
     name: "testName",
     type: "text",
@@ -10,6 +10,15 @@ describe("AppInput", () => {
     errorText: "Error",
     required: true,
     disabled: false,
+  };
+
+  const getPropsData = (params) => {
+    return {
+      propsData: {
+        ...defaultPropsData,
+        ...params
+      }
+    }
   };
 
   let wrapper;
@@ -22,19 +31,19 @@ describe("AppInput", () => {
   });
 
   it("sets the initial model value", () => {
-    createComponent({ propsData });
-    expect(wrapper.find("input").element.value).toBe(propsData.value);
+    createComponent(getPropsData());
+    expect(wrapper.find("input").element.value).toBe(defaultPropsData.value);
   });
 
   it("emits input event when typing", async () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
     await input.trigger("input");
     expect(wrapper.emitted().input).toBeTruthy();
   });
 
   it("emits the current input value when typing", async () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
     input.element.value = "test";
     await input.trigger("input");
@@ -42,7 +51,7 @@ describe("AppInput", () => {
   });
 
   it("emits change event with the current input value", async () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
     input.element.value = "test";
     await input.trigger("change");
@@ -50,49 +59,47 @@ describe("AppInput", () => {
   });
 
   it("input name is prop name", () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
-    expect(input.attributes("name")).toBe(propsData.name);
+    expect(input.attributes("name")).toBe(defaultPropsData.name);
   });
 
   it("input type is prop type", () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
-    expect(input.attributes("type")).toBe(propsData.type);
+    expect(input.attributes("type")).toBe(defaultPropsData.type);
   });
 
   it("input placeholder is prop placeholder", () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
-    expect(input.attributes("placeholder")).toBe(propsData.placeholder);
+    expect(input.attributes("placeholder")).toBe(defaultPropsData.placeholder);
   });
 
   it("has error class if error text has been passed in prop", () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
     expect(input.attributes("class")).toContain("text-field__input--error");
   });
 
   it("has error message if error text has been passed in prop", () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     expect(wrapper.html()).toContain("span");
   });
 
   it("does not have error message if error text hasn't been passed in prop", () => {
-    propsData.errorText = "";
-    createComponent({ propsData });
+    createComponent(getPropsData({ errorText: "" }));
     expect(wrapper.html()).not.toContain("span");
   });
 
   it("isn't disabled if prop disabled is false", () => {
-    createComponent({ propsData });
+    createComponent(getPropsData());
     let input = wrapper.find("input");
     expect(input.attributes("disabled")).toBeUndefined();
   });
 
   it("is disabled if prop disabled is true", () => {
-    propsData.disabled = true;
-    createComponent({ propsData });
+    createComponent(getPropsData({ disabled: true }));
     let input = wrapper.find("input");
     expect(input.attributes("disabled")).toBe("disabled");
   });

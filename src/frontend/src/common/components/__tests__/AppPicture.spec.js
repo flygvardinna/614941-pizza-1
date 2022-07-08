@@ -30,9 +30,7 @@ describe("AppPicture", () => {
 
   it("image width is equal to prop width when prop type is string", () => {
     createComponent({ propsData });
-    expect(wrapper.find("img").attributes("width")).toBe(
-      propsData.width.toString()
-    );
+    expect(wrapper.find("img").attributes("width")).toBe("32");
   });
 
   it("image height is equal to prop height when prop type is number", () => {
