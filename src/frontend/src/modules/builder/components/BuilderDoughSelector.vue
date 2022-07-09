@@ -10,7 +10,7 @@
           v-for="item in dough"
           :key="item.id"
           :item="item"
-          :input-name="'dough'"
+          input-name="dough"
           :class="`dough__input dough__input--${item.value}`"
           @changeSelectedItem="
             changeSelectedItem({

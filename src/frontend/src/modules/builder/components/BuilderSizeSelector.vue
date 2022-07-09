@@ -10,7 +10,7 @@
           v-for="size in sizes"
           :key="size.id"
           :item="size"
-          :input-name="'diameter'"
+          input-name="diameter"
           :class="`diameter__input diameter__input--${size.value}`"
           @changeSelectedItem="
             changeSelectedItem({

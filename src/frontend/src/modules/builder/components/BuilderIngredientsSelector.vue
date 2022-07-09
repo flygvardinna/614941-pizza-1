@@ -13,7 +13,7 @@
             v-for="sauce in sauces"
             :key="sauce.id"
             :item="sauce"
-            :input-name="'sauce'"
+            input-name="sauce"
             class="radio ingredients__input"
             data-test="sauce-input"
             @changeSelectedItem="
