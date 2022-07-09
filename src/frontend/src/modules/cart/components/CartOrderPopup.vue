@@ -18,7 +18,9 @@
         class="button"
         data-test="popup-button"
         @click="$emit('close')"
-      >Отлично, я жду!</a>
+      >
+        Отлично, я жду!
+      </a>
     </div>
   </div>
 </template>

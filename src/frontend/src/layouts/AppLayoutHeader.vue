@@ -72,7 +72,6 @@ export default {
 
   computed: {
     ...mapState("Auth", ["user"]),
-
     ...mapGetters("Cart", ["totalPrice"]),
   },
 };
