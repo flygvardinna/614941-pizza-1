@@ -60,7 +60,7 @@
 </template>
 
 <script>
-import { mapActions, mapState } from "vuex";
+import { mapActions, mapState, mapGetters } from "vuex";
 import PizzaItem from "@/common/components/PizzaItem";
 import OrdersAdditionalItem from "./OrdersAdditionalItem";
 import { getItemById, getOrderPrice } from "@/common/helpers";
@@ -79,6 +79,7 @@ export default {
   computed: {
     ...mapState("Builder", ["dough", "sauces", "sizes", "ingredients"]),
     ...mapState("Cart", ["additionalItems"]),
+    ...mapGetters("Builder", ["isPizzaDataLoading"]),
 
     address() {
       return this.order.orderAddress
@@ -87,6 +88,10 @@ export default {
     },
 
     pizzas() {
+      if (this.isPizzaDataLoading) {
+        return [];
+      }
+
       return this.order.orderPizzas.map((pizza) => {
         return { ...pizza, price: this.getPizzaPrice(pizza) };
       });

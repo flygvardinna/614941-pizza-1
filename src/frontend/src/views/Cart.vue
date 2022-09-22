@@ -70,7 +70,7 @@ import CartFooter from "@/modules/cart/components/CartFooter";
 import { validator } from "@/common/mixins";
 
 export default {
-  name: "CartView",
+  name: "Cart",
   components: {
     CartProductList,
     CartAdditionalList,
@@ -192,7 +192,7 @@ export default {
       await this.resetBuilderState();
       await this.fetchPizzaParts();
 
-      await this.$router.push({ name: this.user ? "Orders" : "IndexHome" });
+      await this.$router.push({ name: this.user ? "Orders" : "Index" });
     },
   },
 };

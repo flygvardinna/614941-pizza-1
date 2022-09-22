@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore, setAddresses, setUser } from "@/store/mocks";
 import Vuex from "vuex";
-import ProfileView from "@/views/ProfileView";
+import ProfileView from "@/views/Profile";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore, setPizzaItems } from "@/store/mocks";
 import $validator from "@/common/mixins/validator";
 import Vuex from "vuex";
-import CartView from "@/views/CartView";
+import CartView from "@/views/Cart";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

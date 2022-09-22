@@ -70,10 +70,13 @@
 <script>
 import ProfileUserBlock from "@/modules/profile/components/ProfileUserBlock";
 import ProfileAddressForm from "@/modules/profile/components/ProfileAddressForm";
+import { auth } from '@/middlewares';
 import { mapActions, mapState } from "vuex";
 
 export default {
-  name: "ProfileView",
+  name: "Profile",
+  middlewares: [auth],
+  layout: "AppLayoutProfile",
   components: {
     ProfileAddressForm,
     ProfileUserBlock,
