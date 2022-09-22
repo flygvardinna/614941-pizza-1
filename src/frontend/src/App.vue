@@ -21,7 +21,7 @@ export default {
 
   computed: {
     isAnimated() {
-      return this.$route.name !== "Login";
+      return this.$route.path !== "/login";
     },
   },
 

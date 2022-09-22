@@ -1,7 +1,7 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore, setOrders } from "@/store/mocks";
 import Vuex from "vuex";
-import OrdersView from "@/views/OrdersView";
+import OrdersView from "@/views/Orders";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);

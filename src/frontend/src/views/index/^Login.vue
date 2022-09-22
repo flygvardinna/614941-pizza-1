@@ -52,10 +52,12 @@
 <script>
 import { validator } from "@/common/mixins";
 import AppInput from "@/common/components/AppInput";
+import { isLoggedIn } from '@/middlewares';
 import { mapActions } from "vuex";
 
 export default {
-  name: "LoginView",
+  name: "Login",
+  middlewares: [isLoggedIn],
   components: { AppInput },
   mixins: [validator],
 

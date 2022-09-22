@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import IndexView from "@/views/IndexView";
+import IndexView from "@/views/index/Index";
 
 describe("IndexView", () => {
   const stubs = ["router-view"];

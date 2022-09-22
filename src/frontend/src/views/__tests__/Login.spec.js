@@ -1,7 +1,7 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore } from "@/store/mocks";
 import Vuex from "vuex";
-import LoginView from "@/views/LoginView";
+import LoginView from "@/views/index/^Login";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
