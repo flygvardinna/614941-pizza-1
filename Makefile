@@ -6,7 +6,7 @@ start_project:
 
 run_server:
 	docker-compose down -v
-	docker-compose up backend --build
+	docker-compose up backend
 
 run_tests:
 	cd src/frontend; echo "...Starting frontend tests" && \
