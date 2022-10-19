@@ -14,7 +14,7 @@ export default Promise.all(routes).then(routes => {
 
   router.beforeEach((to, from, next) => {
     const middlewares = to.meta.middlewares;
-    
+
     if (!middlewares?.length) {
       return next();
     }

@@ -27,6 +27,7 @@ export class Application extends BootMixin(ServiceMixin(RepositoryMixin(RestAppl
     this.sequence(MySequence);
 
     // Set up default home page
+    this.static('/', path.join(__dirname, '../build'));
     this.static('/public', path.join(__dirname, '../public'));
 
     // Customize @loopback/rest-explorer configuration here
@@ -34,6 +35,8 @@ export class Application extends BootMixin(ServiceMixin(RepositoryMixin(RestAppl
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
+
+    this.static('/*', path.join(__dirname, '../build'));
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here
