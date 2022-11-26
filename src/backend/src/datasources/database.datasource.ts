@@ -2,14 +2,14 @@ import {inject, lifeCycleObserver, LifeCycleObserver} from '@loopback/core';
 import {juggler} from '@loopback/repository';
 
 const config = {
-  name: 'database',
+  name: 'pizza',
   connector: 'postgresql',
-  url: 'postgres://ozzz:F0P2ShUn133R1W3j97x7F3BxNoBhp30V@dpg-ce11gmta4996ndslh0tg-a/pizza_hdrk',
-  host: 'dpg-ce11gmta4996ndslh0tg-a',
+  url: 'postgres://pizza_zl04_user:fCiKgoioruGLYprQ8fsVFacgpoiHYd6C@dpg-ce11o1arrk09esb0on50-a/pizza_zl04',
+  host: 'dpg-ce11o1arrk09esb0on50-a',
   port: 5432,
-  user: 'ozzz',
-  password: 'F0P2ShUn133R1W3j97x7F3BxNoBhp30V',
-  database: 'pizza_hdrk',
+  user: 'pizza_zl04_user',
+  password: 'fCiKgoioruGLYprQ8fsVFacgpoiHYd6C',
+  database: 'pizza_zl04',
 };
 
 /* const config = {
