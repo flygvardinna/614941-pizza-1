@@ -7,7 +7,7 @@ export async function main(options: ApplicationConfig = {}) {
   const app = new Application(options);
   await app.boot();
   await app.migrateSchema();
-  /* await factory(app); */
+  await factory(app);
   // Uncomment to create dummy data for db again
   await app.start();
 
