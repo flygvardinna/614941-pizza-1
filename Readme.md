@@ -1,6 +1,6 @@
 # «VuePizza»
 
-[vue-pizza-oz.herokuapp.com](https://vue-pizza-oz.herokuapp.com/)
+[vue-pizza-oz.onrender.com](https://vue-pizza-oz.onrender.com/)
 
 VuePizza — это веб-приложение для заказа пиццы. Сервис позволяет собрать свою собственную пиццу с любыми ингредиентами и оформить заказ. 
 
